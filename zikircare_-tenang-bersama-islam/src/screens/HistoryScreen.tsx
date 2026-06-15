@@ -1,0 +1,291 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Calendar, Trash2, Check, Award, BarChart3, Star, Sparkles } from 'lucide-react';
+import { 
+  AppPhoneFrame, 
+  SoftSkyBackground, 
+  StarSparklePattern, 
+  IslamicMoonStarDecoration,
+  CloudDecoration
+} from '../components/Decorations';
+import { BottomNav } from '../components/BottomNav';
+import { SadChildIllustration } from '../components/Illustrations';
+import { emotionData } from '../data/emotions';
+import { EmotionKey, EmotionHistoryItem } from '../types';
+
+export const HistoryScreen: React.FC = () => {
+  const navigate = useNavigate();
+  const [history, setHistory] = useState<EmotionHistoryItem[]>([]);
+
+  // Local helper to format date/time into beautiful Malay text
+  const formatMalayTime = (isoString: string): string => {
+    try {
+      const d = new Date(isoString);
+      const day = d.getDate();
+      const monthNames = [
+        "Januari", "Februari", "Mac", "April", "Mei", "Jun", 
+        "Julai", "Ogos", "September", "Oktober", "November", "Disember"
+      ];
+      const month = monthNames[d.getMonth()];
+      let hrs = d.getHours();
+      const mins = d.getMinutes().toString().padStart(2, '0');
+      
+      let timeframe = 'pagi';
+      if (hrs >= 12 && hrs < 14) timeframe = 'tengah hari';
+      else if (hrs >= 14 && hrs < 19) timeframe = 'petang';
+      else if (hrs >= 19 || hrs < 5) timeframe = 'malam';
+
+      hrs = hrs % 12;
+      hrs = hrs ? hrs : 12;
+
+      const now = new Date();
+      if (d.toDateString() === now.toDateString()) {
+        return `Hari ini, ${hrs}:${mins} ${timeframe}`;
+      }
+
+      const yesterday = new Date();
+      yesterday.setDate(now.getDate() - 1);
+      if (d.toDateString() === yesterday.toDateString()) {
+        return `Semalam, ${hrs}:${mins} ${timeframe}`;
+      }
+
+      return `${day} ${month}, ${hrs}:${mins} ${timeframe}`;
+    } catch (e) {
+      return "Baru sahaja";
+    }
+  };
+
+  useEffect(() => {
+    const rawHistory = localStorage.getItem('emosiHistory');
+    if (!rawHistory) {
+      const seedData: EmotionHistoryItem[] = [
+        {
+          id: 'seed-1',
+          emotion: 'marah',
+          label: 'Marah',
+          emoji: '😡',
+          aktiviti: 'Baca istighfar 10 kali',
+          completedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+          completed: true
+        },
+        {
+          id: 'seed-2',
+          emotion: 'sedih',
+          label: 'Sedih',
+          emoji: '😢',
+          aktiviti: 'Baca doa kesedihan 10 kali',
+          completedAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
+          completed: true
+        },
+        {
+          id: 'seed-3',
+          emotion: 'gembira',
+          label: 'Gembira',
+          emoji: '😊',
+          aktiviti: 'Baca Alhamdulillah 10 kali',
+          completedAt: new Date(Date.now() - 1000 * 60 * 60 * 25).toISOString(),
+          completed: true
+        },
+        {
+          id: 'seed-4',
+          emotion: 'takut',
+          label: 'Takut',
+          emoji: '😨',
+          aktiviti: 'Baca doa perlindungan 10 kali',
+          completedAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
+          completed: true
+        },
+        {
+          id: 'seed-5',
+          emotion: 'tenang',
+          label: 'Tenang',
+          emoji: '😌',
+          aktiviti: 'Baca tasbih 10 kali',
+          completedAt: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
+          completed: true
+        }
+      ];
+      localStorage.setItem('emosiHistory', JSON.stringify(seedData));
+      setHistory(seedData);
+    } else {
+      try {
+        setHistory(JSON.parse(rawHistory));
+      } catch (err) {
+        setHistory([]);
+      }
+    }
+  }, []);
+
+  const emotionsList: { key: EmotionKey; emoji: string }[] = [
+    { key: 'gembira', emoji: '😊' },
+    { key: 'marah', emoji: '😡' },
+    { key: 'sedih', emoji: '😢' },
+    { key: 'takut', emoji: '😨' },
+    { key: 'tenang', emoji: '😌' }
+  ];
+
+  const getStatsCount = (key: EmotionKey) => {
+    return history.filter(item => item.emotion === key).length;
+  };
+
+  const handleClearHistory = () => {
+    if (confirm("Adakah anda pasti mahu menetapkan semula (reset) semua rekod sejarah emosi?")) {
+      localStorage.setItem('emosiHistory', JSON.stringify([]));
+      setHistory([]);
+    }
+  };
+
+  return (
+    <AppPhoneFrame id="history-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none">
+      
+      {/* Soft warm Cream childhood background */}
+      <SoftSkyBackground variant="sunset">
+        <StarSparklePattern />
+        <CloudDecoration className="absolute top-18 left-1 opacity-70 scale-90" speed="slow" />
+      </SoftSkyBackground>
+
+      {/* Hanging ornament */}
+      <IslamicMoonStarDecoration className="absolute top-18 right-2 z-10 scale-90" />
+
+      {/* Header Bar */}
+      <header className="flex items-center justify-between px-6 pt-5 pb-3 bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-purple-100/70 shadow-xs">
+        <div className="flex items-center gap-2">
+          {/* Calendar decoration */}
+          <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center border border-amber-300">
+            <span className="text-lg">📅</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider leading-none mb-0.5">Rekod Perkembangan</span>
+            <h1 className="text-base font-black text-slate-800 tracking-tight leading-none">
+              Sejarah Emosi
+            </h1>
+          </div>
+        </div>
+        
+        {history.length > 0 && (
+          <button
+            id="clear-history-btn"
+            onClick={handleClearHistory}
+            className="p-2.5 text-rose-500 hover:bg-rose-50 rounded-full border border-purple-100/50 hover:border-rose-200 transition-all cursor-pointer bg-white"
+            title="Padam Semua Rekod"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        )}
+      </header>
+
+      {/* Main Stats Scroll */}
+      <main className="flex-grow px-5 pt-3 pb-6 select-none relative z-10 overflow-y-auto">
+        
+        {/* Weekly Stats Header structured extra round */}
+        <div className="bg-white/95 rounded-[32px] p-5 shadow-[0_12px_24px_-10px_rgba(124,58,237,0.1)] border-2 border-purple-100/60 mb-5 relative">
+          
+          {/* Sparkly corner overlays */}
+          <span className="absolute -top-3 -right-2 text-2xl animate-star-twinkle">✨</span>
+
+          <div className="flex items-center gap-2 mb-2 text-primary">
+            <BarChart3 className="w-4.5 h-4.5 text-purple-600" />
+            <h2 className="text-xs font-black uppercase tracking-widest text-purple-950">Statistik Emosi</h2>
+          </div>
+          <p className="text-[11px] font-bold text-slate-500 leading-relaxed px-1">
+            Pantau graf ringkas yang kerap dilalui anak murid untuk membantu guru kaunseling mengenali emosi semasa harian.
+          </p>
+
+          {/* Emoji row dashboard customized with cheerful round elements */}
+          <div className="grid grid-cols-5 gap-1.5 mt-4 text-center bg-purple-50/50 p-3.5 rounded-2xl border border-purple-100/40">
+            {emotionsList.map((em) => {
+              const count = getStatsCount(em.key);
+              return (
+                <div key={em.key} className="flex flex-col items-center">
+                  <span className="text-3xl filter drop-shadow-xs transition-transform hover:scale-115 active:scale-95 duration-150 cursor-pointer select-none">
+                    {em.emoji}
+                  </span>
+                  <span className="text-[9px] font-black text-purple-950 mt-1 capitalize tracking-wide select-none">
+                    {em.key}
+                  </span>
+                  <div className="mt-2 min-w-[26px] h-[24px] rounded-full bg-primary text-[11px] font-black text-white flex items-center justify-center border-2 border-white shadow-sm">
+                    {count}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Recent logs card list */}
+        <div className="flex items-center gap-1.5 mb-3.5 select-none px-1">
+          <Star className="w-3.5 h-3.5 text-amber-500 animate-star-twinkle" />
+          <h3 className="text-xs font-black text-purple-950 uppercase tracking-widest">
+            Perkembangan Terkini Murid
+          </h3>
+        </div>
+
+        {history.length === 0 ? (
+          <div className="flex flex-col items-center justify-center bg-white p-8 rounded-[32px] border-2 border-purple-100/50 shadow-sm min-h-[240px]">
+            <SadChildIllustration className="h-32 mb-2" />
+            <p className="text-sm font-black text-slate-800 mt-2">Belum ada rekod lagi.</p>
+            <p className="text-[11px] font-bold text-slate-400 text-center mt-1 leading-relaxed px-4">
+              Bimbinglah murid berzikir terlebih dahulu, dan catat kemajuan bertenang pertama mereka di sini!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
+            {history.map((item) => {
+              const emotionDetails = emotionData[item.emotion];
+              const colorClasses = {
+                yellow: 'bg-yellow-50 text-amber-800 border-amber-200',
+                red: 'bg-rose-50 text-rose-800 border-rose-200',
+                blue: 'bg-blue-50 text-blue-800 border-blue-200',
+                purple: 'bg-purple-50 text-purple-800 border-purple-200',
+                orange: 'bg-orange-50 text-orange-800 border-orange-200',
+                teal: 'bg-teal-50 text-teal-800 border-teal-200',
+                green: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+              };
+              const pillStyle = emotionDetails ? colorClasses[emotionDetails.color] : 'bg-purple-50 text-purple-800 border-purple-200';
+
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white/95 rounded-2xl p-4 shadow-sm border-2 border-purple-100/30 hover:border-purple-200/60 flex items-center gap-3.5 transition-all group relative overflow-hidden"
+                >
+                  {/* Decorative background sparkle shape */}
+                  <span className="absolute top-1 right-2 text-lg opacity-15 filter grayscale select-none">✨</span>
+
+                  {/* Large emoji face */}
+                  <div className="text-4.5xl filter drop-shadow-sm shrink-0 select-none animate-pulse-soft">
+                    {item.emoji}
+                  </div>
+
+                  {/* Mid descriptive details */}
+                  <div className="flex-grow min-w-0">
+                    <div className="flex items-center justify-between gap-1.5">
+                      <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-full border ${pillStyle}`}>
+                        {item.label}
+                      </span>
+                      <span className="text-[9px] font-bold text-slate-450 truncate text-right">
+                        {formatMalayTime(item.completedAt)}
+                      </span>
+                    </div>
+                    {/* Activity Title description */}
+                    <p className="text-xs font-black text-slate-800 mt-2 leading-none uppercase tracking-wide">
+                      {item.aktiviti}
+                    </p>
+                  </div>
+
+                  {/* Success indicator green checkmark */}
+                  <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center shrink-0 shadow-inner">
+                    <Check className="w-4 h-4 stroke-[3.5px]" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+      </main>
+
+      {/* Bottom Navigation */}
+      <BottomNav active="Sejarah" />
+    </AppPhoneFrame>
+  );
+};

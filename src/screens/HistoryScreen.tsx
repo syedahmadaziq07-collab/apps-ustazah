@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Trash2, Check, Award, BarChart3, Star, Sparkles } from 'lucide-react';
+import { Calendar, Trash2, Check, Award, BarChart3, Star, Sparkles, Share2, User } from 'lucide-react';
 import { 
   AppPhoneFrame, 
   SoftSkyBackground, 
@@ -135,6 +135,24 @@ export const HistoryScreen: React.FC = () => {
     }
   };
 
+  const handleShare = (item: EmotionHistoryItem) => {
+    const text = item.shareText || `Rekod Emosi ZikirCare
+Murid: ${item.studentFullName || '-'}
+Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}
+Masa: ${item.completedTime || ''}
+Emosi: ${item.label}
+Terapi: ${item.aktiviti}
+Status: Selesai`;
+
+    if (navigator.share) {
+      navigator.share({ title: 'Rekod Emosi ZikirCare', text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Rekod telah disalin. Boleh paste kepada ibu bapa.');
+      }).catch(() => {});
+    }
+  };
+
   return (
     <AppPhoneFrame id="history-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none">
       
@@ -246,35 +264,60 @@ export const HistoryScreen: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className="bg-white/95 rounded-2xl p-4 shadow-sm border-2 border-purple-100/30 hover:border-purple-200/60 flex items-center gap-3.5 transition-all group relative overflow-hidden"
+                  className="bg-white/95 rounded-2xl p-4 shadow-sm border-2 border-purple-100/30 hover:border-purple-200/60 transition-all group relative overflow-hidden"
                 >
                   {/* Decorative background sparkle shape */}
                   <span className="absolute top-1 right-2 text-lg opacity-15 filter grayscale select-none">✨</span>
 
-                  {/* Large emoji face */}
-                  <div className="text-4.5xl filter drop-shadow-sm shrink-0 select-none animate-pulse-soft">
-                    {item.emoji}
-                  </div>
-
-                  {/* Mid descriptive details */}
-                  <div className="flex-grow min-w-0">
-                    <div className="flex items-center justify-between gap-1.5">
-                      <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-full border ${pillStyle}`}>
-                        {item.label}
-                      </span>
-                      <span className="text-[9px] font-bold text-slate-450 truncate text-right">
-                        {formatMalayTime(item.completedAt)}
-                      </span>
+                  {/* Student Info + Emotion */}
+                  <div className="flex items-start gap-3">
+                    {/* Student photo */}
+                    <div className="w-10 h-12 rounded-lg bg-gradient-to-b from-purple-100 to-amber-50 flex items-center justify-center border border-purple-200 overflow-hidden shrink-0">
+                      {item.studentPhotoUrl ? (
+                        <img src={item.studentPhotoUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <User className="w-4 h-4 text-purple-400" />
+                      )}
                     </div>
-                    {/* Activity Title description */}
-                    <p className="text-xs font-black text-slate-800 mt-2 leading-none uppercase tracking-wide">
-                      {item.aktiviti}
-                    </p>
-                  </div>
 
-                  {/* Success indicator green checkmark */}
-                  <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center shrink-0 shadow-inner">
-                    <Check className="w-4 h-4 stroke-[3.5px]" />
+                    <div className="flex-grow min-w-0">
+                      {/* Student name + emotion badge */}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-xs font-black text-slate-800">
+                          {item.studentFullName || 'Murid'}
+                        </span>
+                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${pillStyle}`}>
+                          {item.emoji} {item.label}
+                        </span>
+                      </div>
+
+                      {/* Activity */}
+                      <p className="text-[11px] font-black text-slate-700 mt-1 leading-tight">
+                        {item.aktiviti}
+                      </p>
+
+                      {/* Date/Time Row */}
+                      <div className="flex items-center gap-2 mt-1 text-[10px] font-bold text-slate-400">
+                        <span>{item.completedDate || formatMalayTime(item.completedAt)}</span>
+                        {item.completedTime && <span>• {item.completedTime}</span>}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-col items-center gap-1.5 shrink-0">
+                      {/* Success indicator */}
+                      <div className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center shadow-inner">
+                        <Check className="w-3.5 h-3.5 stroke-[3.5px]" />
+                      </div>
+                      {/* Share button */}
+                      <button
+                        onClick={() => handleShare(item)}
+                        className="w-7 h-7 rounded-full bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-500 hover:bg-purple-100 active:scale-95 transition-all cursor-pointer"
+                        title="Share dengan Parent"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );

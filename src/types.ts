@@ -18,16 +18,6 @@ export interface EmotionDetails {
   audio: AudioPaths;
 }
 
-export interface EmotionHistoryItem {
-  id: string;
-  emotion: EmotionKey;
-  label: string; // The translated Malay label
-  emoji: string;
-  aktiviti: string;
-  completedAt: string;
-  completed: boolean;
-}
-
 export interface DuaItem {
   id: string;
   name: string;
@@ -38,4 +28,42 @@ export interface DuaItem {
   emojiDecorative: string;
   explanation: string;
   audio: AudioPaths;
+}
+
+export interface SelectedStudent {
+  id: string;
+  fullName: string;
+  className: string;
+  photoUrl: string;
+}
+
+export interface EmotionHistoryItem {
+  id: string;
+  emotion: EmotionKey;
+  label: string;
+  emoji: string;
+  aktiviti: string;
+  completedAt: string;
+  completed: boolean;
+  studentId?: string;
+  studentFullName?: string;
+  studentPhotoUrl?: string;
+  completedDate?: string;
+  completedTime?: string;
+  shareText?: string;
+}
+
+export interface EmotionLogRecord {
+  id: string;
+  studentId: string;
+  studentFullName: string;
+  studentPhotoUrl: string;
+  emotionId: string;
+  emotionLabel: string;
+  therapyTitle: string;
+  status: string;
+  completedAt: string;
+  completedDate: string;
+  completedTime: string;
+  shareText: string;
 }

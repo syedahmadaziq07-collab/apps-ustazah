@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, Info, Heart, Award } from 'lucide-react';
+import { Settings, Info, Heart, Award, LogOut } from 'lucide-react';
 import { 
   AppPhoneFrame, 
   SoftSkyBackground, 
@@ -12,10 +12,18 @@ import { EmotionButton } from '../components/EmotionButton';
 import { BottomNav } from '../components/BottomNav';
 import { emotionData } from '../data/emotions';
 import { EmotionKey } from '../types';
+import { useStudent } from '../components/StudentProvider';
 
 export const HomeScreen: React.FC = () => {
   const navigate = useNavigate();
+  const { selectedStudent, clearStudent } = useStudent();
   const [showCounselorModal, setShowCounselorModal] = useState(false);
+
+  useEffect(() => {
+    if (!selectedStudent) {
+      navigate('/login', { replace: true });
+    }
+  }, [selectedStudent, navigate]);
 
   const handleEmotionSelect = (emotion: EmotionKey) => {
     setTimeout(() => {
@@ -52,15 +60,37 @@ export const HomeScreen: React.FC = () => {
           </div>
         </div>
         
-        {/* Settings Button */}
-        <button
-          id="toggle-counselor-modal-btn"
-          onClick={() => setShowCounselorModal(true)}
-          className="w-9 h-9 rounded-full bg-white border border-purple-100 flex items-center justify-center text-primary shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer animate-pulse-soft"
-          title="Info & Panduan Kaunselor"
-        >
-          <Settings className="w-4.5 h-4.5 text-purple-600" />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Selected Student Badge */}
+          {selectedStudent && (
+            <div className="hidden sm:flex items-center gap-1.5 bg-purple-50 border border-purple-200 rounded-full px-3 py-1">
+              <span className="text-[10px] font-black text-purple-700 truncate max-w-[120px]">
+                Hari ini: {selectedStudent.fullName}
+              </span>
+            </div>
+          )}
+
+          {/* Tukar Murid Button */}
+          {selectedStudent && (
+            <button
+              onClick={() => { clearStudent(); navigate('/login'); }}
+              className="text-[10px] font-black text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
+              title="Tukar Murid"
+            >
+              Tukar
+            </button>
+          )}
+          
+          {/* Settings Button */}
+          <button
+            id="toggle-counselor-modal-btn"
+            onClick={() => setShowCounselorModal(true)}
+            className="w-9 h-9 rounded-full bg-white border border-purple-100 flex items-center justify-center text-primary shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer animate-pulse-soft"
+            title="Info & Panduan Kaunselor"
+          >
+            <Settings className="w-4.5 h-4.5 text-purple-600" />
+          </button>
+        </div>
       </header>
 
       {/* Main Content scroll area */}

@@ -11,10 +11,13 @@ import {
 import { ProgressCircle } from '../components/ProgressCircle';
 import { EmotionKey, EmotionHistoryItem } from '../types';
 import { playStaticAudio } from '../utils/audio';
+import { isSupabaseConnected, supabase } from '../lib/supabase';
+import { useStudent } from '../components/StudentProvider';
 
 export const CounterScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
   const navigate = useNavigate();
+  const { selectedStudent } = useStudent();
 
   const idVal = emotionId || 'tenang';
   const [count, setCount] = useState(0);
@@ -107,8 +110,17 @@ export const CounterScreen: React.FC = () => {
 
   const saveCompletionData = () => {
     try {
-      const existingHistoryStr = localStorage.getItem('emosiHistory');
-      const historyList: EmotionHistoryItem[] = existingHistoryStr ? JSON.parse(existingHistoryStr) : [];
+      const now = new Date();
+      const completedDate = now.toLocaleDateString('ms-MY', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const completedTime = now.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' });
+      const shareText = `Rekod Emosi ZikirCare
+Murid: ${selectedStudent?.fullName || '-'}
+Kelas: ${selectedStudent?.className || '-'}
+Tarikh: ${completedDate}
+Masa: ${completedTime}
+Emosi: ${emotionData[emotionKey]?.label || 'Tenang'}
+Terapi: ${activityName}
+Status: Selesai`;
 
       const newItem: EmotionHistoryItem = {
         id: 'zikir-' + Math.random().toString(36).substring(2, 11) + '-' + Date.now(),
@@ -116,12 +128,42 @@ export const CounterScreen: React.FC = () => {
         label: emotionData[emotionKey]?.label || 'Tenang',
         emoji: emotionData[emotionKey]?.emoji || '😌',
         aktiviti: activityName,
-        completedAt: new Date().toISOString(),
-        completed: true
+        completedAt: now.toISOString(),
+        completed: true,
+        studentId: selectedStudent?.id,
+        studentFullName: selectedStudent?.fullName,
+        studentPhotoUrl: selectedStudent?.photoUrl,
+        completedDate,
+        completedTime,
+        shareText,
       };
 
-      historyList.unshift(newItem); // put at front
+      // Save to localStorage
+      const existingHistoryStr = localStorage.getItem('emosiHistory');
+      const historyList: EmotionHistoryItem[] = existingHistoryStr ? JSON.parse(existingHistoryStr) : [];
+      historyList.unshift(newItem);
       localStorage.setItem('emosiHistory', JSON.stringify(historyList));
+
+      // Also save to Supabase if connected
+      if (isSupabaseConnected && supabase) {
+        (async () => {
+          try {
+            await supabase.from('emotion_logs').insert({
+              student_id: selectedStudent?.id,
+              student_full_name: selectedStudent?.fullName,
+              student_photo_url: selectedStudent?.photoUrl,
+              emotion_id: emotionKey,
+              emotion_label: emotionData[emotionKey]?.label || 'Tenang',
+              therapy_title: activityName,
+              status: 'completed',
+              completed_at: now.toISOString(),
+              completed_date: completedDate,
+              completed_time: completedTime,
+              share_text: shareText,
+            });
+          } catch (_e) { /* supabase insert non-critical */ }
+        })();
+      }
     } catch (e) {
       console.error('Failed to save zikir to history list:', e);
     }

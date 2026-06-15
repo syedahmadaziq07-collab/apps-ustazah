@@ -1,6 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { StudentProvider } from './components/StudentProvider';
 import { HomeScreen } from './screens/HomeScreen';
+import { LoginScreen } from './screens/LoginScreen';
 import { EmotionDetailScreen } from './screens/EmotionDetailScreen';
 import { ReadingScreen } from './screens/ReadingScreen';
 import { CounterScreen } from './screens/CounterScreen';
@@ -8,22 +10,43 @@ import { SuccessScreen } from './screens/SuccessScreen';
 import { HistoryScreen } from './screens/HistoryScreen';
 import { DuaScreen } from './screens/DuaScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
+import { TeacherDashboard } from './screens/teacher/TeacherDashboard';
+import { TeacherMurid } from './screens/teacher/TeacherMurid';
+import { TeacherSejarah } from './screens/teacher/TeacherSejarah';
+import { TeacherPlaceholder } from './screens/teacher/TeacherPlaceholder';
+import { TeacherLayout } from './components/teacher/TeacherLayout';
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginScreen />} />
+      <Route path="/" element={<HomeScreen />} />
+      <Route path="/emosi/:emotionId" element={<EmotionDetailScreen />} />
+      <Route path="/baca/:emotionId" element={<ReadingScreen />} />
+      <Route path="/kira/:emotionId" element={<CounterScreen />} />
+      <Route path="/tahniah/:emotionId" element={<SuccessScreen />} />
+      <Route path="/sejarah" element={<HistoryScreen />} />
+      <Route path="/doa" element={<DuaScreen />} />
+      <Route path="/profil" element={<ProfileScreen />} />
+
+      {/* Teacher Routes */}
+      <Route path="/teacher" element={<TeacherLayout><TeacherDashboard /></TeacherLayout>} />
+      <Route path="/teacher/murid" element={<TeacherLayout><TeacherMurid /></TeacherLayout>} />
+      <Route path="/teacher/sejarah" element={<TeacherLayout><TeacherSejarah /></TeacherLayout>} />
+      <Route path="/teacher/:pageId" element={<TeacherLayout><TeacherPlaceholder /></TeacherLayout>} />
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/emosi/:emotionId" element={<EmotionDetailScreen />} />
-        <Route path="/baca/:emotionId" element={<ReadingScreen />} />
-        <Route path="/kira/:emotionId" element={<CounterScreen />} />
-        <Route path="/tahniah/:emotionId" element={<SuccessScreen />} />
-        <Route path="/sejarah" element={<HistoryScreen />} />
-        <Route path="/doa" element={<DuaScreen />} />
-        <Route path="/profil" element={<ProfileScreen />} />
-        {/* Fallback route back to home */}
-        <Route path="*" element={<HomeScreen />} />
-      </Routes>
+      <StudentProvider>
+        <AppRoutes />
+      </StudentProvider>
     </BrowserRouter>
   );
 }

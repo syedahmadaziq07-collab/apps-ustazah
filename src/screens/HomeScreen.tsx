@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, Info, Heart, Award, LogOut } from 'lucide-react';
 import { 
@@ -13,11 +13,33 @@ import { BottomNav } from '../components/BottomNav';
 import { emotionData } from '../data/emotions';
 import { EmotionKey } from '../types';
 import { useStudent } from '../components/StudentProvider';
+import { getAppPage, getSchoolSettings } from '../services/appContentService';
 
 export const HomeScreen: React.FC = () => {
   const navigate = useNavigate();
   const { selectedStudent, clearStudent } = useStudent();
   const [showCounselorModal, setShowCounselorModal] = useState(false);
+  const [homeTitle, setHomeTitle] = useState('Apa perasaan kamu hari ini?');
+  const [homeSubtitle, setHomeSubtitle] = useState('Pilih emosi yang kamu rasa sekarang untuk bertenang bersama ZikirCare.');
+  const [homeImage, setHomeImage] = useState('/assets/illustrations/home-children-hero.png');
+  const [selectedLabel, setSelectedLabel] = useState('Hari ini:');
+  const [changeBtnText, setChangeBtnText] = useState('Tukar');
+  const [appName, setAppName] = useState('ZikirCare');
+
+  useEffect(() => {
+    getAppPage('home').then((page) => {
+      if (page) {
+        if (page.title) setHomeTitle(page.title);
+        if (page.subtitle) setHomeSubtitle(page.subtitle);
+        if (page.image_url) setHomeImage(page.image_url);
+        if (page.content_json?.selectedStudentLabel) setSelectedLabel(page.content_json.selectedStudentLabel);
+        if (page.content_json?.changeStudentButtonText) setChangeBtnText(page.content_json.changeStudentButtonText);
+      }
+    }).catch(() => {});
+    getSchoolSettings().then((s) => {
+      if (s.app_name) setAppName(s.app_name);
+    }).catch(() => {});
+  }, []);
 
   // Render guard: redirect is handled by App.tsx, but prevent rendering if no student
   if (!selectedStudent) {
@@ -54,7 +76,7 @@ export const HomeScreen: React.FC = () => {
               EmosiKu
             </span>
             <span className="text-lg font-black text-primary tracking-tight leading-none flex items-center gap-1">
-              ZikirCare
+              {appName}
             </span>
           </div>
         </div>
@@ -64,7 +86,7 @@ export const HomeScreen: React.FC = () => {
           {selectedStudent && (
             <div className="hidden sm:flex items-center gap-1.5 bg-purple-50 border border-purple-200 rounded-full px-3 py-1">
               <span className="text-[10px] font-black text-purple-700 truncate max-w-[120px]">
-                Hari ini: {selectedStudent.fullName}
+                {selectedLabel} {selectedStudent.fullName}
               </span>
             </div>
           )}
@@ -76,7 +98,7 @@ export const HomeScreen: React.FC = () => {
               className="text-[10px] font-black text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-1 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
               title="Tukar Murid"
             >
-              Tukar
+              {changeBtnText}
             </button>
           )}
           
@@ -101,17 +123,17 @@ export const HomeScreen: React.FC = () => {
             {/* Polished Kid App Header Title */}
             <div className="text-center sm:text-left">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight leading-tight">
-                Apa perasaan kamu hari ini?
+                {homeTitle}
               </h2>
               <p className="text-xs sm:text-sm font-bold text-slate-500 mt-1 font-sans">
-                Pilih emosi yang kamu rasa sekarang untuk bertenang bersama ZikirCare.
+                {homeSubtitle}
               </p>
             </div>
 
             {/* High-fidelity custom illustration of the Muslim Boy and Girl */}
             <div className="my-2 overflow-hidden flex justify-center items-center w-full">
               <img
-                src="/assets/illustrations/home-children-hero.png"
+                src={homeImage}
                 alt="Kanak-kanak Muslim ceria"
                 className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[400px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
                 referrerPolicy="no-referrer"

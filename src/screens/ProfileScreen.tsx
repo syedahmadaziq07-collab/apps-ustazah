@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Award, User, Sparkles, LogOut, CheckCircle, Flame, ShieldAlert, Heart, GraduationCap, Star } from 'lucide-react';
 import { 
   AppPhoneFrame, 
@@ -8,8 +8,37 @@ import {
   PrayingChildIllustration
 } from '../components/Decorations';
 import { BottomNav } from '../components/BottomNav';
+import { getAppPage, getSchoolSettings } from '../services/appContentService';
 
 export const ProfileScreen: React.FC = () => {
+  const [profileTitle, setProfileTitle] = useState('Profil Guru Kaunseling');
+  const [profileSubtitle, setProfileSubtitle] = useState('ZikirCare membantu murid mengenal emosi dan mengamalkan cara bertenang secara Islam.');
+  const [bodyText, setBodyText] = useState('');
+  const [schoolInfo, setSchoolInfo] = useState('SK Seri Idaman, Shah Alam, Selangor');
+  const [counsellingNote, setCounsellingNote] = useState('');
+  const [privacyNote, setPrivacyNote] = useState('');
+  const [appName, setAppName] = useState('ZikirCare');
+  const [tagline, setTagline] = useState('');
+  const [themeColor, setThemeColor] = useState('#8B5CF6');
+
+  useEffect(() => {
+    getAppPage('profile').then((page) => {
+      if (page) {
+        if (page.title) setProfileTitle(page.title);
+        if (page.subtitle) setProfileSubtitle(page.subtitle);
+        if (page.body_text) setBodyText(page.body_text);
+        if (page.content_json?.schoolInfo) setSchoolInfo(page.content_json.schoolInfo);
+        if (page.content_json?.counsellingNote) setCounsellingNote(page.content_json.counsellingNote);
+        if (page.content_json?.privacyNote) setPrivacyNote(page.content_json.privacyNote);
+      }
+    }).catch(() => {});
+    getSchoolSettings().then((s) => {
+      if (s.app_name) setAppName(s.app_name);
+      if (s.tagline) setTagline(s.tagline);
+      if (s.theme_color) setThemeColor(s.theme_color);
+    }).catch(() => {});
+  }, []);
+
   // Simple stats compiled from localStorage history if any
   const historyStr = localStorage.getItem('emosiHistory');
   let completedCount = 5; // seed default
@@ -22,7 +51,7 @@ export const ProfileScreen: React.FC = () => {
   }
 
   const counselorName = "Cikgu Fatimah Binti Ismail";
-  const schoolName = "SK Seri Idaman, Shah Alam, Selangor";
+  const schoolName = schoolInfo;
   const counselorId = "KB-08249-M";
 
   return (
@@ -42,9 +71,9 @@ export const ProfileScreen: React.FC = () => {
           <span className="text-lg">🧕</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider leading-none mb-0.5">ZikirCare Panel</span>
+          <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider leading-none mb-0.5">{appName} Panel</span>
           <h1 className="text-base font-black text-slate-800 tracking-tight leading-none">
-            Profil Guru Kaunseling
+            {profileTitle}
           </h1>
         </div>
       </header>
@@ -185,11 +214,13 @@ export const ProfileScreen: React.FC = () => {
         {/* Footer info brand */}
         <div className="mt-8 text-center pb-4 select-none">
           <p className="text-[10px] font-black text-slate-600">
-            ZikirCare: Tenang Bersama Islam (PWA v1.0.0)
+            {appName}{tagline ? `: ${tagline}` : ''} (PWA v1.0.0)
           </p>
-          <p className="text-[9px] font-bold text-slate-400 mt-1 leading-relaxed px-5">
-            Dibangunkan khas untuk Guru Kaunseling Malaysia bagi pengurusan sokongan emosi sejahtera murid sekolah rendah & menengah.
-          </p>
+          {!privacyNote && (
+            <p className="text-[9px] font-bold text-slate-400 mt-1 leading-relaxed px-5">
+              Dibangunkan khas untuk Guru Kaunseling Malaysia bagi pengurusan sokongan emosi sejahtera murid sekolah rendah & menengah.
+            </p>
+          )}
         </div>
 
       </main>

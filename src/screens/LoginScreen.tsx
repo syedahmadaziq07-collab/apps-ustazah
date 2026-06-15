@@ -5,6 +5,7 @@ import { useStudent } from '../components/StudentProvider';
 import { isSupabaseConnected } from '../lib/supabase';
 import { SelectedStudent } from '../types';
 import { getActiveStudents } from '../services/studentService';
+import { getSchoolSettings, getAppPage } from '../services/appContentService';
 
 export const LoginScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +18,12 @@ export const LoginScreen: React.FC = () => {
   const [students, setStudents] = useState<SelectedStudent[]>([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [studentError, setStudentError] = useState(false);
+  const [schoolName, setSchoolName] = useState('ZikirCare');
+  const [appName, setAppName] = useState('ZikirCare');
+  const [tagline, setTagline] = useState('Terapi Emosi & Zikir untuk Murid');
+  const [logoUrl, setLogoUrl] = useState('');
+  const [loginTitle, setLoginTitle] = useState('Siapa yang hadir hari ini?');
+  const [loginSubtitle, setLoginSubtitle] = useState('Pilih gambar kamu sebelum mula.');
 
   useEffect(() => {
     getActiveStudents()
@@ -28,6 +35,18 @@ export const LoginScreen: React.FC = () => {
         setStudentError(true);
         setLoadingStudents(false);
       });
+    getSchoolSettings().then((s) => {
+      if (s.school_name) setSchoolName(s.school_name);
+      if (s.app_name) setAppName(s.app_name);
+      if (s.tagline) setTagline(s.tagline);
+      if (s.logo_url) setLogoUrl(s.logo_url);
+    }).catch(() => {});
+    getAppPage('login').then((page) => {
+      if (page) {
+        if (page.title) setLoginTitle(page.title);
+        if (page.subtitle) setLoginSubtitle(page.subtitle);
+      }
+    }).catch(() => {});
   }, []);
 
   const handleStudentSelect = (student: SelectedStudent) => {
@@ -58,12 +77,16 @@ export const LoginScreen: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 via-amber-50 to-purple-50 flex flex-col">
       {/* School Header */}
       <header className="px-6 pt-6 pb-4 text-center">
-        <div className="w-16 h-16 rounded-full bg-white shadow-md border-2 border-purple-200 flex items-center justify-center mx-auto mb-3">
-          <School className="w-8 h-8 text-purple-600" />
+        <div className="w-16 h-16 rounded-full bg-white shadow-md border-2 border-purple-200 flex items-center justify-center mx-auto mb-3 overflow-hidden">
+          {logoUrl ? (
+            <img src={logoUrl} alt={schoolName} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          ) : (
+            <School className="w-8 h-8 text-purple-600" />
+          )}
         </div>
-        <h1 className="text-2xl font-black text-purple-900 tracking-tight">ZikirCare</h1>
+        <h1 className="text-2xl font-black text-purple-900 tracking-tight">{appName}</h1>
         <p className="text-xs font-bold text-purple-600 mt-1">
-          Terapi Emosi & Zikir untuk Murid
+          {tagline}
         </p>
         {supabaseMissing && (
           <div className="mt-2 inline-block bg-amber-50 border border-amber-200 rounded-full px-4 py-1">
@@ -76,8 +99,8 @@ export const LoginScreen: React.FC = () => {
       {!showTeacherLogin ? (
         <main className="flex-grow px-5 pb-6 overflow-y-auto">
           <div className="text-center mb-5">
-            <h2 className="text-lg font-black text-slate-800">Siapa yang hadir hari ini?</h2>
-            <p className="text-xs font-bold text-slate-500 mt-1">Pilih gambar kamu sebelum mula.</p>
+            <h2 className="text-lg font-black text-slate-800">{loginTitle}</h2>
+            <p className="text-xs font-bold text-slate-500 mt-1">{loginSubtitle}</p>
           </div>
 
           {loadingStudents ? (

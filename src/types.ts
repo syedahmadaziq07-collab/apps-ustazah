@@ -86,6 +86,28 @@ export function toStudentRecord(s: SelectedStudent, partial?: Partial<StudentRec
   };
 }
 
+export interface SchoolSettings {
+  id?: string;
+  school_name: string;
+  app_name: string;
+  logo_url: string;
+  tagline: string;
+  theme_color: string;
+}
+
+export interface AppPage {
+  id: string;
+  page_name: string;
+  title: string;
+  subtitle: string;
+  body_text: string;
+  image_url: string;
+  audio_url: string;
+  content_json: Record<string, string>;
+  is_active: boolean;
+  updated_at: string;
+}
+
 export interface EmotionLogRecord {
   id: string;
   studentId: string;

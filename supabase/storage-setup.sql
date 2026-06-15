@@ -1,12 +1,11 @@
 -- ZikirCare Supabase Storage Setup
--- Phase 2D: Storage buckets for image and audio uploads
+-- Phase 3A: Storage buckets for image and audio uploads
 --
--- Run these SQL statements in your Supabase SQL Editor
--- or create buckets manually via Supabase Dashboard > Storage.
+-- Run these SQL statements in your Supabase SQL Editor.
 --
--- IMPORTANT: For production, tighten RLS policies to restrict write
--- access to authenticated teachers only. The public read policies below
--- allow the student app to display/play files without authentication.
+-- For school production, replace demo upload policy with teacher-authenticated
+-- upload policy (see production notes at bottom).
+-- Do not use service role key in frontend.
 
 -- ============================================
 -- Bucket: student-photos
@@ -16,13 +15,14 @@ INSERT INTO storage.buckets (id, name, public, avif_autodetection)
 VALUES ('student-photos', 'student-photos', true, false)
 ON CONFLICT (id) DO NOTHING;
 
--- Public read (anyone can view photos)
+-- Public read (anyone can view photos — needed for student login cards)
 CREATE POLICY "student-photos-public-read"
 ON storage.objects FOR SELECT
 USING (bucket_id = 'student-photos');
 
--- Authenticated upload (teacher/admin only)
--- For demo: allow anon uploads (restrict in production)
+-- Demo: allow anon upload (anyone can upload).
+-- For school production, replace demo upload policy with teacher-authenticated
+-- upload policy (see production notes at bottom).
 CREATE POLICY "student-photos-upload"
 ON storage.objects FOR INSERT
 WITH CHECK (bucket_id = 'student-photos');
@@ -60,20 +60,28 @@ ON storage.objects FOR INSERT
 WITH CHECK (bucket_id = 'app-audio');
 
 -- ============================================
--- Production Security Notes:
+-- Production Security Notes
 -- ============================================
--- 1. For production, replace INSERT policies with:
---    CREATE POLICY "app-images-upload-authenticated"
+-- 1. For school production, replace demo upload policy with
+--    teacher-authenticated upload policy:
+--
+--    DROP POLICY IF EXISTS "student-photos-upload" ON storage.objects;
+--    CREATE POLICY "student-photos-upload-authenticated"
 --    ON storage.objects FOR INSERT
 --    WITH CHECK (
---      bucket_id = 'app-images'
+--      bucket_id = 'student-photos'
 --      AND auth.role() = 'authenticated'
 --    );
 --
--- 2. To restrict file types at the database level,
+--    (Repeat for app-images-upload and app-audio-upload.)
+--
+-- 2. Do not use service role key in frontend.
+--    The anon key with RLS policies is sufficient.
+--
+-- 3. To restrict file types at the database level,
 --    add a CHECK constraint or use Supabase Dashboard
 --    "File size limit" and "Allowed MIME types" settings.
 --
--- 3. Recommended limits:
+-- 4. Recommended limits (already enforced by frontend):
 --    - Images: max 5MB, types: image/jpeg, image/png, image/webp
 --    - Audio:  max 15MB, types: audio/mpeg, audio/wav, audio/mp4, audio/ogg

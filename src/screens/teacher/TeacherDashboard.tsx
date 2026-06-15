@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, History, Heart, CheckCircle, School } from 'lucide-react';
+import { Users, History, Heart, CheckCircle, School, Database } from 'lucide-react';
 import { useStudent } from '../../components/StudentProvider';
 import { isSupabaseConnected } from '../../lib/supabase';
 
@@ -25,6 +25,19 @@ const placeholderPages: { label: string; path: string; desc: string }[] = [
 export const TeacherDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { selectedStudent } = useStudent();
+  const [supabaseCheck, setSupabaseCheck] = useState<'loading' | 'connected' | 'error'>('loading');
+
+  useEffect(() => {
+    if (!isSupabaseConnected) {
+      setSupabaseCheck('error');
+      return;
+    }
+    fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/emotions?select=id&limit=1`, {
+      headers: { 'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY },
+    })
+      .then(res => setSupabaseCheck(res.ok ? 'connected' : 'error'))
+      .catch(() => setSupabaseCheck('error'));
+  }, []);
 
   return (
     <div className="flex-grow p-4 md:p-6 overflow-y-auto pb-20 md:pb-6">
@@ -80,6 +93,33 @@ export const TeacherDashboard: React.FC = () => {
           </div>
           <p className="text-[11px] font-bold text-amber-700 leading-relaxed">
             Mod demo aktif: data disimpan pada peranti ini.
+          </p>
+        </div>
+      )}
+
+      {/* Supabase status card */}
+      {isSupabaseConnected && (
+        <div className={`rounded-2xl p-4 border-2 ${
+          supabaseCheck === 'connected'
+            ? 'bg-green-50 border-green-200'
+            : supabaseCheck === 'loading'
+            ? 'bg-gray-50 border-gray-200'
+            : 'bg-amber-50 border-amber-200'
+        }`}>
+          <div className="flex items-center gap-2 mb-1">
+            <Database className={`w-4 h-4 ${
+              supabaseCheck === 'connected' ? 'text-green-600' : 'text-amber-600'
+            }`} />
+            <p className={`text-xs font-black ${
+              supabaseCheck === 'connected' ? 'text-green-800' : 'text-amber-800'
+            }`}>
+              {supabaseCheck === 'connected' ? 'Supabase' : 'Supabase'}
+            </p>
+          </div>
+          <p className="text-[11px] font-bold leading-relaxed text-slate-600">
+            {supabaseCheck === 'loading' && 'Sedang memuatkan...'}
+            {supabaseCheck === 'connected' && 'Supabase disambungkan.'}
+            {supabaseCheck === 'error' && 'Supabase belum lengkap. Sila semak schema atau env.'}
           </p>
         </div>
       )}

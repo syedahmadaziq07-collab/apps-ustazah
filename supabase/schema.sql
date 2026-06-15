@@ -1,8 +1,10 @@
 -- ZikirCare Supabase Schema
--- Phase 1: Foundation tables for student login, emotion tracking, and future CMS
+-- Phase 3A: Complete schema with all columns used by services, indexes, and comments
+-- Safe to run multiple times (uses CREATE TABLE IF NOT EXISTS and CREATE INDEX IF NOT EXISTS)
 
 -- ============================================
 -- Table: school_settings
+-- Singleton row for school branding.
 -- ============================================
 CREATE TABLE IF NOT EXISTS school_settings (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -17,8 +19,8 @@ CREATE TABLE IF NOT EXISTS school_settings (
 
 -- ============================================
 -- Table: students
--- Real student photos should be stored in Supabase Storage bucket 'student-photos'
--- and linked via students.photo_url
+-- Student profiles for photo login.
+-- Photo files stored in storage bucket 'student-photos'.
 -- ============================================
 CREATE TABLE IF NOT EXISTS students (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -31,10 +33,12 @@ CREATE TABLE IF NOT EXISTS students (
   updated_at timestamptz DEFAULT now()
 );
 
+CREATE INDEX IF NOT EXISTS idx_students_active_sort ON students (is_active, sort_order);
+
 -- ============================================
 -- Table: teacher_profiles
--- Teacher auth uses Supabase Auth email/password.
--- This table stores profile info linked to auth.users.
+-- Linked to auth.users when Supabase Auth is enabled.
+-- For now, teacher PIN login (VITE_TEACHER_PIN) is used.
 -- ============================================
 CREATE TABLE IF NOT EXISTS teacher_profiles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -46,7 +50,9 @@ CREATE TABLE IF NOT EXISTS teacher_profiles (
 
 -- ============================================
 -- Table: app_pages
--- Editable page content for Home, Sejarah, Doa, Profile screens
+-- Editable page content for Home, Login, Profile screens.
+-- id is a stable text key: 'login', 'home', 'profile'.
+-- content_json stores page-specific JSON fields.
 -- ============================================
 CREATE TABLE IF NOT EXISTS app_pages (
   id text PRIMARY KEY,
@@ -58,12 +64,13 @@ CREATE TABLE IF NOT EXISTS app_pages (
   audio_url text,
   content_json jsonb DEFAULT '{}'::jsonb,
   is_active boolean DEFAULT true,
+  created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
 
 -- ============================================
 -- Table: emotions
--- Editable emotion definitions
+-- Editable emotion definitions with zikir text.
 -- ============================================
 CREATE TABLE IF NOT EXISTS emotions (
   id text PRIMARY KEY,
@@ -74,22 +81,29 @@ CREATE TABLE IF NOT EXISTS emotions (
   image_url text,
   malay_audio_url text,
   arabic_audio_url text,
+  zikir text,
+  zikir_rumi text,
+  zikir_maksud text,
+  aktiviti text,
   sort_order int DEFAULT 0,
   is_active boolean DEFAULT true,
+  created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
 
+CREATE INDEX IF NOT EXISTS idx_emotions_active_sort ON emotions (is_active, sort_order);
+
 -- ============================================
 -- Table: therapies
--- Editable therapy/zikir activities linked to emotions
+-- Therapy/zikir activities linked to an emotion via emotion_id.
 -- ============================================
 CREATE TABLE IF NOT EXISTS therapies (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  emotion_id text REFERENCES emotions(id),
+  id text PRIMARY KEY,
+  emotion_id text REFERENCES emotions(id) ON DELETE CASCADE,
   title text NOT NULL,
   instruction text,
   therapy_type text,
-  count_target int DEFAULT 0,
+  count_target int DEFAULT 1,
   arabic_text text,
   rumi_text text,
   meaning_text text,
@@ -98,38 +112,47 @@ CREATE TABLE IF NOT EXISTS therapies (
   arabic_audio_url text,
   sort_order int DEFAULT 0,
   is_active boolean DEFAULT true,
+  created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
 
+CREATE INDEX IF NOT EXISTS idx_therapies_emotion ON therapies (emotion_id, is_active, sort_order);
+
 -- ============================================
 -- Table: duas
--- Editable doa/zikir list
+-- Editable doa/zikir list for the Dua screen.
 -- ============================================
 CREATE TABLE IF NOT EXISTS duas (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  id text PRIMARY KEY,
   title text NOT NULL,
   arabic_text text,
   rumi_text text,
   meaning_text text,
   image_url text,
   audio_url text,
+  emoji_decorative text DEFAULT '📖',
+  explanation text,
   sort_order int DEFAULT 0,
   is_active boolean DEFAULT true,
+  created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
 
+CREATE INDEX IF NOT EXISTS idx_duas_active_sort ON duas (is_active, sort_order);
+
 -- ============================================
 -- Table: emotion_logs
--- Records of student emotion/therapy sessions
+-- Records of completed student emotion/therapy sessions.
+-- Used by Sejarah screens and parent share.
 -- ============================================
 CREATE TABLE IF NOT EXISTS emotion_logs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  student_id uuid REFERENCES students(id),
+  student_id uuid REFERENCES students(id) ON DELETE SET NULL,
   student_full_name text,
   student_photo_url text,
   emotion_id text,
   emotion_label text,
-  therapy_id uuid,
+  therapy_id text,
   therapy_title text,
   status text DEFAULT 'completed',
   started_at timestamptz,
@@ -140,16 +163,5 @@ CREATE TABLE IF NOT EXISTS emotion_logs (
   created_at timestamptz DEFAULT now()
 );
 
--- ============================================
--- Storage buckets (create via Supabase Dashboard)
--- ============================================
--- Required buckets:
--- 1. student-photos  (public read, authenticated write)
--- 2. app-images      (public read, authenticated write)
--- 3. app-audio       (public read, authenticated write)
---
--- TODO: Add Row Level Security (RLS) policies when deploying to production.
--- For Phase 1, RLS is left as a manual setup step.
--- Example RLS for students table:
---   CREATE POLICY "Students are viewable by everyone" ON students FOR SELECT USING (true);
---   CREATE POLICY "Students are insertable by teachers only" ON students FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE INDEX IF NOT EXISTS idx_emotion_logs_created ON emotion_logs (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_emotion_logs_student ON emotion_logs (student_id);

@@ -132,7 +132,7 @@ export const EmotionDetailScreen: React.FC = () => {
             </h3>
 
             {loadingTherapies ? (
-              <p className="text-[10px] font-bold text-slate-400">Memuatkan terapi...</p>
+              <p className="text-[10px] font-bold text-slate-400">Sedang memuatkan...</p>
             ) : therapies.length === 0 ? (
               <p className="text-[10px] font-bold text-slate-400">Cikgu belum menambah kandungan ini.</p>
             ) : (

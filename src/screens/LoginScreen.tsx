@@ -102,7 +102,7 @@ export const LoginScreen: React.FC = () => {
 
             {loadingStudents ? (
               <div className="text-center py-8">
-                <p className="text-sm font-bold text-slate-400">Memuatkan...</p>
+                <p className="text-sm font-bold text-slate-400">Sedang memuatkan...</p>
               </div>
             ) : studentError || students.length === 0 ? (
               <div className="text-center py-8 bg-white/80 rounded-3xl border-2 border-purple-100">

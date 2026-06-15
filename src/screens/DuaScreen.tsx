@@ -66,7 +66,13 @@ export const DuaScreen: React.FC = () => {
 
         {loading ? (
           <div className="text-center py-8">
-            <p className="text-xs font-black text-slate-400">Memuatkan...</p>
+            <p className="text-xs font-black text-slate-400">Sedang memuatkan...</p>
+          </div>
+        ) : duas.length === 0 ? (
+          <div className="flex flex-col items-center justify-center bg-white p-8 rounded-[32px] border-2 border-purple-100/50 shadow-sm min-h-[200px]">
+            <span className="text-4xl mb-2">📖</span>
+            <p className="text-sm font-black text-slate-600">Belum ada doa lagi.</p>
+            <p className="text-[11px] font-bold text-slate-400 mt-1">Cikgu belum menambah kandungan ini.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">

@@ -202,8 +202,8 @@ Tarikh: ${completedDate}, ${completedTime}`;
           <h1 className="text-2xl font-black text-slate-800 tracking-tight leading-tight">
             Sebut <span className="text-purple-600 font-black">{activeZikir}</span>
           </h1>
-          <p className="text-[11px] font-bold text-slate-550 mt-1.5 whitespace-pre-line leading-relaxed px-4">
-            Ketuk butang di bawah apabila kamu selesai melafazkan bacaan ini sehinggalah penuh bintang di atas.
+          <p className="text-[11px] font-bold text-slate-500 mt-1.5 leading-relaxed px-4">
+            Tekan butang di bawah setiap kali kamu selesai membaca. {count}/{maxCount} sudah selesai.
           </p>
         </div>
 
@@ -224,11 +224,18 @@ Tarikh: ${completedDate}, ${completedTime}`;
           <button onClick={handleTap}
             className="w-full py-5 bg-gradient-to-r from-primary to-purple-600 hover:from-purple-700 hover:to-purple-800 text-white text-base font-black rounded-3xl shadow-lg border-b-6 border-purple-800 flex items-center justify-center gap-2 active:translate-y-[3px] active:border-b-2 hover:translate-y-[-1px] transition-all duration-150 cursor-pointer animate-pulse-soft">
             <CheckCircle2 className="w-5.5 h-5.5 text-emerald-300" />
-            SAYA DAH BACA ✓
+            {count >= maxCount ? 'SIAP ✓' : 'SAYA DAH BACA ✓'}
           </button>
-          <span className="block text-[10px] text-slate-500 font-black mt-2 text-center tracking-wide uppercase">
-            👉 Tap butang besar ini untuk kiraan zikir seterusnya
-          </span>
+          {count < maxCount && (
+            <p className="text-[10px] text-slate-400 font-bold mt-2 text-center">
+            Tekan setiap kali selesai membaca. {maxCount - count} lagi.
+            </p>
+          )}
+          {count >= maxCount && (
+            <p className="text-[10px] text-emerald-600 font-bold mt-2 text-center">
+            Alhamdulillah, sudah selesai!
+            </p>
+          )}
         </div>
       </main>
 

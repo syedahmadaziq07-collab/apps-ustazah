@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Sparkles, Home, Star, Volume2 } from 'lucide-react';
+import { Sparkles, Home, Star, Volume2, History } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
 import {
   AppPhoneFrame,
@@ -109,11 +109,18 @@ export const SuccessScreen: React.FC = () => {
             <Volume2 className="w-5 h-5" />
             Dengar Ucapan
           </button>
-          <button onClick={() => navigate('/')}
-            className="w-full py-4 bg-gradient-to-r from-primary to-purple-600 hover:from-purple-700 hover:to-purple-800 text-white font-black text-base rounded-2xl flex items-center justify-center gap-2 shadow-lg border-b-4 border-purple-800 active:translate-y-[2px] active:border-b-2 transition-all cursor-pointer">
-            <Home className="w-5 h-5" />
-            Kembali ke Utama
-          </button>
+          <div className="grid grid-cols-2 gap-3">
+            <button onClick={() => navigate('/sejarah')}
+              className="w-full py-4 border-3 border-purple-300 text-purple-600 hover:bg-purple-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white/90 shadow-sm">
+              <History className="w-5 h-5" />
+              Lihat Sejarah
+            </button>
+            <button onClick={() => navigate('/')}
+              className="w-full py-4 bg-gradient-to-r from-primary to-purple-600 hover:from-purple-700 hover:to-purple-800 text-white font-black text-base rounded-2xl flex items-center justify-center gap-2 shadow-lg border-b-4 border-purple-800 active:translate-y-[2px] active:border-b-2 transition-all cursor-pointer">
+              <Home className="w-5 h-5" />
+              Kembali ke Utama
+            </button>
+          </div>
         </div>
       </main>
 

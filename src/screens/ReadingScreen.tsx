@@ -122,7 +122,13 @@ export const ReadingScreen: React.FC = () => {
       </header>
 
       <main className="flex-grow px-5 pt-4 pb-6 select-none text-center flex flex-col justify-between relative z-10 overflow-y-auto">
-        <div className="bg-[#FFFDF4]/95 rounded-[32px] p-6 shadow-[0_12px_24px_-10px_rgba(124,58,237,0.12)] border-3 border-[#FDE68A] transition-all flex flex-col justify-center min-h-[220px] relative">
+        {!loaded && !(idVal in emotionData) && !staticDuas.some(d => d.id === idVal) ? (
+          <div className="flex items-center justify-center min-h-[300px]">
+            <p className="text-sm font-bold text-slate-400">Sedang memuatkan...</p>
+          </div>
+        ) : (
+          <>
+        <div className="bg-[#FFFDF4]/95 rounded-[32px] p-6 shadow-[0_12px_24px_-10px rgba(124,58,237,0.12)] border-3 border-[#FDE68A] transition-all flex flex-col justify-center min-h-[220px] relative">
           <span className="absolute -top-3 -left-2 text-2xl animate-star-twinkle">⭐</span>
           <span className="absolute -bottom-2 -right-1 text-xl animate-pulse-soft">✨</span>
 
@@ -175,6 +181,8 @@ export const ReadingScreen: React.FC = () => {
             Sebut & Kira
           </button>
         </div>
+          </>
+      )}
       </main>
 
       {audioFallback && (

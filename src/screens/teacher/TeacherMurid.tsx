@@ -114,7 +114,7 @@ export const TeacherMurid: React.FC = () => {
       {/* Student Grid */}
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-sm font-bold text-slate-400">Memuatkan...</p>
+          <p className="text-sm font-bold text-slate-400">Sedang memuatkan...</p>
         </div>
       ) : students.length === 0 ? (
         <div className="text-center py-12 bg-white/80 rounded-3xl border-2 border-purple-100">

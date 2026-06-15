@@ -99,7 +99,7 @@ export const TeacherHomeEditor: React.FC = () => {
   if (loading) {
     return (
       <div className="flex-grow p-4 md:p-6 overflow-y-auto pb-20 md:pb-6">
-        <p className="text-sm font-bold text-slate-400">Memuatkan...</p>
+        <p className="text-sm font-bold text-slate-400">Sedang memuatkan...</p>
       </div>
     );
   }

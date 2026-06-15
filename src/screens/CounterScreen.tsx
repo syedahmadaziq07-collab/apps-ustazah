@@ -104,7 +104,7 @@ export const CounterScreen: React.FC = () => {
 
     if (arabicAudioPath) {
       playStaticAudio(arabicAudioPath, () => {
-        setAudioFallback('Audio bacaan akan ditambah kemudian.');
+        setAudioFallback('Audio belum ditambah lagi.');
       });
     }
 
@@ -126,14 +126,8 @@ export const CounterScreen: React.FC = () => {
       const now = new Date();
       const completedDate = now.toLocaleDateString('ms-MY', { day: '2-digit', month: '2-digit', year: 'numeric' });
       const completedTime = now.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' });
-      const shareText = `Rekod Emosi ZikirCare
-Murid: ${selectedStudent?.fullName || '-'}
-Kelas: ${selectedStudent?.className || '-'}
-Tarikh: ${completedDate}
-Masa: ${completedTime}
-Emosi: ${emotionData[emotionKey]?.label || 'Tenang'}
-Terapi: ${activityName}
-Status: Selesai`;
+      const shareText = `Assalamualaikum. Hari ini ${selectedStudent?.fullName || 'murid'} telah memilih emosi ${emotionData[emotionKey]?.label || 'Tenang'} dan menyelesaikan aktiviti "${activityName}". Tahniah atas usaha yang baik.
+Tarikh: ${completedDate}, ${completedTime}`;
 
       const newItem: EmotionHistoryItem = {
         id: 'zikir-' + Math.random().toString(36).substring(2, 11) + '-' + Date.now(),

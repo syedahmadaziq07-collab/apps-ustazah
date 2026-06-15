@@ -136,13 +136,8 @@ export const HistoryScreen: React.FC = () => {
   };
 
   const handleShare = (item: EmotionHistoryItem) => {
-    const text = item.shareText || `Rekod Emosi ZikirCare
-Murid: ${item.studentFullName || '-'}
-Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}
-Masa: ${item.completedTime || ''}
-Emosi: ${item.label}
-Terapi: ${item.aktiviti}
-Status: Selesai`;
+    const text = item.shareText || `Assalamualaikum. Hari ini ${item.studentFullName || 'murid'} telah memilih emosi ${item.label} dan menyelesaikan aktiviti "${item.aktiviti}". Tahniah atas usaha yang baik.
+Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}${item.completedTime ? ', ' + item.completedTime : ''}`;
 
     if (navigator.share) {
       navigator.share({ title: 'Rekod Emosi ZikirCare', text }).catch(() => {});
@@ -241,9 +236,9 @@ Status: Selesai`;
         {history.length === 0 ? (
           <div className="flex flex-col items-center justify-center bg-white p-8 rounded-[32px] border-2 border-purple-100/50 shadow-sm min-h-[240px]">
             <SadChildIllustration className="h-32 mb-2" />
-            <p className="text-sm font-black text-slate-800 mt-2">Belum ada rekod lagi.</p>
+            <p className="text-sm font-black text-slate-800 mt-2">Belum ada rekod hari ini.</p>
             <p className="text-[11px] font-bold text-slate-400 text-center mt-1 leading-relaxed px-4">
-              Bimbinglah murid berzikir terlebih dahulu, dan catat kemajuan bertenang pertama mereka di sini!
+              Tidak apa. Pilih emosi kamu dan mula bertenang perlahan-lahan.
             </p>
           </div>
         ) : (

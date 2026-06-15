@@ -39,13 +39,8 @@ export const TeacherSejarah: React.FC = () => {
   }, []);
 
   const handleShare = (item: EmotionHistoryItem) => {
-    const shareText = item.shareText || `Rekod Emosi ZikirCare
-Murid: ${item.studentFullName || '-'}
-Tarikh: ${item.completedDate || formatDate(item.completedAt)}
-Masa: ${item.completedTime || formatTime(item.completedAt)}
-Emosi: ${item.label}
-Terapi: ${item.aktiviti}
-Status: Selesai`;
+    const shareText = item.shareText || `Assalamualaikum. Hari ini ${item.studentFullName || 'murid'} telah memilih emosi ${item.label} dan menyelesaikan aktiviti "${item.aktiviti}". Tahniah atas usaha yang baik.
+Tarikh: ${item.completedDate || formatDate(item.completedAt)}, ${item.completedTime || formatTime(item.completedAt)}`;
 
     if (navigator.share) {
       navigator.share({ title: 'Rekod Emosi ZikirCare', text: shareText }).catch(() => {});
@@ -69,7 +64,7 @@ Status: Selesai`;
       {logs.length === 0 ? (
         <div className="bg-white rounded-2xl p-8 border-2 border-purple-100 text-center">
           <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm font-black text-slate-500">Belum ada rekod.</p>
+          <p className="text-sm font-black text-slate-500">Belum ada rekod hari ini.</p>
         </div>
       ) : (
         <div className="space-y-3">

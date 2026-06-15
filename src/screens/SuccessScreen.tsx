@@ -47,7 +47,7 @@ export const SuccessScreen: React.FC = () => {
   const handlePlayTahniah = useCallback(() => {
     setAudioFallback('');
     playStaticAudio('/audio/malay/tahniah.mp3', () => {
-      setAudioFallback('Audio ucapan akan ditambah kemudian.');
+      setAudioFallback('Audio belum ditambah lagi.');
     });
   }, []);
 
@@ -75,7 +75,10 @@ export const SuccessScreen: React.FC = () => {
             Tahniah! 🎉
           </h1>
           <p className="text-[13px] font-black text-slate-800 mt-2 px-3 leading-relaxed">
-            Kamu berjaya membaca <span className="text-purple-650 font-black uppercase">&quot;{zikirText}&quot;</span> sebanyak <strong className="text-emerald-650 font-black">{maxCount} kali</strong>.
+            {therapyData ? `Kamu sudah selesai: "${therapyData.title}"` : `Kamu berjaya membaca "${zikirText}" sebanyak ${maxCount} kali.`}
+          </p>
+          <p className="text-[10px] font-bold text-emerald-600 mt-1">
+            Cikgu bangga dengan usaha kamu!
           </p>
         </div>
 
@@ -87,15 +90,15 @@ export const SuccessScreen: React.FC = () => {
           <ul className="space-y-3 font-sans text-[11px] font-black text-slate-700">
             <li className="flex items-start gap-2.5">
               <span className="text-lg bg-pink-100 border border-pink-200 p-1 rounded-xl shrink-0">🤲</span>
-              <span className="leading-relaxed pt-0.5">Allah sentiasa sayang kepada kanak-kanak yang sabar, tenang, dan rajin berzikir.</span>
+              <span className="leading-relaxed pt-0.5">Alhamdulillah, kamu sudah mencuba dengan baik. Teruskan berlatih perlahan-lahan, ya.</span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="text-lg bg-[#E6FDF4] border border-[#A7F3D0] p-1 rounded-xl shrink-0">❤️</span>
-              <span className="leading-relaxed pt-0.5">Kamu sangat hebat hari ini kerana mengawal perasaan dengan penuh tenang dan ceria!</span>
+              <span className="leading-relaxed pt-0.5">Kamu sangat hebat hari ini. Cikgu bangga dengan usaha kamu!</span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="text-lg bg-amber-100 border border-amber-200 p-1 rounded-xl shrink-0">⭐</span>
-              <span className="leading-relaxed pt-0.5">Mari teruskan amalan zikir harian untuk memelihara jiwa yang murni.</span>
+              <span className="leading-relaxed pt-0.5">Jom teruskan amalan baik ini. Setiap langkah kecil membawa kebaikan.</span>
             </li>
           </ul>
         </div>

@@ -81,14 +81,15 @@ export const ReadingScreen: React.FC = () => {
 
   const handleListenAudio = useCallback(() => {
     setAudioFallback('');
+    const fb = isDua ? 'Audio doa belum ditambah.' : 'Audio belum ditambah lagi.';
     if (audioPath) {
       playStaticAudio(audioPath, () => {
-        setAudioFallback('Audio nasihat akan ditambah kemudian.');
+        setAudioFallback(fb);
       });
     } else {
-      setAudioFallback('Audio nasihat akan ditambah kemudian.');
+      setAudioFallback(fb);
     }
-  }, [audioPath]);
+  }, [audioPath, isDua]);
 
   const handleStartCounter = () => {
     if (therapyId) {
@@ -128,7 +129,7 @@ export const ReadingScreen: React.FC = () => {
           <div className="flex justify-center mb-4">
             <span className="px-4 py-1.5 text-[10px] font-black tracking-wider text-[#92400E] uppercase bg-[#FEF3C7] rounded-full border border-[#FDE68A] flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-star-twinkle" />
-              Sila Baca Dengan Khusyuk
+              {isDua ? 'Bacaan Arab' : 'Sila Baca Dengan Khusyuk'}
             </span>
           </div>
 
@@ -137,7 +138,10 @@ export const ReadingScreen: React.FC = () => {
           )}
 
           {rumi && (
-            <div className="text-[15px] font-black text-slate-700 mt-2 select-all leading-snug px-2 italic">&quot;{rumi}&quot;</div>
+            <div>
+              {isDua && <span className="text-[10px] font-black tracking-wider text-amber-600 uppercase block mt-3 mb-1">Cara sebut:</span>}
+              <div className="text-[15px] font-black text-slate-700 select-all leading-snug px-2 italic">&quot;{rumi}&quot;</div>
+            </div>
           )}
 
           <div className="flex items-center gap-3 my-4">
@@ -147,7 +151,7 @@ export const ReadingScreen: React.FC = () => {
           </div>
 
           <div className="text-left bg-white/80 p-3.5 rounded-2xl border-2 border-amber-100 shadow-inner">
-            <span className="text-[10px] font-black tracking-wider text-amber-600 uppercase block mb-1">Maksud Lafaz:</span>
+            <span className="text-[10px] font-black tracking-wider text-amber-600 uppercase block mb-1">Maksud:</span>
             <p className="text-[11px] font-black text-[#78350F] leading-relaxed">{maksud}</p>
           </div>
         </div>
@@ -163,7 +167,7 @@ export const ReadingScreen: React.FC = () => {
           <button onClick={handleListenAudio}
             className="flex-1 py-4 border-3 border-purple-600 text-purple-600 hover:bg-purple-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white shadow-sm">
             <Volume2 className="w-4.5 h-4.5" />
-            Dengar Nasihat
+            {isDua ? 'Dengar Audio' : 'Dengar Nasihat'}
           </button>
           <button onClick={handleStartCounter}
             className="flex-1 py-4 bg-primary hover:bg-purple-700 text-white font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md text-sm cursor-pointer animate-pulse-soft">

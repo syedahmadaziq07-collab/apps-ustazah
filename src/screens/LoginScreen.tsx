@@ -21,8 +21,8 @@ export const LoginScreen: React.FC = () => {
   const [appName, setAppName] = useState('ZikirCare');
   const [tagline, setTagline] = useState('Terapi Emosi & Zikir untuk Murid');
   const [logoUrl, setLogoUrl] = useState('');
-  const [loginTitle, setLoginTitle] = useState('Siapa yang hadir hari ini?');
-  const [loginSubtitle, setLoginSubtitle] = useState('Pilih gambar kamu sebelum mula.');
+  const [loginTitle, setLoginTitle] = useState('Siapa yang belajar hari ini?');
+  const [loginSubtitle, setLoginSubtitle] = useState('Pilih gambar dan nama kamu untuk mula.');
   const [teacherAlreadyIn] = useState(isTeacherLoggedIn());
 
   useEffect(() => {
@@ -107,8 +107,8 @@ export const LoginScreen: React.FC = () => {
             ) : studentError || students.length === 0 ? (
               <div className="text-center py-8 bg-white/80 rounded-3xl border-2 border-purple-100">
                 <User className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm font-black text-slate-600">Tiada murid aktif</p>
-                <p className="text-xs font-bold text-slate-400 mt-1">Sila hubungi guru untuk pendaftaran.</p>
+                <p className="text-sm font-black text-slate-600">Tiada murid aktif untuk dipilih.</p>
+                <p className="text-xs font-bold text-slate-400 mt-1">Tidak apa, cuba lagi nanti ya.</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

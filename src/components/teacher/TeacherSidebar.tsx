@@ -75,7 +75,7 @@ export const TeacherSidebar: React.FC<TeacherSidebarProps> = ({ onLogout }) => {
           className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-black text-rose-600 hover:bg-rose-50 transition-all cursor-pointer"
         >
           <LogOut className="w-4.5 h-4.5" />
-          Logout
+          Log Keluar
         </button>
       </div>
     </aside>

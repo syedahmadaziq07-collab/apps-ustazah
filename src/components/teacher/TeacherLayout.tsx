@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherSidebar } from './TeacherSidebar';
 import { TeacherMobileNav } from './TeacherMobileNav';
-import { School } from 'lucide-react';
+import { School, LogOut } from 'lucide-react';
+import { logoutTeacher } from '../../services/teacherAuthService';
 
 interface TeacherLayoutProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ export const TeacherLayout: React.FC<TeacherLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    logoutTeacher();
     navigate('/login');
   };
 
@@ -32,9 +34,10 @@ export const TeacherLayout: React.FC<TeacherLayoutProps> = ({ children }) => {
           </div>
           <button
             onClick={handleLogout}
-            className="text-xs font-bold text-rose-500 hover:text-rose-700 transition-colors cursor-pointer bg-transparent border-none"
+            className="flex items-center gap-1 text-xs font-bold text-rose-500 hover:text-rose-700 transition-colors cursor-pointer bg-transparent border-none"
           >
-            Logout
+            <LogOut className="w-3.5 h-3.5" />
+            Log Keluar
           </button>
         </div>
 

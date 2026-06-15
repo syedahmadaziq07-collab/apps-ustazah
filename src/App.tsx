@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { StudentProvider, useStudent } from './components/StudentProvider';
+import { isTeacherLoggedIn } from './services/teacherAuthService';
 import { HomeScreen } from './screens/HomeScreen';
 import { LoginScreen } from './screens/LoginScreen';
 import { EmotionDetailScreen } from './screens/EmotionDetailScreen';
@@ -30,6 +31,12 @@ function AppRoutes() {
 
   const isLoginRoute = location.pathname === '/login';
   const isTeacherRoute = location.pathname.startsWith('/teacher');
+  const teacherLoggedIn = isTeacherLoggedIn();
+
+  // Teacher route guard: redirect to login if not logged in as teacher
+  if (isTeacherRoute && !teacherLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
 
   // If no student selected and not already on login or teacher pages, redirect to login
   if (!selectedStudent && !isLoginRoute && !isTeacherRoute) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, Volume2, Sparkles, Star } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
@@ -10,11 +10,12 @@ import {
   IslamicMoonStarDecoration
 } from '../components/Decorations';
 import { EmotionKey } from '../types';
+import { playStaticAudio } from '../utils/audio';
 
 export const ReadingScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
   const navigate = useNavigate();
-  const [showAudioModal, setShowAudioModal] = useState(false);
+  const [audioFallback, setAudioFallback] = useState('');
 
   const idVal = emotionId || 'tenang';
   
@@ -50,9 +51,19 @@ export const ReadingScreen: React.FC = () => {
     }
   }
 
-  const handleListenAudio = () => {
-    setShowAudioModal(true);
-  };
+  const handleListenAudio = useCallback(() => {
+    setAudioFallback('');
+    const data = idVal in emotionData
+      ? emotionData[idVal as EmotionKey]
+      : staticDuas.find(d => d.id === idVal);
+    if (data && data.audio?.malay) {
+      playStaticAudio(data.audio.malay, () => {
+        setAudioFallback('Audio nasihat akan ditambah kemudian.');
+      });
+    } else {
+      setAudioFallback('Audio nasihat akan ditambah kemudian.');
+    }
+  }, [idVal]);
 
   const handleStartCounter = () => {
     navigate(`/kira/${idVal}`);
@@ -150,14 +161,14 @@ export const ReadingScreen: React.FC = () => {
         {/* Action Buttons with Purple Bottom Styling */}
         <div className="flex items-center gap-3 select-none mt-auto">
           
-          {/* Audio Listen Button */}
+          {/* Audio Nasihat Button */}
           <button
             id="listen-audio-btn"
             onClick={handleListenAudio}
             className="flex-1 py-4 border-3 border-purple-600 text-purple-600 hover:bg-purple-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white shadow-sm"
           >
             <Volume2 className="w-4.5 h-4.5" />
-            Dengar Sebutan
+            Dengar Nasihat
           </button>
 
           {/* Play/Kira Button */}
@@ -174,39 +185,11 @@ export const ReadingScreen: React.FC = () => {
 
       </main>
 
-      {/* Floating Audio Player Modal */}
-      {showAudioModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-5 z-50 animate-fade-in">
-          <div className="bg-white rounded-[32px] w-full max-w-[340px] p-6 shadow-2xl border-4 border-amber-100 text-center animate-bounce-in relative">
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-4xl bg-amber-100 p-2.5 rounded-full border-3 border-amber-300 shadow-md">🎧</span>
-            
-            <h3 className="text-lg font-black text-slate-800 mt-6 mb-2">Terapi Audio ZikirCare</h3>
-            
-            <div className="p-3.5 bg-amber-50 rounded-2xl border-2 border-amber-100 text-left my-4 text-xs font-bold text-amber-900">
-              <p className="mb-2 flex items-center gap-1">
-                <span>🔊</span> <strong>Sebutlah mengikut rentak:</strong>
-              </p>
-              <p className="leading-relaxed">
-                Tarik nafas perlahan-lahan dari hidung, sebutkan kalimah suci ini dengan tenang di dalam minda seiring hembusan nafas yang damai.
-              </p>
-            </div>
-
-            {/* Simulated Child Wave player */}
-            <div className="flex justify-center items-center gap-1 mb-5 h-8">
-              <span className="w-1 bg-purple-600 h-6 rounded-full animate-pulse" />
-              <span className="w-1 bg-purple-500 h-3 rounded-full animate-bounce-soft" style={{ animationDelay: '0.1s' }} />
-              <span className="w-1 bg-purple-400 h-8 rounded-full animate-pulse-soft" style={{ animationDelay: '0.2s' }} />
-              <span className="w-1 bg-purple-500 h-4 rounded-full animate-bounce-soft" />
-              <span className="w-1 bg-purple-600 h-7 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
-            </div>
-
-            <button
-              id="close-audio-modal-btn"
-              onClick={() => setShowAudioModal(false)}
-              className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-black rounded-2xl text-xs tracking-wide cursor-pointer"
-            >
-              Tutup & Mula Kira
-            </button>
+      {/* Audio Fallback Toast */}
+      {audioFallback && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3 shadow-lg text-center">
+            <p className="text-xs font-black text-amber-900">{audioFallback}</p>
           </div>
         </div>
       )}

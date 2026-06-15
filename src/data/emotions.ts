@@ -10,7 +10,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca Alhamdulillah 10 kali",
     zikir: "الْحَمْدُ لِلّٰهِ", 
     zikirRumi: "Alhamdulillah",
-    zikirMaksud: "Segala puji bagi Allah."
+    zikirMaksud: "Segala puji bagi Allah.",
+    audio: { arabic: "/audio/arabic/alhamdulillah.mp3", malay: "/audio/malay/gembira-nasihat.mp3" }
   },
   marah: {
     emoji: "😡", 
@@ -21,7 +22,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca istighfar 10 kali",
     zikir: "أَسْتَغْفِرُ اللهَ", 
     zikirRumi: "Astaghfirullah",
-    zikirMaksud: "Aku memohon ampun kepada Allah."
+    zikirMaksud: "Aku memohon ampun kepada Allah.",
+    audio: { arabic: "/audio/arabic/istighfar.mp3", malay: "/audio/malay/marah-nasihat.mp3" }
   },
   sedih: {
     emoji: "😢", 
@@ -32,7 +34,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca doa kesedihan 10 kali",
     zikir: "حَسْبِيَ اللهُ", 
     zikirRumi: "Hasbiyallah",
-    zikirMaksud: "Cukuplah Allah bagiku."
+    zikirMaksud: "Cukuplah Allah bagiku.",
+    audio: { arabic: "/audio/arabic/doa-tenang.mp3", malay: "/audio/malay/sedih-nasihat.mp3" }
   },
   takut: {
     emoji: "😨", 
@@ -43,7 +46,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca doa perlindungan 10 kali",
     zikir: "أَعُوذُ بِاللهِ", 
     zikirRumi: "A’udzubillah",
-    zikirMaksud: "Aku berlindung dengan Allah."
+    zikirMaksud: "Aku berlindung dengan Allah.",
+    audio: { arabic: "/audio/arabic/doa-perlindungan.mp3", malay: "/audio/malay/takut-nasihat.mp3" }
   },
   risau: {
     emoji: "😟", 
@@ -54,7 +58,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca doa tawakal 10 kali",
     zikir: "تَوَكَّلْتُ عَلَى اللهِ", 
     zikirRumi: "Tawakkaltu ’alallah",
-    zikirMaksud: "Aku bertawakal kepada Allah."
+    zikirMaksud: "Aku bertawakal kepada Allah.",
+    audio: { arabic: "/audio/arabic/hasbunallah.mp3", malay: "/audio/malay/risau-nasihat.mp3" }
   },
   penat: {
     emoji: "😴", 
@@ -65,7 +70,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca selawat 10 kali",
     zikir: "صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ", 
     zikirRumi: "Sallallahu ’alaihi wasallam",
-    zikirMaksud: "Semoga Allah merahmatinya (merahmati Nabi)."
+    zikirMaksud: "Semoga Allah merahmatinya (merahmati Nabi).",
+    audio: { arabic: "/audio/arabic/doa-kekuatan.mp3", malay: "/audio/malay/penat-nasihat.mp3" }
   },
   tenang: {
     emoji: "😌", 
@@ -76,7 +82,8 @@ export const emotionData: Record<EmotionKey, EmotionDetails> = {
     aktiviti: "Baca tasbih 10 kali",
     zikir: "سُبْحَانَ اللهِ", 
     zikirRumi: "Subhanallah",
-    zikirMaksud: "Maha Suci Allah."
+    zikirMaksud: "Maha Suci Allah.",
+    audio: { arabic: "/audio/arabic/alhamdulillah.mp3", malay: "/audio/malay/tenang-nasihat.mp3" }
   }
 };
 
@@ -90,7 +97,8 @@ export const staticDuas: DuaItem[] = [
     meaning: "Aku memohon ampun kepada Allah.",
     bgColorClass: "bg-green-pastel border-emerald-200 text-emerald-800",
     emojiDecorative: "🤲",
-    explanation: "Memohon ampun dan kelapangan hati daripada Allah SWT."
+    explanation: "Memohon ampun dan kelapangan hati daripada Allah SWT.",
+    audio: { arabic: "/audio/arabic/istighfar.mp3", malay: "/audio/malay/istighfar-nasihat.mp3" }
   },
   {
     id: "doa-tenang",
@@ -100,7 +108,8 @@ export const staticDuas: DuaItem[] = [
     meaning: "Ya Allah, aku memohon kepada-Mu jiwa yang tenang dan tenteram.",
     bgColorClass: "bg-blue-pastel border-sky-200 text-blue-800",
     emojiDecorative: "🤲",
-    explanation: "Doa untuk bertenang, melahirkan jiwa lapang, dan menghilangkan runsing."
+    explanation: "Doa untuk bertenang, melahirkan jiwa lapang, dan menghilangkan runsing.",
+    audio: { arabic: "/audio/arabic/doa-tenang.mp3", malay: "/audio/malay/doa-tenang-nasihat.mp3" }
   },
   {
     id: "doa-perlindungan",
@@ -110,7 +119,8 @@ export const staticDuas: DuaItem[] = [
     meaning: "Aku berlindung dengan kalimah-kalimah Allah yang sempurna daripada kejahatan makhluk-Nya.",
     bgColorClass: "bg-purple-pastel border-purple-200 text-purple-800",
     emojiDecorative: "🛡️",
-    explanation: "Doa perlindungan diri daripada sebarang ketakutan dan bahaya."
+    explanation: "Doa perlindungan diri daripada sebarang ketakutan dan bahaya.",
+    audio: { arabic: "/audio/arabic/doa-perlindungan.mp3", malay: "/audio/malay/doa-perlindungan-nasihat.mp3" }
   },
   {
     id: "alhamdulillah",
@@ -120,7 +130,8 @@ export const staticDuas: DuaItem[] = [
     meaning: "Segala puji bagi Allah.",
     bgColorClass: "bg-yellow-pastel border-amber-200 text-amber-800",
     emojiDecorative: "💫",
-    explanation: "Zikir bersyukur kepada Allah atas segala nikmat kebaikan."
+    explanation: "Zikir bersyukur kepada Allah atas segala nikmat kebaikan.",
+    audio: { arabic: "/audio/arabic/alhamdulillah.mp3", malay: "/audio/malay/alhamdulillah-nasihat.mp3" }
   },
   {
     id: "doa-ibu-bapa",
@@ -130,6 +141,7 @@ export const staticDuas: DuaItem[] = [
     meaning: "Wahai Tuhanku, ampunilah dosaku dan dosa kedua-dua ibu bapaku, dan kasihanilah mereka sebagaimana mereka mendidikku semasa kecil.",
     bgColorClass: "bg-pink-pastel border-rose-250 text-rose-800",
     emojiDecorative: "👨‍👩‍👧‍👦",
-    explanation: "Doa mendoakan kebaikan, keampunan, dan kasih sayang untuk ibu dan bapa."
+    explanation: "Doa mendoakan kebaikan, keampunan, dan kasih sayang untuk ibu dan bapa.",
+    audio: { arabic: "/audio/arabic/doa-ibu-bapa.mp3", malay: "/audio/malay/doa-ibu-bapa-nasihat.mp3" }
   }
 ];

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, CheckCircle2 } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
@@ -10,6 +10,7 @@ import {
 } from '../components/Decorations';
 import { ProgressCircle } from '../components/ProgressCircle';
 import { EmotionKey, EmotionHistoryItem } from '../types';
+import { playStaticAudio } from '../utils/audio';
 
 export const CounterScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
@@ -17,6 +18,7 @@ export const CounterScreen: React.FC = () => {
 
   const idVal = emotionId || 'tenang';
   const [count, setCount] = useState(0);
+  const [audioFallback, setAudioFallback] = useState('');
 
   // Determine if it is an emotion or static dua
   let label = "Zikir";
@@ -24,6 +26,7 @@ export const CounterScreen: React.FC = () => {
   let emotionKey: EmotionKey = 'tenang';
   let activityName = "Baca zikir 10 kali";
   let tipText = "Fokus, tenang dan serahkan semua emosi kepada Allah.";
+  let arabicAudioPath = "";
 
   if (idVal in emotionData) {
     const data = emotionData[idVal as EmotionKey];
@@ -31,6 +34,7 @@ export const CounterScreen: React.FC = () => {
     activeZikir = data.zikirRumi;
     emotionKey = idVal as EmotionKey;
     activityName = data.aktiviti;
+    arabicAudioPath = data.audio?.arabic || "";
 
     // Tips mapping
     const tipsMap: Record<EmotionKey, string> = {
@@ -50,6 +54,7 @@ export const CounterScreen: React.FC = () => {
       label = dataObj.name;
       activeZikir = dataObj.rumi;
       activityName = `Baca ${dataObj.name} 10 kali`;
+      arabicAudioPath = dataObj.audio?.arabic || "";
       
       const emotionMapping: Record<string, EmotionKey> = {
         'istighfar': 'marah',
@@ -71,11 +76,18 @@ export const CounterScreen: React.FC = () => {
     }
   }
 
-  const handleTap = () => {
+  const handleTap = useCallback(() => {
     if (count >= 10) return;
 
     const nextCount = count + 1;
     setCount(nextCount);
+
+    // Play Arabic audio
+    if (arabicAudioPath) {
+      playStaticAudio(arabicAudioPath, () => {
+        setAudioFallback('Audio bacaan akan ditambah kemudian.');
+      });
+    }
 
     try {
       if ('vibrate' in navigator) {
@@ -91,7 +103,7 @@ export const CounterScreen: React.FC = () => {
         navigate(`/tahniah/${idVal}`);
       }, 500);
     }
-  };
+  }, [count, arabicAudioPath, idVal, navigate]);
 
   const saveCompletionData = () => {
     try {
@@ -189,6 +201,16 @@ export const CounterScreen: React.FC = () => {
         </div>
 
       </main>
+
+      {/* Audio Fallback Toast */}
+      {audioFallback && (
+        <div className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3 shadow-lg text-center">
+            <p className="text-xs font-black text-amber-900">{audioFallback}</p>
+          </div>
+        </div>
+      )}
+
     </AppPhoneFrame>
   );
 };

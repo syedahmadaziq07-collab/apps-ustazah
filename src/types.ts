@@ -1,5 +1,10 @@
 export type EmotionKey = 'gembira' | 'marah' | 'sedih' | 'takut' | 'risau' | 'penat' | 'tenang';
 
+export interface AudioPaths {
+  arabic: string;
+  malay: string;
+}
+
 export interface EmotionDetails {
   emoji: string;
   label: string;
@@ -10,6 +15,7 @@ export interface EmotionDetails {
   zikir: string;
   zikirRumi: string;
   zikirMaksud: string;
+  audio: AudioPaths;
 }
 
 export interface EmotionHistoryItem {
@@ -31,4 +37,5 @@ export interface DuaItem {
   bgColorClass: string;
   emojiDecorative: string;
   explanation: string;
+  audio: AudioPaths;
 }

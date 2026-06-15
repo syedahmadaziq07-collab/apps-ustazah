@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Sparkles, Home, Star } from 'lucide-react';
+import { Sparkles, Home, Star, Volume2 } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
 import { 
   AppPhoneFrame, 
@@ -10,10 +10,12 @@ import {
   SuccessStarMosqueIllustration
 } from '../components/Decorations';
 import { EmotionKey } from '../types';
+import { playStaticAudio } from '../utils/audio';
 
 export const SuccessScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
   const navigate = useNavigate();
+  const [audioFallback, setAudioFallback] = useState('');
 
   const idVal = emotionId || 'tenang';
   
@@ -27,6 +29,13 @@ export const SuccessScreen: React.FC = () => {
       zikirText = dataObj.rumi;
     }
   }
+
+  const handlePlayTahniah = useCallback(() => {
+    setAudioFallback('');
+    playStaticAudio('/audio/malay/tahniah.mp3', () => {
+      setAudioFallback('Audio ucapan akan ditambah kemudian.');
+    });
+  }, []);
 
   return (
     <AppPhoneFrame id="success-screen-container" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none overflow-hidden pb-8">
@@ -92,8 +101,16 @@ export const SuccessScreen: React.FC = () => {
           </ul>
         </div>
 
-        {/* Primary CTA and Return Home */}
-        <div className="w-full mt-5 select-none">
+        {/* Audio Ucapan and Return Home */}
+        <div className="w-full mt-5 select-none flex flex-col gap-3">
+          <button
+            id="play-tahniah-audio-btn"
+            onClick={handlePlayTahniah}
+            className="w-full py-4 border-3 border-amber-400 text-amber-700 hover:bg-amber-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white/90 shadow-sm"
+          >
+            <Volume2 className="w-5 h-5" />
+            Dengar Ucapan
+          </button>
           <button
             id="back-to-home-from-success"
             onClick={() => navigate('/')}
@@ -105,6 +122,16 @@ export const SuccessScreen: React.FC = () => {
         </div>
 
       </main>
+
+      {/* Audio Fallback Toast */}
+      {audioFallback && (
+        <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3 shadow-lg text-center">
+            <p className="text-xs font-black text-amber-900">{audioFallback}</p>
+          </div>
+        </div>
+      )}
+
     </AppPhoneFrame>
   );
 };

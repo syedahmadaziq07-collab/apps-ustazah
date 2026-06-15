@@ -3,6 +3,7 @@ import { Save, RotateCcw, Plus } from 'lucide-react';
 import { isSupabaseConnected } from '../../lib/supabase';
 import { DuaContent } from '../../types';
 import { getDuas, saveDua, resetDuasToDefault } from '../../services/duaService';
+import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 export const TeacherDoaEditor: React.FC = () => {
   const [duas, setDuas] = useState<DuaContent[]>([]);
@@ -119,11 +120,14 @@ export const TeacherDoaEditor: React.FC = () => {
               <input type="number" value={editTarget.sort_order} onChange={(e) => setEditTarget({ ...editTarget, sort_order: parseInt(e.target.value) || 0 })}
                 className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
             </div>
-            <div>
-              <label className="text-xs font-black text-slate-700 block mb-1">URL Gambar</label>
-              <input type="url" value={editTarget.image_url} onChange={(e) => setEditTarget({ ...editTarget, image_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-            </div>
+            <FileUploadField
+              label="URL Gambar"
+              value={editTarget.image_url}
+              onChange={(url) => setEditTarget({ ...editTarget, image_url: url })}
+              bucket="app-images"
+              folder="duas"
+              type="image"
+            />
             <div>
               <label className="flex items-center gap-2">
                 <input type="checkbox" checked={editTarget.is_active} onChange={(e) => setEditTarget({ ...editTarget, is_active: e.target.checked })}
@@ -152,11 +156,14 @@ export const TeacherDoaEditor: React.FC = () => {
             <textarea value={editTarget.explanation} onChange={(e) => setEditTarget({ ...editTarget, explanation: e.target.value })}
               className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" rows={2} />
           </div>
-          <div>
-            <label className="text-xs font-black text-slate-700 block mb-1">URL Audio</label>
-            <input type="url" value={editTarget.audio_url} onChange={(e) => setEditTarget({ ...editTarget, audio_url: e.target.value })}
-              className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-          </div>
+          <FileUploadField
+            label="URL Audio"
+            value={editTarget.audio_url}
+            onChange={(url) => setEditTarget({ ...editTarget, audio_url: url })}
+            bucket="app-audio"
+            folder="duas"
+            type="audio"
+          />
           <div className="flex items-center gap-3 pt-2">
             <button onClick={handleSave} disabled={saving}
               className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white text-xs font-black rounded-2xl hover:bg-purple-700 active:scale-95 transition-all cursor-pointer disabled:opacity-50">

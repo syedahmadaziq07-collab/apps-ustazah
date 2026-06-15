@@ -3,6 +3,7 @@ import { Save, RotateCcw, School } from 'lucide-react';
 import { isSupabaseConnected } from '../../lib/supabase';
 import { SchoolSettings } from '../../types';
 import { getSchoolSettings, saveSchoolSettings, getDefaultSettings } from '../../services/appContentService';
+import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 export const TeacherBrandingEditor: React.FC = () => {
   const [form, setForm] = useState<SchoolSettings>(getDefaultSettings());
@@ -73,13 +74,15 @@ export const TeacherBrandingEditor: React.FC = () => {
             <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
           </div>
-          <div>
-            <label className="text-xs font-black text-slate-700 block mb-1">URL Logo Sekolah</label>
-            <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })}
-              placeholder="https://example.com/logo.png"
-              className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
-            <p className="text-[9px] font-bold text-slate-400 mt-1">Fasa seterusnya: upload logo terus ke Supabase Storage.</p>
-          </div>
+          <FileUploadField
+            label="URL Logo Sekolah"
+            value={form.logo_url}
+            onChange={(url) => setForm({ ...form, logo_url: url })}
+            bucket="app-images"
+            folder="branding"
+            type="image"
+            helperText="Muat naik logo sekolah atau taip URL manual."
+          />
           <div>
             <label className="text-xs font-black text-slate-700 block mb-1">Warna Tema</label>
             <div className="flex items-center gap-3">

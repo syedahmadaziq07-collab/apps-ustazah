@@ -3,6 +3,7 @@ import { User, Plus, Edit2, XCircle, Check, ChevronDown, ChevronUp } from 'lucid
 import { isSupabaseConnected } from '../../lib/supabase';
 import { StudentRecord } from '../../types';
 import { getStudents, createStudent, updateStudent, deactivateStudent } from '../../services/studentService';
+import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 interface FormFields {
   fullName: string;
@@ -191,13 +192,6 @@ export const TeacherMurid: React.FC = () => {
         </div>
       )}
 
-      {/* TODO note */}
-      <div className="mt-6 bg-purple-50 border-2 border-purple-200 rounded-2xl p-4">
-        <p className="text-[10px] font-bold text-purple-700">
-          TODO: Muat naik gambar passport ke Supabase Storage bucket 'student-photos' akan dibina dalam fasa seterusnya.
-        </p>
-      </div>
-
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setShowModal(false)}>
@@ -237,20 +231,15 @@ export const TeacherMurid: React.FC = () => {
                 />
               </div>
 
-              {/* Photo URL */}
-              <div>
-                <label className="text-xs font-black text-slate-700 block mb-1">URL Gambar Passport</label>
-                <input
-                  type="url"
-                  value={form.photoUrl}
-                  onChange={(e) => setForm({ ...form, photoUrl: e.target.value })}
-                  placeholder="https://example.com/photo.jpg"
-                  className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors"
-                />
-                <p className="text-[9px] font-bold text-slate-400 mt-1">
-                  Phase later: upload passport photo to Supabase Storage.
-                </p>
-              </div>
+              <FileUploadField
+                label="URL Gambar Passport"
+                value={form.photoUrl}
+                onChange={(url) => setForm({ ...form, photoUrl: url })}
+                bucket="student-photos"
+                folder="students"
+                type="image"
+                helperText="Muat naik gambar passport murid (3:4). Atau taip URL manual."
+              />
 
               {/* Sort Order + Active */}
               <div className="flex items-center gap-4">

@@ -4,6 +4,7 @@ import { isSupabaseConnected } from '../../lib/supabase';
 import { EmotionContent, TherapyContent } from '../../types';
 import { getEmotions } from '../../services/emotionContentService';
 import { getTherapiesByEmotion, saveTherapy, resetTherapiesToDefault, getDefaultTherapies } from '../../services/emotionContentService';
+import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 export const TeacherTerapiEditor: React.FC = () => {
   const [emotions, setEmotions] = useState<EmotionContent[]>([]);
@@ -165,16 +166,22 @@ export const TeacherTerapiEditor: React.FC = () => {
               className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-black text-slate-700 block mb-1">URL Audio Malay</label>
-              <input type="url" value={editTarget.malay_audio_url} onChange={(e) => setEditTarget({ ...editTarget, malay_audio_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-            </div>
-            <div>
-              <label className="text-xs font-black text-slate-700 block mb-1">URL Audio Arab</label>
-              <input type="url" value={editTarget.arabic_audio_url} onChange={(e) => setEditTarget({ ...editTarget, arabic_audio_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-            </div>
+            <FileUploadField
+              label="URL Audio Malay"
+              value={editTarget.malay_audio_url}
+              onChange={(url) => setEditTarget({ ...editTarget, malay_audio_url: url })}
+              bucket="app-audio"
+              folder="malay"
+              type="audio"
+            />
+            <FileUploadField
+              label="URL Audio Arab"
+              value={editTarget.arabic_audio_url}
+              onChange={(url) => setEditTarget({ ...editTarget, arabic_audio_url: url })}
+              bucket="app-audio"
+              folder="arabic"
+              type="audio"
+            />
           </div>
           <div className="flex items-center gap-3 pt-2">
             <button onClick={handleSave} disabled={saving}

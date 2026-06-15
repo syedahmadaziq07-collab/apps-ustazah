@@ -19,6 +19,8 @@ import { TeacherTerapiEditor } from './screens/teacher/TeacherTerapiEditor';
 import { TeacherDoaEditor } from './screens/teacher/TeacherDoaEditor';
 import { TeacherProfileEditor } from './screens/teacher/TeacherProfileEditor';
 import { TeacherBrandingEditor } from './screens/teacher/TeacherBrandingEditor';
+import { TeacherGambar } from './screens/teacher/TeacherGambar';
+import { TeacherAudio } from './screens/teacher/TeacherAudio';
 import { TeacherPlaceholder } from './screens/teacher/TeacherPlaceholder';
 import { TeacherLayout } from './components/teacher/TeacherLayout';
 
@@ -56,6 +58,8 @@ function AppRoutes() {
       <Route path="/teacher/doa" element={<TeacherLayout><TeacherDoaEditor /></TeacherLayout>} />
       <Route path="/teacher/profil-app" element={<TeacherLayout><TeacherProfileEditor /></TeacherLayout>} />
       <Route path="/teacher/tetapan" element={<TeacherLayout><TeacherBrandingEditor /></TeacherLayout>} />
+      <Route path="/teacher/gambar" element={<TeacherLayout><TeacherGambar /></TeacherLayout>} />
+      <Route path="/teacher/audio" element={<TeacherLayout><TeacherAudio /></TeacherLayout>} />
       <Route path="/teacher/:pageId" element={<TeacherLayout><TeacherPlaceholder /></TeacherLayout>} />
 
       {/* Fallback */}

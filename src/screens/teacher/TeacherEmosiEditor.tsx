@@ -3,6 +3,7 @@ import { Save, RotateCcw } from 'lucide-react';
 import { isSupabaseConnected } from '../../lib/supabase';
 import { EmotionContent } from '../../types';
 import { getEmotions, saveEmotion, resetEmotionsToDefault, getDefaultEmotions } from '../../services/emotionContentService';
+import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 const colorOptions = ['yellow', 'red', 'blue', 'purple', 'orange', 'teal', 'green'];
 const illustrationOptions = ['HappyChildren', 'AngryChild', 'SadChild', 'ScaredChild', 'CalmChild'];
@@ -123,11 +124,14 @@ export const TeacherEmosiEditor: React.FC = () => {
                 <span className="text-xs font-bold text-slate-600">Emosi aktif</span>
               </label>
             </div>
-            <div>
-              <label className="text-xs font-black text-slate-700 block mb-1">URL Gambar</label>
-              <input type="url" value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-            </div>
+            <FileUploadField
+              label="URL Gambar"
+              value={form.image_url}
+              onChange={(url) => setForm({ ...form, image_url: url })}
+              bucket="app-images"
+              folder="emotions"
+              type="image"
+            />
           </div>
           <div>
             <label className="text-xs font-black text-slate-700 block mb-1">Teks Nasihat</label>
@@ -155,16 +159,22 @@ export const TeacherEmosiEditor: React.FC = () => {
               className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-black text-slate-700 block mb-1">URL Audio Malay</label>
-              <input type="url" value={form.malay_audio_url} onChange={(e) => setForm({ ...form, malay_audio_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-            </div>
-            <div>
-              <label className="text-xs font-black text-slate-700 block mb-1">URL Audio Arab</label>
-              <input type="url" value={form.arabic_audio_url} onChange={(e) => setForm({ ...form, arabic_audio_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400" />
-            </div>
+            <FileUploadField
+              label="URL Audio Malay"
+              value={form.malay_audio_url}
+              onChange={(url) => setForm({ ...form, malay_audio_url: url })}
+              bucket="app-audio"
+              folder="malay"
+              type="audio"
+            />
+            <FileUploadField
+              label="URL Audio Arab"
+              value={form.arabic_audio_url}
+              onChange={(url) => setForm({ ...form, arabic_audio_url: url })}
+              bucket="app-audio"
+              folder="arabic"
+              type="audio"
+            />
           </div>
           <div className="flex items-center gap-3 pt-2">
             <button onClick={handleSave} disabled={saving}

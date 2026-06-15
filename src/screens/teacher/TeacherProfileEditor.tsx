@@ -3,6 +3,7 @@ import { Save, RotateCcw, Eye, School } from 'lucide-react';
 import { isSupabaseConnected } from '../../lib/supabase';
 import { AppPage } from '../../types';
 import { getAppPage, saveAppPage, getDefaultPage } from '../../services/appContentService';
+import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 interface ProfileContent {
   title: string;
@@ -155,17 +156,24 @@ export const TeacherProfileEditor: React.FC = () => {
             <input type="text" value={form.supportText} onChange={(e) => { setForm({ ...form, supportText: e.target.value }); setDirty(true); }}
               className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
           </div>
-          <div>
-            <label className="text-xs font-black text-slate-700 block mb-1">URL Gambar Profil</label>
-            <input type="url" value={form.imageUrl} onChange={(e) => { setForm({ ...form, imageUrl: e.target.value }); setDirty(true); }}
-              className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
-          </div>
-          <div>
-            <label className="text-xs font-black text-slate-700 block mb-1">URL Audio Profil (opsional)</label>
-            <input type="url" value={form.audioUrl} onChange={(e) => { setForm({ ...form, audioUrl: e.target.value }); setDirty(true); }}
-              className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
-            <p className="text-[9px] font-bold text-slate-400 mt-1">Fasa seterusnya: upload audio terus ke Supabase Storage.</p>
-          </div>
+          <FileUploadField
+            label="URL Gambar Profil"
+            value={form.imageUrl}
+            onChange={(url) => { setForm({ ...form, imageUrl: url }); setDirty(true); }}
+            bucket="app-images"
+            folder="profile"
+            type="image"
+            helperText="Muat naik gambar profil atau taip URL manual."
+          />
+          <FileUploadField
+            label="URL Audio Profil (opsional)"
+            value={form.audioUrl}
+            onChange={(url) => { setForm({ ...form, audioUrl: url }); setDirty(true); }}
+            bucket="app-audio"
+            folder="malay"
+            type="audio"
+            helperText="Muat naik audio profil atau taip URL manual."
+          />
 
           {message && (
             <p className={`text-xs font-black px-4 py-2 rounded-xl ${message.includes('Berjaya') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>

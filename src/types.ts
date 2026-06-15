@@ -53,6 +53,39 @@ export interface EmotionHistoryItem {
   shareText?: string;
 }
 
+export interface StudentRecord {
+  id: string;
+  full_name: string;
+  class_name: string | null;
+  photo_url: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export function toSelectedStudent(r: StudentRecord): SelectedStudent {
+  return {
+    id: r.id,
+    fullName: r.full_name,
+    className: r.class_name || '',
+    photoUrl: r.photo_url || '',
+  };
+}
+
+export function toStudentRecord(s: SelectedStudent, partial?: Partial<StudentRecord>): StudentRecord {
+  return {
+    id: s.id,
+    full_name: s.fullName,
+    class_name: s.className || null,
+    photo_url: s.photoUrl || null,
+    is_active: partial?.is_active ?? true,
+    sort_order: partial?.sort_order ?? 0,
+    created_at: partial?.created_at || new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+}
+
 export interface EmotionLogRecord {
   id: string;
   studentId: string;

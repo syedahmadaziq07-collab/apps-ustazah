@@ -1,18 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, GraduationCap, School, Lock, User } from 'lucide-react';
 import { useStudent } from '../components/StudentProvider';
 import { isSupabaseConnected } from '../lib/supabase';
 import { SelectedStudent } from '../types';
-
-const FALLBACK_STUDENTS: SelectedStudent[] = [
-  { id: 'demo-1', fullName: 'Ahmad Danial', className: 'Kelas 1 Bestari', photoUrl: '' },
-  { id: 'demo-2', fullName: 'Nur Aisyah', className: 'Kelas 1 Bestari', photoUrl: '' },
-  { id: 'demo-3', fullName: 'Muhammad Faiz', className: 'Kelas 2 Cemerlang', photoUrl: '' },
-  { id: 'demo-4', fullName: 'Siti Aminah', className: 'Kelas 2 Cemerlang', photoUrl: '' },
-  { id: 'demo-5', fullName: 'Ali Imran', className: 'Kelas 3 Pintar', photoUrl: '' },
-  { id: 'demo-6', fullName: 'Fatimah Zahra', className: 'Kelas 3 Pintar', photoUrl: '' },
-];
+import { getActiveStudents } from '../services/studentService';
 
 export const LoginScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +14,15 @@ export const LoginScreen: React.FC = () => {
   const [teacherPassword, setTeacherPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [supabaseMissing] = useState(!isSupabaseConnected);
+  const [students, setStudents] = useState<SelectedStudent[]>([]);
+  const [loadingStudents, setLoadingStudents] = useState(true);
+
+  useEffect(() => {
+    getActiveStudents().then((list) => {
+      setStudents(list);
+      setLoadingStudents(false);
+    });
+  }, []);
 
   const handleStudentSelect = (student: SelectedStudent) => {
     selectStudent(student);
@@ -73,29 +74,35 @@ export const LoginScreen: React.FC = () => {
             <p className="text-xs font-bold text-slate-500 mt-1">Pilih gambar kamu sebelum mula.</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            {FALLBACK_STUDENTS.map((student) => (
-              <button
-                key={student.id}
-                onClick={() => handleStudentSelect(student)}
-                className="bg-white rounded-2xl p-4 shadow-md border-2 border-purple-100 hover:border-purple-300 hover:shadow-lg active:scale-95 transition-all cursor-pointer text-center"
-              >
-                <div className="w-full aspect-[3/4] rounded-xl bg-gradient-to-b from-purple-100 to-amber-50 flex items-center justify-center mb-3 border-2 border-purple-200 overflow-hidden">
-                  {student.photoUrl ? (
-                    <img
-                      src={student.photoUrl}
-                      alt={student.fullName}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-12 h-12 text-purple-400" />
-                  )}
-                </div>
-                <p className="text-xs font-black text-slate-800 leading-tight">{student.fullName}</p>
-                <p className="text-[10px] font-bold text-slate-500 mt-1">{student.className}</p>
-              </button>
-            ))}
-          </div>
+          {loadingStudents ? (
+            <div className="text-center py-8">
+              <p className="text-sm font-bold text-slate-400">Memuatkan...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+              {students.map((student) => (
+                <button
+                  key={student.id}
+                  onClick={() => handleStudentSelect(student)}
+                  className="bg-white rounded-2xl p-4 shadow-md border-2 border-purple-100 hover:border-purple-300 hover:shadow-lg active:scale-95 transition-all cursor-pointer text-center"
+                >
+                  <div className="w-full aspect-[3/4] rounded-xl bg-gradient-to-b from-purple-100 to-amber-50 flex items-center justify-center mb-3 border-2 border-purple-200 overflow-hidden">
+                    {student.photoUrl ? (
+                      <img
+                        src={student.photoUrl}
+                        alt={student.fullName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-12 h-12 text-purple-400" />
+                    )}
+                  </div>
+                  <p className="text-xs font-black text-slate-800 leading-tight">{student.fullName}</p>
+                  <p className="text-[10px] font-bold text-slate-500 mt-1">{student.className}</p>
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Teacher Login Toggle */}
           <div className="text-center mt-8">

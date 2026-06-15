@@ -16,12 +16,18 @@ export const LoginScreen: React.FC = () => {
   const [supabaseMissing] = useState(!isSupabaseConnected);
   const [students, setStudents] = useState<SelectedStudent[]>([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
+  const [studentError, setStudentError] = useState(false);
 
   useEffect(() => {
-    getActiveStudents().then((list) => {
-      setStudents(list);
-      setLoadingStudents(false);
-    });
+    getActiveStudents()
+      .then((list) => {
+        setStudents(list);
+        setLoadingStudents(false);
+      })
+      .catch(() => {
+        setStudentError(true);
+        setLoadingStudents(false);
+      });
   }, []);
 
   const handleStudentSelect = (student: SelectedStudent) => {
@@ -77,6 +83,12 @@ export const LoginScreen: React.FC = () => {
           {loadingStudents ? (
             <div className="text-center py-8">
               <p className="text-sm font-bold text-slate-400">Memuatkan...</p>
+            </div>
+          ) : studentError || students.length === 0 ? (
+            <div className="text-center py-8 bg-white/80 rounded-3xl border-2 border-purple-100 max-w-md mx-auto">
+              <User className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+              <p className="text-sm font-black text-slate-600">Tiada murid aktif</p>
+              <p className="text-xs font-bold text-slate-400 mt-1">Sila hubungi guru untuk pendaftaran.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mx-auto">

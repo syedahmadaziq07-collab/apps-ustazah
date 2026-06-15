@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { StudentProvider } from './components/StudentProvider';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { StudentProvider, useStudent } from './components/StudentProvider';
 import { HomeScreen } from './screens/HomeScreen';
 import { LoginScreen } from './screens/LoginScreen';
 import { EmotionDetailScreen } from './screens/EmotionDetailScreen';
@@ -17,6 +17,17 @@ import { TeacherPlaceholder } from './screens/teacher/TeacherPlaceholder';
 import { TeacherLayout } from './components/teacher/TeacherLayout';
 
 function AppRoutes() {
+  const { selectedStudent } = useStudent();
+  const location = useLocation();
+
+  const isLoginRoute = location.pathname === '/login';
+  const isTeacherRoute = location.pathname.startsWith('/teacher');
+
+  // If no student selected and not already on login or teacher pages, redirect to login
+  if (!selectedStudent && !isLoginRoute && !isTeacherRoute) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <Routes>
       <Route path="/login" element={<LoginScreen />} />

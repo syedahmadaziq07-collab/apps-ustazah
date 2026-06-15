@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, Info, Heart, Award, LogOut } from 'lucide-react';
 import { 
@@ -19,11 +19,10 @@ export const HomeScreen: React.FC = () => {
   const { selectedStudent, clearStudent } = useStudent();
   const [showCounselorModal, setShowCounselorModal] = useState(false);
 
-  useEffect(() => {
-    if (!selectedStudent) {
-      navigate('/login', { replace: true });
-    }
-  }, [selectedStudent, navigate]);
+  // Render guard: redirect is handled by App.tsx, but prevent rendering if no student
+  if (!selectedStudent) {
+    return null;
+  }
 
   const handleEmotionSelect = (emotion: EmotionKey) => {
     setTimeout(() => {

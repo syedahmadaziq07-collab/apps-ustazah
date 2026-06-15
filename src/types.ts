@@ -18,6 +18,54 @@ export interface EmotionDetails {
   audio: AudioPaths;
 }
 
+export interface EmotionContent {
+  id: string;
+  label: string;
+  emoji: string;
+  color: string;
+  advice_text: string;
+  image_url: string;
+  malay_audio_url: string;
+  arabic_audio_url: string;
+  sort_order: number;
+  is_active: boolean;
+  zikir: string;
+  zikir_rumi: string;
+  zikir_maksud: string;
+  aktiviti: string;
+}
+
+export interface TherapyContent {
+  id: string;
+  emotion_id: string;
+  title: string;
+  instruction: string;
+  therapy_type: string;
+  count_target: number;
+  arabic_text: string;
+  rumi_text: string;
+  meaning_text: string;
+  image_url: string;
+  malay_audio_url: string;
+  arabic_audio_url: string;
+  sort_order: number;
+  is_active: boolean;
+}
+
+export interface DuaContent {
+  id: string;
+  title: string;
+  arabic_text: string;
+  rumi_text: string;
+  meaning_text: string;
+  image_url: string;
+  audio_url: string;
+  sort_order: number;
+  is_active: boolean;
+  emoji_decorative: string;
+  explanation: string;
+}
+
 export interface DuaItem {
   id: string;
   name: string;
@@ -51,6 +99,8 @@ export interface EmotionHistoryItem {
   completedDate?: string;
   completedTime?: string;
   shareText?: string;
+  therapyId?: string;
+  therapyTitle?: string;
 }
 
 export interface StudentRecord {

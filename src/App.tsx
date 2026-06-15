@@ -14,6 +14,9 @@ import { TeacherDashboard } from './screens/teacher/TeacherDashboard';
 import { TeacherMurid } from './screens/teacher/TeacherMurid';
 import { TeacherSejarah } from './screens/teacher/TeacherSejarah';
 import { TeacherHomeEditor } from './screens/teacher/TeacherHomeEditor';
+import { TeacherEmosiEditor } from './screens/teacher/TeacherEmosiEditor';
+import { TeacherTerapiEditor } from './screens/teacher/TeacherTerapiEditor';
+import { TeacherDoaEditor } from './screens/teacher/TeacherDoaEditor';
 import { TeacherProfileEditor } from './screens/teacher/TeacherProfileEditor';
 import { TeacherBrandingEditor } from './screens/teacher/TeacherBrandingEditor';
 import { TeacherPlaceholder } from './screens/teacher/TeacherPlaceholder';
@@ -48,6 +51,9 @@ function AppRoutes() {
       <Route path="/teacher/murid" element={<TeacherLayout><TeacherMurid /></TeacherLayout>} />
       <Route path="/teacher/sejarah" element={<TeacherLayout><TeacherSejarah /></TeacherLayout>} />
       <Route path="/teacher/home" element={<TeacherLayout><TeacherHomeEditor /></TeacherLayout>} />
+      <Route path="/teacher/emosi" element={<TeacherLayout><TeacherEmosiEditor /></TeacherLayout>} />
+      <Route path="/teacher/terapi" element={<TeacherLayout><TeacherTerapiEditor /></TeacherLayout>} />
+      <Route path="/teacher/doa" element={<TeacherLayout><TeacherDoaEditor /></TeacherLayout>} />
       <Route path="/teacher/profil-app" element={<TeacherLayout><TeacherProfileEditor /></TeacherLayout>} />
       <Route path="/teacher/tetapan" element={<TeacherLayout><TeacherBrandingEditor /></TeacherLayout>} />
       <Route path="/teacher/:pageId" element={<TeacherLayout><TeacherPlaceholder /></TeacherLayout>} />

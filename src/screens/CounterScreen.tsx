@@ -147,8 +147,11 @@ Tarikh: ${completedDate}, ${completedTime}`;
         therapyTitle: therapyData?.title || undefined,
       };
 
-      const existingHistoryStr = localStorage.getItem('emosiHistory');
-      const historyList: EmotionHistoryItem[] = existingHistoryStr ? JSON.parse(existingHistoryStr) : [];
+      let historyList: EmotionHistoryItem[] = [];
+      try {
+        const existingHistoryStr = localStorage.getItem('emosiHistory');
+        if (existingHistoryStr) historyList = JSON.parse(existingHistoryStr);
+      } catch { historyList = []; }
       historyList.unshift(newItem);
       localStorage.setItem('emosiHistory', JSON.stringify(historyList));
 

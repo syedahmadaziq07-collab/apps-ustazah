@@ -120,7 +120,7 @@ export const LoginScreen: React.FC = () => {
                   >
                     <div className="w-full aspect-[3/4] rounded-xl bg-gradient-to-b from-purple-100 to-amber-50 flex items-center justify-center mb-3 border-2 border-purple-200 overflow-hidden">
                       {student.photoUrl ? (
-                        <img src={student.photoUrl} alt={student.fullName} className="w-full h-full object-cover" />
+                        <img src={student.photoUrl} alt={student.fullName} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                       ) : (
                         <User className="w-12 h-12 text-purple-400" />
                       )}

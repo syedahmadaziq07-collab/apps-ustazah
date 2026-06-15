@@ -71,16 +71,15 @@ export const TeacherDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Supabase info */}
+      {/* Demo mode banner */}
       {!isSupabaseConnected && (
         <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <School className="w-4 h-4 text-amber-600" />
-            <p className="text-xs font-black text-amber-800">Mod Luar Talian</p>
+            <p className="text-xs font-black text-amber-800">Mod Demo Aktif</p>
           </div>
           <p className="text-[11px] font-bold text-amber-700 leading-relaxed">
-            Aplikasi berjalan dengan data demo. Sambungkan Supabase untuk fungsi penuh.
-            Fungsi edit penuh akan dibuat dalam fasa seterusnya.
+            Mod demo aktif: data disimpan pada peranti ini.
           </p>
         </div>
       )}

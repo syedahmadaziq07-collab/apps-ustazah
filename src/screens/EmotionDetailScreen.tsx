@@ -11,7 +11,7 @@ import {
   IslamicMoonStarDecoration,
   EmotionChildIllustration
 } from '../components/Decorations';
-import { getTherapiesByEmotion } from '../services/emotionContentService';
+import { getEmotionById, getTherapiesByEmotion } from '../services/emotionContentService';
 
 const therapyIcons: Record<string, React.ReactNode> = {
   zikir: <Heart className="w-5 h-5" />,
@@ -34,6 +34,7 @@ export const EmotionDetailScreen: React.FC = () => {
   const navigate = useNavigate();
   const [therapies, setTherapies] = useState<TherapyContent[]>([]);
   const [loadingTherapies, setLoadingTherapies] = useState(true);
+  const [emotionImageUrl, setEmotionImageUrl] = useState('');
 
   const evVal = (emotionId || 'tenang') as EmotionKey;
   const currentEmotion = emotionData[evVal];
@@ -41,6 +42,9 @@ export const EmotionDetailScreen: React.FC = () => {
   useEffect(() => {
     if (emotionId) {
       setLoadingTherapies(true);
+      getEmotionById(emotionId).then(e => {
+        if (e?.image_url) setEmotionImageUrl(e.image_url);
+      });
       getTherapiesByEmotion(emotionId).then(list => {
         setTherapies(list.filter(t => t.is_active));
         setLoadingTherapies(false);
@@ -112,7 +116,11 @@ export const EmotionDetailScreen: React.FC = () => {
         </div>
 
         <div className="w-full my-3 flex items-center justify-center">
-          <EmotionChildIllustration emotion={evVal} className="h-44" />
+          {emotionImageUrl ? (
+            <img src={emotionImageUrl} alt={currentEmotion.label} className="h-44 w-auto object-contain rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          ) : (
+            <EmotionChildIllustration emotion={evVal} className="h-44" />
+          )}
         </div>
 
         <div className="bg-white rounded-[32px] p-5.5 border-2 border-purple-100/65 shadow-[0_12px_24px_-10px_rgba(124,58,237,0.12)] text-left mt-auto">

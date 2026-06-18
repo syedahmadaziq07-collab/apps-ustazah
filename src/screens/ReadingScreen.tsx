@@ -12,7 +12,7 @@ import {
 } from '../components/Decorations';
 import { EmotionKey, TherapyContent, DuaContent } from '../types';
 import { playStaticAudio } from '../utils/audio';
-import { getTherapyById } from '../services/emotionContentService';
+import { getEmotionById, getTherapyById } from '../services/emotionContentService';
 import { getDuaById } from '../services/duaService';
 
 export const ReadingScreen: React.FC = () => {
@@ -23,6 +23,7 @@ export const ReadingScreen: React.FC = () => {
   const [therapyData, setTherapyData] = useState<TherapyContent | null>(null);
   const [dynamicDua, setDynamicDua] = useState<DuaContent | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [emotionImageUrl, setEmotionImageUrl] = useState('');
 
   const idVal = emotionId || 'tenang';
   const therapyId = searchParams.get('therapy');
@@ -38,6 +39,12 @@ export const ReadingScreen: React.FC = () => {
       } else {
         setLoaded(true);
       }
+    }
+    // Fetch emotion image for illustration fallback
+    if (idVal in emotionData) {
+      getEmotionById(idVal).then(e => {
+        if (e?.image_url) setEmotionImageUrl(e.image_url);
+      });
     }
   }, [therapyId, idVal]);
 
@@ -165,7 +172,13 @@ export const ReadingScreen: React.FC = () => {
         </div>
 
         <div className="w-full my-4 flex flex-col items-center justify-center">
-          <PrayingChildIllustration className="h-40" />
+          {therapyData?.image_url ? (
+            <img src={therapyData.image_url} alt={title} className="h-40 w-auto object-contain rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          ) : emotionImageUrl && !therapyData ? (
+            <img src={emotionImageUrl} alt={title} className="h-40 w-auto object-contain rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          ) : (
+            <PrayingChildIllustration className="h-40" />
+          )}
           <p className="text-[10px] font-black tracking-wide text-purple-950 uppercase mt-2 bg-purple-100/70 border border-purple-200 px-3 py-1 rounded-full flex items-center gap-1.5 animate-pulse-soft">
             <span>🤲</span> Bayangkan limpahan rahmat Allah swt
           </p>

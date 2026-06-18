@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, GraduationCap, School, Lock, User, ChevronRight } from 'lucide-react';
 import { useStudent } from '../components/StudentProvider';
-import { isSupabaseConnected } from '../lib/supabase';
 import { SelectedStudent } from '../types';
 import { getActiveStudents } from '../services/studentService';
 import { getSchoolSettings, getAppPage } from '../services/appContentService';
@@ -13,7 +12,6 @@ export const LoginScreen: React.FC = () => {
   const { selectStudent } = useStudent();
   const [teacherPin, setTeacherPin] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [supabaseMissing] = useState(!isSupabaseConnected);
   const [students, setStudents] = useState<SelectedStudent[]>([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [studentError, setStudentError] = useState(false);
@@ -83,11 +81,6 @@ export const LoginScreen: React.FC = () => {
         </div>
         <h1 className="text-2xl font-black text-purple-900 tracking-tight">{appName}</h1>
         <p className="text-xs font-bold text-purple-600 mt-1">{tagline}</p>
-        {supabaseMissing && (
-          <div className="mt-2 inline-block bg-amber-50 border border-amber-200 rounded-full px-4 py-1">
-            <span className="text-[10px] font-black text-amber-800">Supabase belum disambungkan.</span>
-          </div>
-        )}
       </header>
 
       {/* Main Content - Two columns on desktop, stacked on mobile */}
@@ -132,9 +125,6 @@ export const LoginScreen: React.FC = () => {
               </div>
             )}
 
-            <p className="text-[10px] text-slate-400 text-center mt-4 font-bold">
-              Data murid adalah sampel demo. Hubung admin untuk data sebenar.
-            </p>
           </div>
 
           {/* Teacher Section - 2/5 width on desktop */}

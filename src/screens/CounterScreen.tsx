@@ -10,11 +10,10 @@ import {
 } from '../components/Decorations';
 import { ProgressCircle } from '../components/ProgressCircle';
 import { EmotionKey, EmotionHistoryItem, TherapyContent } from '../types';
-import { playStaticAudio } from '../utils/audio';
 import { isSupabaseConnected, supabase } from '../lib/supabase';
 import { useStudent } from '../components/StudentProvider';
 import { StudentLayout } from '../components/StudentLayout';
-import { getTherapyById } from '../services/emotionContentService';
+import { getEmotionById, getTherapyById } from '../services/emotionContentService';
 
 export const CounterScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
@@ -26,14 +25,17 @@ export const CounterScreen: React.FC = () => {
   const therapyId = searchParams.get('therapy');
 
   const [count, setCount] = useState(0);
-  const [audioFallback, setAudioFallback] = useState('');
   const [therapyData, setTherapyData] = useState<TherapyContent | null>(null);
+  const [emotionArabicAudioUrl, setEmotionArabicAudioUrl] = useState('');
 
   useEffect(() => {
+    getEmotionById(idVal).then(e => {
+      if (e?.arabic_audio_url) setEmotionArabicAudioUrl(e.arabic_audio_url);
+    });
     if (therapyId) {
       getTherapyById(therapyId).then(t => setTherapyData(t));
     }
-  }, [therapyId]);
+  }, [therapyId, idVal]);
 
   const maxCount = therapyData?.count_target || 10;
 
@@ -98,16 +100,15 @@ export const CounterScreen: React.FC = () => {
   }
 
   const handleTap = useCallback(() => {
+    const url = emotionArabicAudioUrl || arabicAudioPath;
+    if (url) {
+      new Audio(url).play().catch(() => {});
+    }
+
     if (count >= maxCount) return;
 
     const nextCount = count + 1;
     setCount(nextCount);
-
-    if (arabicAudioPath) {
-      playStaticAudio(arabicAudioPath, () => {
-        setAudioFallback('Audio belum ditambah lagi.');
-      });
-    }
 
     try {
       if ('vibrate' in navigator) { navigator.vibrate(30); }
@@ -120,7 +121,7 @@ export const CounterScreen: React.FC = () => {
         navigate(`/tahniah/${idVal}${params}`);
       }, 500);
     }
-  }, [count, arabicAudioPath, idVal, navigate, maxCount, therapyId]);
+  }, [count, emotionArabicAudioUrl, arabicAudioPath, idVal, navigate, maxCount, therapyId]);
 
   const saveCompletionData = () => {
     try {
@@ -243,14 +244,6 @@ Tarikh: ${completedDate}, ${completedTime}`;
           )}
         </div>
       </main>
-
-      {audioFallback && (
-        <div className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
-          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3 shadow-lg text-center">
-            <p className="text-xs font-black text-amber-900">{audioFallback}</p>
-          </div>
-        </div>
-      )}
     </AppPhoneFrame>
     </StudentLayout>
   );

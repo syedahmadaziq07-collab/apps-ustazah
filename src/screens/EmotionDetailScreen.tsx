@@ -12,6 +12,7 @@ import {
   EmotionChildIllustration
 } from '../components/Decorations';
 import { getEmotionById, getTherapiesByEmotion } from '../services/emotionContentService';
+import { getCurrentAudioUrl, stopCurrentAudio } from '../utils/audio';
 
 const therapyIcons: Record<string, React.ReactNode> = {
   zikir: <Heart className="w-5 h-5" />,
@@ -54,12 +55,17 @@ export const EmotionDetailScreen: React.FC = () => {
     }
   }, [emotionId]);
 
+  // Audio already playing from home page tap — don't create a new instance
   useEffect(() => {
-    if (!emotionDataFull?.audio_malay_url) return;
-    const audio = new Audio(emotionDataFull.audio_malay_url);
-    audio.play().catch(() => {});
-    return () => { audio.pause(); audio.src = ''; };
+    if (emotionDataFull?.audio_malay_url && getCurrentAudioUrl() === emotionDataFull.audio_malay_url) {
+      return;
+    }
   }, [emotionDataFull?.audio_malay_url]);
+
+  // Stop audio when navigating away
+  useEffect(() => {
+    return () => { stopCurrentAudio(); };
+  }, []);
 
   if (!currentEmotion) {
     return (

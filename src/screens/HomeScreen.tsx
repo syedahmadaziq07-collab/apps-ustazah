@@ -16,6 +16,7 @@ import { EmotionKey } from '../types';
 import { useStudent } from '../components/StudentProvider';
 import { getAppPage, getSchoolSettings } from '../services/appContentService';
 import { getEmotions } from '../services/emotionContentService';
+import { playAudioSync } from '../utils/audio';
 
 export const HomeScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const HomeScreen: React.FC = () => {
   const [changeBtnText, setChangeBtnText] = useState('Tukar');
   const [appName, setAppName] = useState('ZikirCare');
   const [emotionImages, setEmotionImages] = useState<Record<string, string>>({});
+  const [emotionAudioUrls, setEmotionAudioUrls] = useState<Record<string, string>>({});
 
   useEffect(() => {
     getAppPage('home').then((page) => {
@@ -43,9 +45,14 @@ export const HomeScreen: React.FC = () => {
       if (s.app_name) setAppName(s.app_name);
     }).catch(() => {});
     getEmotions().then(list => {
-      const map: Record<string, string> = {};
-      list.forEach(e => { if (e.image_url) map[e.id] = e.image_url; });
-      setEmotionImages(map);
+      const imgMap: Record<string, string> = {};
+      const audioMap: Record<string, string> = {};
+      list.forEach(e => {
+        if (e.image_url) imgMap[e.id] = e.image_url;
+        if (e.malay_audio_url) audioMap[e.id] = e.malay_audio_url;
+      });
+      setEmotionImages(imgMap);
+      setEmotionAudioUrls(audioMap);
     }).catch(() => {});
   }, []);
 
@@ -55,9 +62,13 @@ export const HomeScreen: React.FC = () => {
   }
 
   const handleEmotionSelect = (emotion: EmotionKey) => {
+    const audioUrl = emotionAudioUrls[emotion];
+    if (audioUrl) {
+      playAudioSync(audioUrl);
+    }
     setTimeout(() => {
       navigate(`/emosi/${emotion}`);
-    }, 250); // small delay to let snap feedback finish
+    }, 250);
   };
 
   return (

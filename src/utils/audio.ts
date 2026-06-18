@@ -1,4 +1,5 @@
 let currentAudio: HTMLAudioElement | null = null;
+let currentAudioUrl: string = '';
 
 export function stopCurrentAudio(): void {
   if (currentAudio) {
@@ -6,17 +7,28 @@ export function stopCurrentAudio(): void {
     currentAudio.currentTime = 0;
     currentAudio = null;
   }
+  currentAudioUrl = '';
+}
+
+/** Play audio synchronously — must be called inside a user gesture handler (click/tap). */
+export function playAudioSync(url: string): void {
+  stopCurrentAudio();
+  currentAudioUrl = url;
+  const audio = new Audio(url);
+  audio.play().catch(() => {});
+  currentAudio = audio;
+}
+
+export function getCurrentAudioUrl(): string {
+  return currentAudioUrl;
 }
 
 export function playStaticAudio(
   audioPath: string,
   onFallback?: () => void
 ): void {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    currentAudio = null;
-  }
+  stopCurrentAudio();
+  currentAudioUrl = audioPath;
 
   const audio = new Audio(audioPath);
 

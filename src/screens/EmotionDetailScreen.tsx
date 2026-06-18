@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, AlertCircle, Sparkles, Star, Heart, Volume2, Brain, Wind, Coffee } from 'lucide-react';
 import { emotionData } from '../data/emotions';
-import { EmotionKey, TherapyContent } from '../types';
+import { EmotionKey, TherapyContent, EmotionContent } from '../types';
 import { StudentLayout } from '../components/StudentLayout';
 import {
   AppPhoneFrame,
@@ -12,7 +12,6 @@ import {
   EmotionChildIllustration
 } from '../components/Decorations';
 import { getEmotionById, getTherapiesByEmotion } from '../services/emotionContentService';
-import { playStaticAudio, stopCurrentAudio } from '../utils/audio';
 
 const therapyIcons: Record<string, React.ReactNode> = {
   zikir: <Heart className="w-5 h-5" />,
@@ -36,7 +35,7 @@ export const EmotionDetailScreen: React.FC = () => {
   const [therapies, setTherapies] = useState<TherapyContent[]>([]);
   const [loadingTherapies, setLoadingTherapies] = useState(true);
   const [emotionImageUrl, setEmotionImageUrl] = useState('');
-  const [terapiAudioUrl, setTerapiAudioUrl] = useState('');
+  const [emotionDataFull, setEmotionDataFull] = useState<EmotionContent | null>(null);
 
   const evVal = (emotionId || 'tenang') as EmotionKey;
   const currentEmotion = emotionData[evVal];
@@ -45,8 +44,8 @@ export const EmotionDetailScreen: React.FC = () => {
     if (emotionId) {
       setLoadingTherapies(true);
       getEmotionById(emotionId).then(e => {
+        setEmotionDataFull(e);
         if (e?.image_url) setEmotionImageUrl(e.image_url);
-        if (e?.audio_terapi_url) setTerapiAudioUrl(e.audio_terapi_url);
       });
       getTherapiesByEmotion(emotionId).then(list => {
         setTherapies(list.filter(t => t.is_active));
@@ -56,13 +55,11 @@ export const EmotionDetailScreen: React.FC = () => {
   }, [emotionId]);
 
   useEffect(() => {
-    if (terapiAudioUrl) {
-      playStaticAudio(terapiAudioUrl);
-    }
-    return () => {
-      stopCurrentAudio();
-    };
-  }, [terapiAudioUrl]);
+    if (!emotionDataFull?.audio_malay_url) return;
+    const audio = new Audio(emotionDataFull.audio_malay_url);
+    audio.play().catch(() => {});
+    return () => { audio.pause(); audio.src = ''; };
+  }, [emotionDataFull?.audio_malay_url]);
 
   if (!currentEmotion) {
     return (

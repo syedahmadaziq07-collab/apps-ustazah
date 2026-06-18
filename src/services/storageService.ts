@@ -79,7 +79,15 @@ export async function uploadFile(
     .from(bucket)
     .getPublicUrl(filePath);
 
-  return { publicUrl: publicData?.publicUrl || '', error: null };
+  let publicUrl = publicData?.publicUrl || '';
+  // Ensure the URL is an absolute Supabase URL (not a relative path)
+  if (publicUrl && !publicUrl.startsWith('http://') && !publicUrl.startsWith('https://')) {
+    const baseUrl = (supabase! as any).supabaseUrl?.replace(/\/+$/, '') || '';
+    if (baseUrl) {
+      publicUrl = `${baseUrl}/storage/v1/object/public/${bucket}/${filePath}`;
+    }
+  }
+  return { publicUrl, error: null };
 }
 
 export async function deleteFile(bucket: BucketName, path: string): Promise<{ error: string | null }> {

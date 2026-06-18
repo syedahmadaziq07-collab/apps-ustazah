@@ -9,6 +9,7 @@ import {
   CloudDecoration
 } from '../components/Decorations';
 import { BottomNav } from '../components/BottomNav';
+import { StudentLayout } from '../components/StudentLayout';
 import { SadChildIllustration } from '../components/Illustrations';
 import { emotionData } from '../data/emotions';
 import { EmotionKey, EmotionHistoryItem } from '../types';
@@ -149,7 +150,8 @@ Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}${item.complet
   };
 
   return (
-    <AppPhoneFrame id="history-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none">
+    <StudentLayout activeNav="Sejarah">
+    <AppPhoneFrame id="history-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       
       {/* Soft warm Cream childhood background */}
       <SoftSkyBackground variant="sunset">
@@ -325,5 +327,6 @@ Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}${item.complet
       {/* Bottom Navigation */}
       <BottomNav active="Sejarah" />
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

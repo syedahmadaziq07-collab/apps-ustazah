@@ -13,6 +13,7 @@ import { EmotionKey, EmotionHistoryItem, TherapyContent } from '../types';
 import { playStaticAudio } from '../utils/audio';
 import { isSupabaseConnected, supabase } from '../lib/supabase';
 import { useStudent } from '../components/StudentProvider';
+import { StudentLayout } from '../components/StudentLayout';
 import { getTherapyById } from '../services/emotionContentService';
 
 export const CounterScreen: React.FC = () => {
@@ -181,7 +182,8 @@ Tarikh: ${completedDate}, ${completedTime}`;
   };
 
   return (
-    <AppPhoneFrame id={`counter-screen-${idVal}`} className="relative flex flex-col justify-between min-h-screen bg-transparent">
+    <StudentLayout activeNav={null}>
+    <AppPhoneFrame id={`counter-screen-${idVal}`} className="relative flex flex-col justify-between min-h-screen bg-transparent lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       <SoftSkyBackground variant="sunset">
         <StarSparklePattern />
       </SoftSkyBackground>
@@ -250,5 +252,6 @@ Tarikh: ${completedDate}, ${completedTime}`;
         </div>
       )}
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

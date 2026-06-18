@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Sparkles, Home, Star, Volume2, History } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
+import { StudentLayout } from '../components/StudentLayout';
 import {
   AppPhoneFrame,
   SoftSkyBackground,
@@ -52,7 +53,8 @@ export const SuccessScreen: React.FC = () => {
   }, []);
 
   return (
-    <AppPhoneFrame id="success-screen-container" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none overflow-hidden pb-8">
+    <StudentLayout activeNav={null}>
+    <AppPhoneFrame id="success-screen-container" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none overflow-hidden pb-8 lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       <SoftSkyBackground variant="sunset">
         <StarSparklePattern />
         <ConfettiPattern />
@@ -132,5 +134,6 @@ export const SuccessScreen: React.FC = () => {
         </div>
       )}
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

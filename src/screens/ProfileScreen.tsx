@@ -8,6 +8,7 @@ import {
   PrayingChildIllustration
 } from '../components/Decorations';
 import { BottomNav } from '../components/BottomNav';
+import { StudentLayout } from '../components/StudentLayout';
 import { getAppPage, getSchoolSettings } from '../services/appContentService';
 
 export const ProfileScreen: React.FC = () => {
@@ -55,7 +56,8 @@ export const ProfileScreen: React.FC = () => {
   const counselorId = "KB-08249-M";
 
   return (
-    <AppPhoneFrame id="profile-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none">
+    <StudentLayout activeNav="Profil">
+    <AppPhoneFrame id="profile-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       
       {/* Pastel background with sparkles */}
       <SoftSkyBackground variant="sunset">
@@ -228,5 +230,6 @@ export const ProfileScreen: React.FC = () => {
       {/* Bottom Nav */}
       <BottomNav active="Profil" />
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

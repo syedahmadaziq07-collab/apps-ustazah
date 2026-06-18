@@ -9,6 +9,7 @@ import {
   PrayingChildIllustration
 } from '../components/Decorations';
 import { BottomNav } from '../components/BottomNav';
+import { StudentLayout } from '../components/StudentLayout';
 import { DuaContent } from '../types';
 import { getDuas } from '../services/duaService';
 
@@ -29,7 +30,8 @@ export const DuaScreen: React.FC = () => {
   };
 
   return (
-    <AppPhoneFrame id="dua-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none">
+    <StudentLayout activeNav="Doa">
+    <AppPhoneFrame id="dua-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent select-none lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       <SoftSkyBackground variant="sunset">
         <StarSparklePattern />
       </SoftSkyBackground>
@@ -117,5 +119,6 @@ export const DuaScreen: React.FC = () => {
 
       <BottomNav active="Doa" />
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

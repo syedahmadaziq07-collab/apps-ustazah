@@ -15,7 +15,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ active }) => {
   };
 
   return (
-    <div className="sticky bottom-4 mx-auto w-[calc(100%-32px)] max-w-[500px] md:max-w-[700px] mb-4 mt-2 h-[68px] bg-white/95 backdrop-blur-md flex items-center justify-around px-4 shadow-[0_12px_32px_rgba(124,58,237,0.16)] z-50 rounded-[24px] border-2 border-purple-100/50 shrink-0">
+    <div className="sticky bottom-4 mx-auto w-[calc(100%-32px)] max-w-[500px] md:max-w-[700px] mb-4 mt-2 h-[68px] bg-white/95 backdrop-blur-md flex items-center justify-around px-4 shadow-[0_12px_32px_rgba(124,58,237,0.16)] z-50 rounded-[24px] border-2 border-purple-100/50 shrink-0 lg:hidden">
       {/* Utama Tab */}
       <button
         id="nav-utama-btn"

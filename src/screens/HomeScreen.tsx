@@ -10,6 +10,7 @@ import {
 } from '../components/Decorations';
 import { EmotionButton } from '../components/EmotionButton';
 import { BottomNav } from '../components/BottomNav';
+import { StudentLayout } from '../components/StudentLayout';
 import { emotionData } from '../data/emotions';
 import { EmotionKey } from '../types';
 import { useStudent } from '../components/StudentProvider';
@@ -53,7 +54,8 @@ export const HomeScreen: React.FC = () => {
   };
 
   return (
-    <AppPhoneFrame id="home-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent">
+    <StudentLayout activeNav="Utama">
+    <AppPhoneFrame id="home-screen" className="relative flex flex-col justify-between min-h-screen bg-transparent lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       {/* Soft Illustrated Sky Background overlay */}
       <SoftSkyBackground variant="sky">
         <StarSparklePattern />
@@ -265,5 +267,6 @@ export const HomeScreen: React.FC = () => {
       {/* Bottom Nav */}
       <BottomNav active="Utama" />
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

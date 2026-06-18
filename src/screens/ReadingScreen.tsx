@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Play, Volume2, Sparkles, Star } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
+import { StudentLayout } from '../components/StudentLayout';
 import {
   AppPhoneFrame,
   SoftSkyBackground,
@@ -100,7 +101,8 @@ export const ReadingScreen: React.FC = () => {
   };
 
   return (
-    <AppPhoneFrame id={`reading-screen-${idVal}`} className="relative flex flex-col justify-between min-h-screen bg-transparent">
+    <StudentLayout activeNav={null}>
+    <AppPhoneFrame id={`reading-screen-${idVal}`} className="relative flex flex-col justify-between min-h-screen bg-transparent lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       <SoftSkyBackground variant="sunset">
         <StarSparklePattern />
       </SoftSkyBackground>
@@ -193,5 +195,6 @@ export const ReadingScreen: React.FC = () => {
         </div>
       )}
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

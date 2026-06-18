@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, AlertCircle, Sparkles, Star, Heart, Volume2, Brain, Wind, Coffee } from 'lucide-react';
 import { emotionData } from '../data/emotions';
 import { EmotionKey, TherapyContent } from '../types';
+import { StudentLayout } from '../components/StudentLayout';
 import {
   AppPhoneFrame,
   SoftSkyBackground,
@@ -83,7 +84,8 @@ export const EmotionDetailScreen: React.FC = () => {
   const badgeStyle = badgeMap[currentEmotion.color] || badgeMap.purple;
 
   return (
-    <AppPhoneFrame id={`emotion-detail-${evVal}`} className="relative flex flex-col min-h-screen bg-transparent select-none">
+    <StudentLayout activeNav={null}>
+    <AppPhoneFrame id={`emotion-detail-${evVal}`} className="relative flex flex-col min-h-screen bg-transparent select-none lg:max-w-none lg:mx-0 lg:rounded-none lg:border-0 lg:my-0 lg:shadow-none">
       <SoftSkyBackground variant="sunset">
         <StarSparklePattern />
       </SoftSkyBackground>
@@ -157,5 +159,6 @@ export const EmotionDetailScreen: React.FC = () => {
         </div>
       </main>
     </AppPhoneFrame>
+    </StudentLayout>
   );
 };

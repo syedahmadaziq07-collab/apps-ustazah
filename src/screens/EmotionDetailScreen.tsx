@@ -108,7 +108,13 @@ export const EmotionDetailScreen: React.FC = () => {
 
       <main className="flex-grow px-5 pt-4 pb-6 relative z-10 overflow-y-auto">
         <div className="my-1 text-center bg-white/60 backdrop-blur-xs p-3 rounded-3xl border border-purple-100/50">
-          <div className="text-6xl animate-pulse-soft filter drop-shadow-sm select-none my-1">{currentEmotion.emoji}</div>
+          <div className="text-6xl animate-pulse-soft filter drop-shadow-sm select-none my-1 flex items-center justify-center">
+            {emotionImageUrl ? (
+              <img src={emotionImageUrl} alt={currentEmotion.label} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md" />
+            ) : (
+              currentEmotion.emoji
+            )}
+          </div>
           <span className={`text-[10px] font-black tracking-widest uppercase border px-3.5 py-1 rounded-full ${badgeStyle}`}>
             Kamu Sedang Rasa {currentEmotion.label}
           </span>

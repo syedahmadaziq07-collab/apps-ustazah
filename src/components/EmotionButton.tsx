@@ -6,9 +6,10 @@ interface EmotionButtonProps {
   label: string;
   colorType: 'yellow' | 'red' | 'blue' | 'purple' | 'orange' | 'teal' | 'green';
   onClick: () => void;
+  imageUrl?: string;
 }
 
-export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, colorType, onClick }) => {
+export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, colorType, onClick, imageUrl }) => {
   const [shaking, setShaking] = useState(false);
 
   const handleClick = () => {
@@ -38,8 +39,11 @@ export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, 
         colorMap[colorType]
       } ${shaking ? 'animate-shake' : 'hover:scale-[1.08] active:scale-95'}`}
     >
-      {/* Sparkly decorative indicator */}
-      <span className="text-4xl filter drop-shadow-sm mb-1 animate-pulse-soft">{emoji}</span>
+      {imageUrl ? (
+        <img src={imageUrl} alt={label} className="w-12 h-12 rounded-full object-cover border-2 border-white/80 shadow-sm mb-1" />
+      ) : (
+        <span className="text-4xl filter drop-shadow-sm mb-1 animate-pulse-soft">{emoji}</span>
+      )}
       <span className="text-[11px] font-black leading-none">{label}</span>
       
       {/* Tap decorative dot */}

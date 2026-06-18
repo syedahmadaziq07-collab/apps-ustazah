@@ -13,10 +13,12 @@ import { StudentLayout } from '../components/StudentLayout';
 import { SadChildIllustration } from '../components/Illustrations';
 import { emotionData } from '../data/emotions';
 import { EmotionKey, EmotionHistoryItem } from '../types';
+import { getEmotions } from '../services/emotionContentService';
 
 export const HistoryScreen: React.FC = () => {
   const navigate = useNavigate();
   const [history, setHistory] = useState<EmotionHistoryItem[]>([]);
+  const [emotionImageMap, setEmotionImageMap] = useState<Record<string, string>>({});
 
   // Local helper to format date/time into beautiful Malay text
   const formatMalayTime = (isoString: string): string => {
@@ -115,6 +117,11 @@ export const HistoryScreen: React.FC = () => {
         setHistory([]);
       }
     }
+    getEmotions().then(list => {
+      const map: Record<string, string> = {};
+      list.forEach(e => { if (e.image_url) map[e.id] = e.image_url; });
+      setEmotionImageMap(map);
+    }).catch(() => {});
   }, []);
 
   const emotionsList: { key: EmotionKey; emoji: string }[] = [
@@ -212,8 +219,12 @@ Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}${item.complet
               const count = getStatsCount(em.key);
               return (
                 <div key={em.key} className="flex flex-col items-center">
-                  <span className="text-3xl filter drop-shadow-xs transition-transform hover:scale-115 active:scale-95 duration-150 cursor-pointer select-none">
-                    {em.emoji}
+                  <span className="text-3xl filter drop-shadow-xs transition-transform hover:scale-115 active:scale-95 duration-150 cursor-pointer select-none flex items-center justify-center">
+                    {emotionImageMap[em.key] ? (
+                      <img src={emotionImageMap[em.key]} alt="" className="w-9 h-9 rounded-full object-cover" />
+                    ) : (
+                      em.emoji
+                    )}
                   </span>
                   <span className="text-[9px] font-black text-purple-950 mt-1 capitalize tracking-wide select-none">
                     {em.key}
@@ -283,8 +294,12 @@ Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}${item.complet
                         <span className="text-xs font-black text-slate-800">
                           {item.studentFullName || 'Murid'}
                         </span>
-                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${pillStyle}`}>
-                          {item.emoji} {item.label}
+                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${pillStyle} flex items-center gap-1`}>
+                          {emotionImageMap[item.emotion] ? (
+                            <img src={emotionImageMap[item.emotion]} alt="" className="w-3.5 h-3.5 rounded-full object-cover" />
+                          ) : (
+                            item.emoji
+                          )} {item.label}
                         </span>
                       </div>
 

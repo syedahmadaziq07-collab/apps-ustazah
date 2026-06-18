@@ -15,6 +15,7 @@ import { emotionData } from '../data/emotions';
 import { EmotionKey } from '../types';
 import { useStudent } from '../components/StudentProvider';
 import { getAppPage, getSchoolSettings } from '../services/appContentService';
+import { getEmotions } from '../services/emotionContentService';
 
 export const HomeScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export const HomeScreen: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState('Hari ini:');
   const [changeBtnText, setChangeBtnText] = useState('Tukar');
   const [appName, setAppName] = useState('ZikirCare');
+  const [emotionImages, setEmotionImages] = useState<Record<string, string>>({});
 
   useEffect(() => {
     getAppPage('home').then((page) => {
@@ -39,6 +41,11 @@ export const HomeScreen: React.FC = () => {
     }).catch(() => {});
     getSchoolSettings().then((s) => {
       if (s.app_name) setAppName(s.app_name);
+    }).catch(() => {});
+    getEmotions().then(list => {
+      const map: Record<string, string> = {};
+      list.forEach(e => { if (e.image_url) map[e.id] = e.image_url; });
+      setEmotionImages(map);
     }).catch(() => {});
   }, []);
 
@@ -158,6 +165,7 @@ export const HomeScreen: React.FC = () => {
                 label={emotionData.gembira.label}
                 colorType={emotionData.gembira.color}
                 onClick={() => handleEmotionSelect('gembira')}
+                imageUrl={emotionImages['gembira']}
               />
               <EmotionButton
                 id="marah"
@@ -165,6 +173,7 @@ export const HomeScreen: React.FC = () => {
                 label={emotionData.marah.label}
                 colorType={emotionData.marah.color}
                 onClick={() => handleEmotionSelect('marah')}
+                imageUrl={emotionImages['marah']}
               />
               <EmotionButton
                 id="sedih"
@@ -172,6 +181,7 @@ export const HomeScreen: React.FC = () => {
                 label={emotionData.sedih.label}
                 colorType={emotionData.sedih.color}
                 onClick={() => handleEmotionSelect('sedih')}
+                imageUrl={emotionImages['sedih']}
               />
 
               {/* Row 2 */}
@@ -181,6 +191,7 @@ export const HomeScreen: React.FC = () => {
                 label={emotionData.takut.label}
                 colorType={emotionData.takut.color}
                 onClick={() => handleEmotionSelect('takut')}
+                imageUrl={emotionImages['takut']}
               />
               <EmotionButton
                 id="risau"
@@ -188,6 +199,7 @@ export const HomeScreen: React.FC = () => {
                 label={emotionData.risau.label}
                 colorType={emotionData.risau.color}
                 onClick={() => handleEmotionSelect('risau')}
+                imageUrl={emotionImages['risau']}
               />
               <EmotionButton
                 id="penat"
@@ -195,6 +207,7 @@ export const HomeScreen: React.FC = () => {
                 label={emotionData.penat.label}
                 colorType={emotionData.penat.color}
                 onClick={() => handleEmotionSelect('penat')}
+                imageUrl={emotionImages['penat']}
               />
             </div>
 
@@ -207,6 +220,7 @@ export const HomeScreen: React.FC = () => {
                   label={emotionData.tenang.label}
                   colorType={emotionData.tenang.color}
                   onClick={() => handleEmotionSelect('tenang')}
+                  imageUrl={emotionImages['tenang']}
                 />
               </div>
             </div>

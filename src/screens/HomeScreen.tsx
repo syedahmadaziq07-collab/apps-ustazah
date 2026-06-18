@@ -135,8 +135,8 @@ export const HomeScreen: React.FC = () => {
       </header>
 
       {/* Main Content scroll area */}
-      <main className="flex-grow px-5 pt-3 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center my-4 lg:my-8">
+      <main className="flex-grow px-5 md:px-6 pt-3 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center my-4 lg:my-8">
           
           {/* Left Column: Title + Hero Image */}
           <div className="flex flex-col gap-4">
@@ -155,7 +155,7 @@ export const HomeScreen: React.FC = () => {
               <img
                 src={homeImage}
                 alt="Kanak-kanak Muslim ceria"
-                className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[400px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
+                className="w-full h-[220px] sm:h-[280px] md:h-64 lg:h-[400px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
                 referrerPolicy="no-referrer"
               />
             </div>

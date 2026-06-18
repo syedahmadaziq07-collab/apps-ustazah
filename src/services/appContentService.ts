@@ -1,9 +1,11 @@
 import { supabase, isSupabaseConnected } from '../lib/supabase';
-import { SchoolSettings, AppPage } from '../types';
+import { SchoolSettings, AppPage, SchoolProfile } from '../types';
 
 const SETTINGS_KEY = 'zikirCareSchoolSettings';
 const PAGES_KEY = 'zikirCareAppPages';
+const SCHOOL_PROFILE_KEY = 'zikirCareSchoolProfile';
 const SETTINGS_SINGLETON_ID = '00000000-0000-0000-0000-000000000001';
+const SCHOOL_PROFILE_SINGLETON_ID = '00000000-0000-0000-0000-000000000002';
 
 const DEFAULT_SETTINGS: SchoolSettings = {
   school_name: 'SK AL-FALAH',
@@ -11,6 +13,13 @@ const DEFAULT_SETTINGS: SchoolSettings = {
   logo_url: '',
   tagline: 'Aplikasi Kerohanian & Emosi Kanak-Kanak',
   theme_color: '#8B5CF6',
+};
+
+const DEFAULT_SCHOOL_PROFILE: SchoolProfile = {
+  teacher_name: 'Cikgu Fatimah Binti Ismail',
+  lembaga_number: 'KB-08249-M',
+  school_name: 'SK Seri Idaman, Shah Alam, Selangor',
+  teacher_photo_url: '',
 };
 
 const DEFAULT_PAGES: Record<string, AppPage> = {
@@ -141,6 +150,50 @@ export async function saveAppPage(pageId: string, data: Partial<AppPage>): Promi
   pages[pageId] = { ...(pages[pageId] || DEFAULT_PAGES[pageId]), ...data, updated_at: new Date().toISOString() };
   saveLocalPages(pages);
   return true;
+}
+
+function getLocalSchoolProfile(): SchoolProfile {
+  try {
+    const raw = localStorage.getItem(SCHOOL_PROFILE_KEY);
+    return raw ? JSON.parse(raw) : { ...DEFAULT_SCHOOL_PROFILE };
+  } catch {
+    return { ...DEFAULT_SCHOOL_PROFILE };
+  }
+}
+
+function saveLocalSchoolProfile(profile: SchoolProfile) {
+  try { localStorage.setItem(SCHOOL_PROFILE_KEY, JSON.stringify(profile)); } catch {}
+}
+
+export async function getSchoolProfile(): Promise<SchoolProfile> {
+  if (isSupabaseConnected && supabase) {
+    const { data, error } = await supabase
+      .from('school_profile')
+      .select('*')
+      .limit(1)
+      .maybeSingle();
+    if (!error && data) {
+      return data as SchoolProfile;
+    }
+  }
+  return getLocalSchoolProfile();
+}
+
+export async function saveSchoolProfile(profile: SchoolProfile): Promise<boolean> {
+  if (isSupabaseConnected && supabase) {
+    const { id, ...upsertData } = profile;
+    const { error } = await supabase
+      .from('school_profile')
+      .upsert({ ...upsertData, id: id || SCHOOL_PROFILE_SINGLETON_ID })
+      .eq('id', id || SCHOOL_PROFILE_SINGLETON_ID);
+    if (!error) return true;
+  }
+  saveLocalSchoolProfile(profile);
+  return true;
+}
+
+export function getDefaultSchoolProfile(): SchoolProfile {
+  return { ...DEFAULT_SCHOOL_PROFILE };
 }
 
 export function getDefaultSettings(): SchoolSettings {

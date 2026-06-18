@@ -136,6 +136,15 @@ export function toStudentRecord(s: SelectedStudent, partial?: Partial<StudentRec
   };
 }
 
+export interface SchoolProfile {
+  id?: string;
+  teacher_name: string;
+  lembaga_number: string;
+  school_name: string;
+  teacher_photo_url: string;
+  updated_at?: string;
+}
+
 export interface SchoolSettings {
   id?: string;
   school_name: string;

@@ -165,3 +165,17 @@ CREATE TABLE IF NOT EXISTS emotion_logs (
 
 CREATE INDEX IF NOT EXISTS idx_emotion_logs_created ON emotion_logs (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_emotion_logs_student ON emotion_logs (student_id);
+
+-- ============================================
+-- Table: school_profile
+-- Editable school counsellor profile for the student Profil page.
+-- Singleton row: teacher_name, lembaga_number, school_name, teacher_photo_url.
+-- ============================================
+CREATE TABLE IF NOT EXISTS school_profile (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  teacher_name text NOT NULL DEFAULT '',
+  lembaga_number text NOT NULL DEFAULT '',
+  school_name text NOT NULL DEFAULT '',
+  teacher_photo_url text NOT NULL DEFAULT '',
+  updated_at timestamptz DEFAULT now()
+);

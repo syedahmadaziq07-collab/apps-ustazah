@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Save, RotateCcw, Eye, School } from 'lucide-react';
+import { Save, RotateCcw, Eye, School, User, FileBadge } from 'lucide-react';
 import { SupabaseBanner } from '../../components/SupabaseBanner';
-import { AppPage } from '../../types';
-import { getAppPage, saveAppPage, getDefaultPage } from '../../services/appContentService';
+import { AppPage, SchoolProfile } from '../../types';
+import { getAppPage, saveAppPage, getDefaultPage, getSchoolProfile, saveSchoolProfile, getDefaultSchoolProfile } from '../../services/appContentService';
 import { FileUploadField } from '../../components/dashboard/FileUploadField';
 
 interface ProfileContent {
@@ -29,6 +29,11 @@ export const TeacherProfileEditor: React.FC = () => {
   const [message, setMessage] = useState('');
   const [dirty, setDirty] = useState(false);
 
+  const [schoolProfile, setSchoolProfile] = useState<SchoolProfile>(getDefaultSchoolProfile());
+  const [schoolProfileSaving, setSchoolProfileSaving] = useState(false);
+  const [schoolProfileMessage, setSchoolProfileMessage] = useState('');
+  const [schoolProfileLoading, setSchoolProfileLoading] = useState(true);
+
   const load = useCallback(async () => {
     setLoading(true);
     const page = await getAppPage('profile');
@@ -49,6 +54,13 @@ export const TeacherProfileEditor: React.FC = () => {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    getSchoolProfile().then((p) => {
+      setSchoolProfile(p);
+      setSchoolProfileLoading(false);
+    });
+  }, []);
 
   const handleSave = async () => {
     setSaving(true);
@@ -74,6 +86,22 @@ export const TeacherProfileEditor: React.FC = () => {
     } else {
       setMessage('Gagal menyimpan. Cuba lagi.');
     }
+  };
+
+  const handleSchoolProfileSave = async () => {
+    setSchoolProfileSaving(true);
+    setSchoolProfileMessage('');
+    const ok = await saveSchoolProfile(schoolProfile);
+    setSchoolProfileSaving(false);
+    if (ok) {
+      setSchoolProfileMessage('Profil kaunselor berjaya disimpan.');
+    } else {
+      setSchoolProfileMessage('Gagal menyimpan profil kaunselor. Cuba lagi.');
+    }
+  };
+
+  const handleSchoolProfileReset = () => {
+    setSchoolProfile(getDefaultSchoolProfile());
   };
 
   const handleReset = async () => {
@@ -112,6 +140,66 @@ export const TeacherProfileEditor: React.FC = () => {
       </div>
 
       <SupabaseBanner />
+
+      {/* School Profile Section */}
+      <div className="mb-8 bg-white rounded-2xl border-2 border-purple-100 p-5 shadow-sm">
+        <div className="flex items-center gap-2 mb-4">
+          <User className="w-5 h-5 text-purple-600" />
+          <h2 className="text-sm font-black text-purple-800">Profil Kaunselor (untuk halaman Profil murid)</h2>
+        </div>
+        {schoolProfileLoading ? (
+          <p className="text-xs font-bold text-slate-400">Sedang memuatkan...</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-black text-slate-700 block mb-1">Nama Kaunselor</label>
+              <input type="text" value={schoolProfile.teacher_name}
+                onChange={(e) => setSchoolProfile({ ...schoolProfile, teacher_name: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
+            </div>
+            <div>
+              <label className="text-xs font-black text-slate-700 block mb-1">Nombor Lembaga Kaunselor</label>
+              <input type="text" value={schoolProfile.lembaga_number}
+                onChange={(e) => setSchoolProfile({ ...schoolProfile, lembaga_number: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
+            </div>
+            <div>
+              <label className="text-xs font-black text-slate-700 block mb-1">Nama Sekolah</label>
+              <input type="text" value={schoolProfile.school_name}
+                onChange={(e) => setSchoolProfile({ ...schoolProfile, school_name: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
+            </div>
+            <div>
+              <FileUploadField
+                label="URL Gambar Kaunselor"
+                value={schoolProfile.teacher_photo_url}
+                onChange={(url) => setSchoolProfile({ ...schoolProfile, teacher_photo_url: url })}
+                bucket="app-images"
+                folder="counsellor"
+                type="image"
+                helperText="Muat naik gambar kaunselor atau taip URL manual."
+              />
+            </div>
+          </div>
+        )}
+        {schoolProfileMessage && (
+          <p className={`mt-3 text-xs font-black px-4 py-2 rounded-xl ${schoolProfileMessage.includes('berjaya') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+            {schoolProfileMessage}
+          </p>
+        )}
+        <div className="flex items-center gap-3 mt-4">
+          <button onClick={handleSchoolProfileSave} disabled={schoolProfileSaving}
+            className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white text-xs font-black rounded-2xl hover:bg-purple-700 active:scale-95 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
+            <Save className="w-4 h-4" />
+            {schoolProfileSaving ? 'Menyimpan...' : 'Simpan Profil Kaunselor'}
+          </button>
+          <button onClick={handleSchoolProfileReset}
+            className="flex items-center gap-2 px-4 py-3 border-2 border-slate-200 text-xs font-black text-slate-600 rounded-2xl hover:bg-slate-50 active:scale-95 transition-all cursor-pointer">
+            <RotateCcw className="w-3.5 h-3.5" />
+            Reset ke Default
+          </button>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className="space-y-4">

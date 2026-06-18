@@ -184,6 +184,24 @@ VALUES
   ('dua-13', 'Doa Belajar', 'رَبِّ زِدْنِي عِلْمًا وَارْزُقْنِي فَهْمًا', 'Rabbi zidni ''ilman warzuqni fahma', 'Ya Tuhanku, tambahkanlah ilmu dan berikanlah aku kefahaman.', '', '/audio/arabic/doa-kekuatan.mp3', '📚', 'Baca doa ini sebelum belajar.', 12, true),
   ('dua-14', 'Doa Bersyukur', 'رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ', 'Rabbi awzi''ni an asykura ni''matakallati an''amta ''alayya', 'Ya Tuhanku, ilhamkanlah aku untuk mensyukuri nikmat-Mu yang telah Engkau berikan kepadaku.', '', '/audio/arabic/alhamdulillah.mp3', '🙏', 'Baca doa ini sebagai tanda syukur.', 13, true),
   ('dua-15', 'Doa Mohon Kekuatan', 'رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا', 'Rabbana afrigh ''alayna sabran wa tsabbit aqdamana', 'Ya Tuhan kami, limpahkanlah kesabaran kepada kami dan teguhkanlah pendirian kami.', '', '/audio/arabic/doa-kekuatan.mp3', '💪', 'Baca doa ini minta kekuatan hati.', 14, true)
+-- ============================================
+-- School Profile (counsellor details for student Profil page)
+-- ============================================
+INSERT INTO school_profile (id, teacher_name, lembaga_number, school_name, teacher_photo_url)
+VALUES (
+  '00000000-0000-0000-0000-000000000002',
+  'Cikgu Fatimah Binti Ismail',
+  'KB-08249-M',
+  'SK Seri Idaman, Shah Alam, Selangor',
+  ''
+)
+ON CONFLICT (id) DO UPDATE SET
+  teacher_name = EXCLUDED.teacher_name,
+  lembaga_number = EXCLUDED.lembaga_number,
+  school_name = EXCLUDED.school_name,
+  teacher_photo_url = EXCLUDED.teacher_photo_url,
+  updated_at = now();
+
 ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title,
   arabic_text = EXCLUDED.arabic_text,

@@ -9,7 +9,8 @@ import {
 } from '../components/Decorations';
 import { BottomNav } from '../components/BottomNav';
 import { StudentLayout } from '../components/StudentLayout';
-import { getAppPage, getSchoolSettings } from '../services/appContentService';
+import { getAppPage, getSchoolSettings, getSchoolProfile } from '../services/appContentService';
+import { SchoolProfile } from '../types';
 
 export const ProfileScreen: React.FC = () => {
   const [profileTitle, setProfileTitle] = useState('Profil Guru Kaunseling');
@@ -18,6 +19,7 @@ export const ProfileScreen: React.FC = () => {
   const [schoolInfo, setSchoolInfo] = useState('SK Seri Idaman, Shah Alam, Selangor');
   const [counsellingNote, setCounsellingNote] = useState('');
   const [privacyNote, setPrivacyNote] = useState('');
+  const [schoolProfile, setSchoolProfile] = useState<SchoolProfile | null>(null);
   const [appName, setAppName] = useState('ZikirCare');
   const [tagline, setTagline] = useState('');
   const [themeColor, setThemeColor] = useState('#8B5CF6');
@@ -38,6 +40,9 @@ export const ProfileScreen: React.FC = () => {
       if (s.tagline) setTagline(s.tagline);
       if (s.theme_color) setThemeColor(s.theme_color);
     }).catch(() => {});
+    getSchoolProfile().then((p) => {
+      setSchoolProfile(p);
+    }).catch(() => {});
   }, []);
 
   // Simple stats compiled from localStorage history if any
@@ -51,9 +56,9 @@ export const ProfileScreen: React.FC = () => {
     }
   }
 
-  const counselorName = "Cikgu Fatimah Binti Ismail";
-  const schoolName = schoolInfo;
-  const counselorId = "KB-08249-M";
+  const counselorName = schoolProfile?.teacher_name || "Cikgu Fatimah Binti Ismail";
+  const schoolName = schoolProfile?.school_name || schoolInfo;
+  const counselorId = schoolProfile?.lembaga_number || "KB-08249-M";
 
   return (
     <StudentLayout activeNav="Profil">
@@ -91,8 +96,12 @@ export const ProfileScreen: React.FC = () => {
 
           <div className="flex items-center gap-4 relative z-10">
             {/* Avatar cartoon */}
-            <div className="w-16 h-16 rounded-2xl bg-[#FFFDF4] flex items-center justify-center text-4.5xl shadow-md border-3 border-purple-200 select-none animate-pulse-soft">
-              🧕
+            <div className="w-16 h-16 rounded-2xl bg-[#FFFDF4] flex items-center justify-center text-4.5xl shadow-md border-3 border-purple-200 select-none animate-pulse-soft overflow-hidden">
+              {schoolProfile?.teacher_photo_url ? (
+                <img src={schoolProfile.teacher_photo_url} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+              ) : (
+                <span>🧕</span>
+              )}
             </div>
 
             <div className="min-w-0 flex-1">

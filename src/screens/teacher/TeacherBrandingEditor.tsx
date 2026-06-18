@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Save, RotateCcw, School } from 'lucide-react';
-import { isSupabaseConnected } from '../../lib/supabase';
+import { SupabaseBanner } from '../../components/SupabaseBanner';
 import { SchoolSettings } from '../../types';
 import { getSchoolSettings, saveSchoolSettings, getDefaultSettings } from '../../services/appContentService';
 import { FileUploadField } from '../../components/dashboard/FileUploadField';
@@ -49,13 +49,7 @@ export const TeacherBrandingEditor: React.FC = () => {
         </p>
       </div>
 
-      {!isSupabaseConnected && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 mb-4">
-          <p className="text-[10px] font-bold text-amber-800">
-            Supabase belum disambungkan, perubahan disimpan pada peranti ini.
-          </p>
-        </div>
-      )}
+      <SupabaseBanner />
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className="space-y-4">

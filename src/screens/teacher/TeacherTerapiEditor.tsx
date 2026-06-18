@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Save, RotateCcw, Plus, ChevronDown, ChevronUp } from 'lucide-react';
-import { isSupabaseConnected } from '../../lib/supabase';
+import { SupabaseBanner } from '../../components/SupabaseBanner';
 import { EmotionContent, TherapyContent } from '../../types';
 import { getEmotions } from '../../services/emotionContentService';
 import { getTherapiesByEmotion, saveTherapy, resetTherapiesToDefault, getDefaultTherapies } from '../../services/emotionContentService';
@@ -89,11 +89,7 @@ export const TeacherTerapiEditor: React.FC = () => {
         <p className="text-xs font-bold text-slate-500 mt-1">Edit senarai terapi untuk setiap emosi.</p>
       </div>
 
-      {!isSupabaseConnected && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 mb-4">
-          <p className="text-[10px] font-bold text-amber-800">Supabase belum disambungkan, perubahan disimpan pada peranti ini.</p>
-        </div>
-      )}
+      <SupabaseBanner />
 
       {message && (
         <div className={`mb-4 text-xs font-black px-4 py-2 rounded-xl ${message.includes('Berjaya') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>

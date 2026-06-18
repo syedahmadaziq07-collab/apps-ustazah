@@ -43,9 +43,6 @@ export const TeacherDashboard: React.FC = () => {
         <h1 className="text-xl md:text-2xl font-black text-slate-800">Dashboard</h1>
         <p className="text-xs font-bold text-slate-500 mt-1">
           Selamat datang ke dashboard ZikirCare.
-          {supabaseCheck === 'env_missing' && (
-            <span className="text-amber-600"> Supabase belum disambungkan.</span>
-          )}
           {supabaseCheck === 'request_failed' && (
             <span className="text-amber-600"> Sambungan Supabase gagal.</span>
           )}

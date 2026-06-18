@@ -91,6 +91,11 @@ CREATE TABLE IF NOT EXISTS emotions (
   updated_at timestamptz DEFAULT now()
 );
 
+-- Audio fields for student page auto-play (Phase 3E)
+ALTER TABLE emotions ADD COLUMN IF NOT EXISTS audio_terapi_url text;
+ALTER TABLE emotions ADD COLUMN IF NOT EXISTS audio_baca_url text;
+ALTER TABLE emotions ADD COLUMN IF NOT EXISTS audio_tahniah_url text;
+
 CREATE INDEX IF NOT EXISTS idx_emotions_active_sort ON emotions (is_active, sort_order);
 
 -- ============================================

@@ -11,8 +11,8 @@ import {
   SuccessStarMosqueIllustration
 } from '../components/Decorations';
 import { EmotionKey, TherapyContent } from '../types';
-import { playStaticAudio } from '../utils/audio';
-import { getTherapyById } from '../services/emotionContentService';
+import { playStaticAudio, stopCurrentAudio } from '../utils/audio';
+import { getTherapyById, getEmotionById } from '../services/emotionContentService';
 
 export const SuccessScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
@@ -23,12 +23,28 @@ export const SuccessScreen: React.FC = () => {
   const idVal = emotionId || 'tenang';
   const therapyId = searchParams.get('therapy');
   const [therapyData, setTherapyData] = useState<TherapyContent | null>(null);
+  const [tahniahAudioUrl, setTahniahAudioUrl] = useState('');
 
   useEffect(() => {
     if (therapyId) {
       getTherapyById(therapyId).then(t => setTherapyData(t));
     }
-  }, [therapyId]);
+    if (idVal in emotionData) {
+      getEmotionById(idVal).then(e => {
+        if (e?.audio_tahniah_url) setTahniahAudioUrl(e.audio_tahniah_url);
+      });
+    }
+  }, [therapyId, idVal]);
+
+  // Auto-play audio_tahniah_url on mount
+  useEffect(() => {
+    if (tahniahAudioUrl) {
+      playStaticAudio(tahniahAudioUrl);
+    }
+    return () => {
+      stopCurrentAudio();
+    };
+  }, [tahniahAudioUrl]);
 
   let zikirText = "berzikir";
   let maxCount = 10;

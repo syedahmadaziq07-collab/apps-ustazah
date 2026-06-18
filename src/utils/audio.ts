@@ -1,5 +1,13 @@
 let currentAudio: HTMLAudioElement | null = null;
 
+export function stopCurrentAudio(): void {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+}
+
 export function playStaticAudio(
   audioPath: string,
   onFallback?: () => void

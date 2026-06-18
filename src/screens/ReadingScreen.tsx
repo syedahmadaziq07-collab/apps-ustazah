@@ -11,7 +11,7 @@ import {
   IslamicMoonStarDecoration
 } from '../components/Decorations';
 import { EmotionKey, TherapyContent, DuaContent } from '../types';
-import { playStaticAudio } from '../utils/audio';
+import { playStaticAudio, stopCurrentAudio } from '../utils/audio';
 import { getEmotionById, getTherapyById } from '../services/emotionContentService';
 import { getDuaById } from '../services/duaService';
 
@@ -24,6 +24,7 @@ export const ReadingScreen: React.FC = () => {
   const [dynamicDua, setDynamicDua] = useState<DuaContent | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [emotionImageUrl, setEmotionImageUrl] = useState('');
+  const [emotionBacaAudioUrl, setEmotionBacaAudioUrl] = useState('');
 
   const idVal = emotionId || 'tenang';
   const therapyId = searchParams.get('therapy');
@@ -40,13 +41,24 @@ export const ReadingScreen: React.FC = () => {
         setLoaded(true);
       }
     }
-    // Fetch emotion image for illustration fallback
+    // Fetch emotion data for illustration and audio_baca_url
     if (idVal in emotionData) {
       getEmotionById(idVal).then(e => {
         if (e?.image_url) setEmotionImageUrl(e.image_url);
+        if (e?.audio_baca_url) setEmotionBacaAudioUrl(e.audio_baca_url);
       });
     }
   }, [therapyId, idVal]);
+
+  // Auto-play audio_baca_url on mount
+  useEffect(() => {
+    if (emotionBacaAudioUrl) {
+      playStaticAudio(emotionBacaAudioUrl);
+    }
+    return () => {
+      stopCurrentAudio();
+    };
+  }, [emotionBacaAudioUrl]);
 
   let title = "Zikir";
   let arabic = "";
@@ -89,15 +101,16 @@ export const ReadingScreen: React.FC = () => {
 
   const handleListenAudio = useCallback(() => {
     setAudioFallback('');
+    const effectivePath = emotionBacaAudioUrl || audioPath;
     const fb = isDua ? 'Audio doa belum ditambah.' : 'Audio belum ditambah lagi.';
-    if (audioPath) {
-      playStaticAudio(audioPath, () => {
+    if (effectivePath) {
+      playStaticAudio(effectivePath, () => {
         setAudioFallback(fb);
       });
     } else {
       setAudioFallback(fb);
     }
-  }, [audioPath, isDua]);
+  }, [emotionBacaAudioUrl, audioPath, isDua]);
 
   const handleStartCounter = () => {
     if (therapyId) {

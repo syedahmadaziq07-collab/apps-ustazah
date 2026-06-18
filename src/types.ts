@@ -27,6 +27,9 @@ export interface EmotionContent {
   image_url: string;
   malay_audio_url: string;
   arabic_audio_url: string;
+  audio_terapi_url: string;
+  audio_baca_url: string;
+  audio_tahniah_url: string;
   sort_order: number;
   is_active: boolean;
   zikir: string;

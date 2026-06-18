@@ -172,6 +172,33 @@ export const TeacherEmosiEditor: React.FC = () => {
               type="audio"
             />
           </div>
+          <p className="text-[10px] font-black text-purple-500 uppercase tracking-wider mt-4 mb-2 border-b border-purple-100 pb-1">Audio Auto-Play Halaman Murid</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FileUploadField
+              label="Audio Halaman Terapi"
+              value={form.audio_terapi_url}
+              onChange={(url) => setForm({ ...form, audio_terapi_url: url })}
+              bucket="app-audio"
+              folder="terapi"
+              type="audio"
+            />
+            <FileUploadField
+              label="Audio Halaman Baca Zikir"
+              value={form.audio_baca_url}
+              onChange={(url) => setForm({ ...form, audio_baca_url: url })}
+              bucket="app-audio"
+              folder="baca"
+              type="audio"
+            />
+            <FileUploadField
+              label="Audio Tahniah"
+              value={form.audio_tahniah_url}
+              onChange={(url) => setForm({ ...form, audio_tahniah_url: url })}
+              bucket="app-audio"
+              folder="tahniah"
+              type="audio"
+            />
+          </div>
           <div className="flex items-center gap-3 pt-2">
             <button onClick={handleSave} disabled={saving}
               className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white text-xs font-black rounded-2xl hover:bg-purple-700 active:scale-95 transition-all cursor-pointer disabled:opacity-50">

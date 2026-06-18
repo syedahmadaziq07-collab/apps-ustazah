@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, History, Heart, CheckCircle, School, Database } from 'lucide-react';
 import { useStudent } from '../../components/StudentProvider';
-import { isSupabaseConnected } from '../../lib/supabase';
+import { SupabaseHealthStatus, checkSupabaseHealth } from '../../lib/supabase';
 
 const statsCards = [
   { label: 'Jumlah Murid', value: '6', icon: <Users className="w-6 h-6" />, color: 'bg-blue-100 text-blue-600 border-blue-200' },
@@ -25,18 +25,15 @@ const placeholderPages: { label: string; path: string; desc: string }[] = [
 export const TeacherDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { selectedStudent } = useStudent();
-  const [supabaseCheck, setSupabaseCheck] = useState<'loading' | 'connected' | 'error'>('loading');
+  const [supabaseCheck, setSupabaseCheck] = useState<SupabaseHealthStatus>('loading');
 
   useEffect(() => {
-    if (!isSupabaseConnected) {
-      setSupabaseCheck('error');
-      return;
-    }
-    fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/emotions?select=id&limit=1`, {
-      headers: { 'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY },
-    })
-      .then(res => setSupabaseCheck(res.ok ? 'connected' : 'error'))
-      .catch(() => setSupabaseCheck('error'));
+    checkSupabaseHealth().then(status => {
+      setSupabaseCheck(status);
+      if (import.meta.env.DEV) {
+        console.log('[Supabase] Health check result:', status);
+      }
+    });
   }, []);
 
   return (
@@ -46,8 +43,14 @@ export const TeacherDashboard: React.FC = () => {
         <h1 className="text-xl md:text-2xl font-black text-slate-800">Dashboard</h1>
         <p className="text-xs font-bold text-slate-500 mt-1">
           Selamat datang ke dashboard ZikirCare.
-          {!isSupabaseConnected && (
+          {supabaseCheck === 'env_missing' && (
             <span className="text-amber-600"> Supabase belum disambungkan.</span>
+          )}
+          {supabaseCheck === 'request_failed' && (
+            <span className="text-amber-600"> Sambungan Supabase gagal.</span>
+          )}
+          {supabaseCheck === 'table_inaccessible' && (
+            <span className="text-amber-600"> Jadual Supabase tidak lengkap.</span>
           )}
         </p>
       </div>
@@ -84,8 +87,8 @@ export const TeacherDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Demo mode banner */}
-      {!isSupabaseConnected && (
+      {/* Demo mode banner — only when env vars are missing */}
+      {supabaseCheck === 'env_missing' && (
         <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-1">
             <School className="w-4 h-4 text-amber-600" />
@@ -97,8 +100,8 @@ export const TeacherDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Supabase status card */}
-      {isSupabaseConnected && (
+      {/* Supabase status card — shown when env vars exist (regardless of runtime check outcome) */}
+      {supabaseCheck !== 'env_missing' && (
         <div className={`rounded-2xl p-4 border-2 ${
           supabaseCheck === 'connected'
             ? 'bg-green-50 border-green-200'
@@ -113,13 +116,15 @@ export const TeacherDashboard: React.FC = () => {
             <p className={`text-xs font-black ${
               supabaseCheck === 'connected' ? 'text-green-800' : 'text-amber-800'
             }`}>
-              {supabaseCheck === 'connected' ? 'Supabase' : 'Supabase'}
+              Status Sambungan
             </p>
           </div>
           <p className="text-[11px] font-bold leading-relaxed text-slate-600">
             {supabaseCheck === 'loading' && 'Sedang memuatkan...'}
             {supabaseCheck === 'connected' && 'Supabase disambungkan.'}
-            {supabaseCheck === 'error' && 'Supabase belum lengkap. Sila semak schema atau env.'}
+            {supabaseCheck === 'request_failed' && 'Tidak dapat menghubungi Supabase.'}
+            {supabaseCheck === 'table_inaccessible' && 'Supabase ditemui tetapi jadual belum boleh diakses.'}
+            {!['loading', 'connected', 'env_missing', 'request_failed', 'table_inaccessible'].includes(supabaseCheck) && 'Semakan Supabase gagal.'}
           </p>
         </div>
       )}

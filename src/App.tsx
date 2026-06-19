@@ -11,6 +11,12 @@ import { SuccessScreen } from './screens/SuccessScreen';
 import { HistoryScreen } from './screens/HistoryScreen';
 import { DuaScreen } from './screens/DuaScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
+import { ProfilMaklumatScreen } from './screens/ProfilMaklumatScreen';
+import { ProfilIbuBapaScreen } from './screens/ProfilIbuBapaScreen';
+import { ProfilLaporanScreen } from './screens/ProfilLaporanScreen';
+import { ProfilTetapanScreen } from './screens/ProfilTetapanScreen';
+import { ProfilBantuanScreen } from './screens/ProfilBantuanScreen';
+import { ProfilTentangScreen } from './screens/ProfilTentangScreen';
 import { TeacherDashboard } from './screens/teacher/TeacherDashboard';
 import { TeacherMurid } from './screens/teacher/TeacherMurid';
 import { TeacherSejarah } from './screens/teacher/TeacherSejarah';
@@ -54,6 +60,12 @@ function AppRoutes() {
       <Route path="/sejarah" element={<HistoryScreen />} />
       <Route path="/doa" element={<DuaScreen />} />
       <Route path="/profil" element={<ProfileScreen />} />
+      <Route path="/profil/maklumat" element={<ProfilMaklumatScreen />} />
+      <Route path="/profil/ibu-bapa" element={<ProfilIbuBapaScreen />} />
+      <Route path="/profil/laporan" element={<ProfilLaporanScreen />} />
+      <Route path="/profil/tetapan" element={<ProfilTetapanScreen />} />
+      <Route path="/profil/bantuan" element={<ProfilBantuanScreen />} />
+      <Route path="/profil/tentang" element={<ProfilTentangScreen />} />
 
       {/* Teacher Routes */}
       <Route path="/teacher" element={<TeacherLayout><TeacherDashboard /></TeacherLayout>} />

@@ -182,5 +182,8 @@ CREATE TABLE IF NOT EXISTS school_profile (
   lembaga_number text NOT NULL DEFAULT '',
   school_name text NOT NULL DEFAULT '',
   teacher_photo_url text NOT NULL DEFAULT '',
+  app_name text NOT NULL DEFAULT 'i-Qalb Care',
+  version text NOT NULL DEFAULT 'v1.0.0',
+  description text NOT NULL DEFAULT 'Aplikasi Kerohanian & Emosi Kanak-Kanak',
   updated_at timestamptz DEFAULT now()
 );

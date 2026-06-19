@@ -145,6 +145,9 @@ export interface SchoolProfile {
   lembaga_number: string;
   school_name: string;
   teacher_photo_url: string;
+  app_name: string;
+  version: string;
+  description: string;
   updated_at?: string;
 }
 

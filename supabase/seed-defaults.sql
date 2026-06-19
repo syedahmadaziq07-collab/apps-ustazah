@@ -187,19 +187,25 @@ VALUES
 -- ============================================
 -- School Profile (counsellor details for student Profil page)
 -- ============================================
-INSERT INTO school_profile (id, teacher_name, lembaga_number, school_name, teacher_photo_url)
+INSERT INTO school_profile (id, teacher_name, lembaga_number, school_name, teacher_photo_url, app_name, version, description)
 VALUES (
   '00000000-0000-0000-0000-000000000002',
   'Cikgu Fatimah Binti Ismail',
   'KB-08249-M',
   'SK Seri Idaman, Shah Alam, Selangor',
-  ''
+  '',
+  'i-Qalb Care',
+  'v1.0.0',
+  'Aplikasi Kerohanian & Emosi Kanak-Kanak'
 )
 ON CONFLICT (id) DO UPDATE SET
   teacher_name = EXCLUDED.teacher_name,
   lembaga_number = EXCLUDED.lembaga_number,
   school_name = EXCLUDED.school_name,
   teacher_photo_url = EXCLUDED.teacher_photo_url,
+  app_name = EXCLUDED.app_name,
+  version = EXCLUDED.version,
+  description = EXCLUDED.description,
   updated_at = now();
 
 ON CONFLICT (id) DO UPDATE SET

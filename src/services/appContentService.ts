@@ -20,6 +20,9 @@ const DEFAULT_SCHOOL_PROFILE: SchoolProfile = {
   lembaga_number: 'KB-08249-M',
   school_name: 'SK Seri Idaman, Shah Alam, Selangor',
   teacher_photo_url: '',
+  app_name: 'i-Qalb Care',
+  version: 'v1.0.0',
+  description: 'Aplikasi Kerohanian & Emosi Kanak-Kanak',
 };
 
 const DEFAULT_PAGES: Record<string, AppPage> = {

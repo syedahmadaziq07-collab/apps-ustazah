@@ -9,7 +9,7 @@ import {
 import { BottomNav } from '../components/BottomNav';
 import { StudentLayout } from '../components/StudentLayout';
 import { useStudent } from '../components/StudentProvider';
-import { getSchoolSettings, getSchoolProfile } from '../services/appContentService';
+import { getSchoolProfile } from '../services/appContentService';
 import { SchoolProfile } from '../types';
 
 type MenuItem = {
@@ -20,16 +20,10 @@ type MenuItem = {
 
 export const ProfileScreen: React.FC = () => {
   const { selectedStudent } = useStudent();
-  const [appName, setAppName] = useState('i-Qalb Care');
   const [schoolProfile, setSchoolProfile] = useState<SchoolProfile | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  const [tagline, setTagline] = useState('');
 
   useEffect(() => {
-    getSchoolSettings().then((s) => {
-      if (s.app_name) setAppName(s.app_name);
-      if (s.tagline) setTagline(s.tagline);
-    }).catch(() => {});
     getSchoolProfile().then((p) => {
       setSchoolProfile(p);
     }).catch(() => {});
@@ -92,19 +86,17 @@ export const ProfileScreen: React.FC = () => {
       );
     }
     if (activeModal === 'about') {
+      const aName = schoolProfile?.app_name || 'i-Qalb Care';
+      const aVer = schoolProfile?.version || 'v1.0.0';
+      const aDesc = schoolProfile?.description || 'Aplikasi Kerohanian & Emosi Kanak-Kanak';
       return (
         <div className="text-center space-y-3">
           <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto border-2 border-purple-200">
             <span className="text-3xl">🌟</span>
           </div>
-          <h3 className="text-lg font-black text-slate-800">{appName}</h3>
-          <p className="text-xs font-bold text-slate-400">Versi 1.0.0</p>
-          <p className="text-xs font-bold text-slate-600 leading-relaxed">
-            {tagline || 'Aplikasi Kerohanian & Emosi Kanak-Kanak'}
-          </p>
-          <p className="text-[11px] font-bold text-slate-400 leading-relaxed pt-2 border-t border-slate-100">
-            Dibangunkan khas untuk Guru Kaunseling Malaysia bagi pengurusan sokongan emosi sejahtera murid sekolah rendah & menengah.
-          </p>
+          <h3 className="text-lg font-black text-slate-800">{aName}</h3>
+          <p className="text-xs font-bold text-slate-400">{aVer}</p>
+          <p className="text-xs font-bold text-slate-600 leading-relaxed">{aDesc}</p>
         </div>
       );
     }

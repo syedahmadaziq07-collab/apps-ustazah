@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, Info, Heart, Award, LogOut } from 'lucide-react';
+import { Menu, Bell, Settings, Info, Heart, Award, LogOut } from 'lucide-react';
 import { 
   AppPhoneFrame, 
   SoftSkyBackground, 
@@ -134,8 +134,27 @@ export const HomeScreen: React.FC = () => {
         </div>
       </header>
 
+      {/* Greeting Header */}
+      <div className="relative z-10 px-5 md:px-6 pt-3 pb-1">
+        <div className="flex items-center justify-between">
+          <button className="lg:hidden w-9 h-9 rounded-full bg-white/80 flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 cursor-pointer active:scale-95 transition-all">
+            <Menu className="w-5 h-5" />
+          </button>
+          <button className="w-9 h-9 rounded-full bg-white/80 flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 cursor-pointer active:scale-95 transition-all">
+            <Bell className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="mt-2">
+          <p className="text-sm font-medium text-purple-600/80">Assalamualaikum,</p>
+          <h1 className="text-2xl font-black text-slate-800 leading-tight">
+            {selectedStudent?.fullName?.split(' ')[0] || 'Murid'}
+          </h1>
+          <p className="text-xs font-bold text-slate-500 mt-0.5">Bagaimana perasaan kamu hari ini?</p>
+        </div>
+      </div>
+
       {/* Main Content scroll area */}
-      <main className="flex-grow px-5 md:px-6 pt-3 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1200px] mx-auto">
+      <main className="flex-grow px-5 md:px-6 pt-1 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center my-4 lg:my-8">
           
           {/* Left Column: Title + Hero Image */}

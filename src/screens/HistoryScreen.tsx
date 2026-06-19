@@ -148,7 +148,7 @@ export const HistoryScreen: React.FC = () => {
 Tarikh: ${item.completedDate || formatMalayTime(item.completedAt)}${item.completedTime ? ', ' + item.completedTime : ''}`;
 
     if (navigator.share) {
-      navigator.share({ title: 'Rekod Emosi ZikirCare', text }).catch(() => {});
+      navigator.share({ title: 'Rekod Emosi i-Qalb Care', text }).catch(() => {});
     } else {
       navigator.clipboard.writeText(text).then(() => {
         alert('Rekod telah disalin. Boleh paste kepada ibu bapa.');

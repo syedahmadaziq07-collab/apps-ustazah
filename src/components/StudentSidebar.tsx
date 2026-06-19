@@ -27,7 +27,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({ activeNav }) => 
             <span className="text-xl">⭐</span>
           </div>
           <div>
-            <span className="text-[10px] font-black text-amber-200 uppercase tracking-wider block leading-none mb-0.5">ZikirCare</span>
+            <span className="text-[10px] font-black text-amber-200 uppercase tracking-wider block leading-none mb-0.5">i-Qalb Care</span>
             <span className="text-base font-black tracking-tight text-white leading-none">EmosiKu</span>
           </div>
         </div>

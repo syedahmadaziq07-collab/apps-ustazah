@@ -30,7 +30,7 @@ export const TeacherLayout: React.FC<TeacherLayoutProps> = ({ children }) => {
             <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center border border-purple-200">
               <School className="w-4 h-4 text-purple-600" />
             </div>
-            <span className="text-sm font-black text-purple-900">ZikirCare</span>
+            <span className="text-sm font-black text-purple-900">i-Qalb Care</span>
           </div>
           <button
             onClick={handleLogout}

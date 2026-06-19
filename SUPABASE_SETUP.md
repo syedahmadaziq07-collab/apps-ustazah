@@ -1,6 +1,6 @@
-# Panduan Persediaan Supabase untuk ZikirCare
+# Panduan Persediaan Supabase untuk i-Qalb Care
 
-Panduan langkah demi langkah untuk menyambungkan ZikirCare ke Supabase.
+Panduan langkah demi langkah untuk menyambungkan i-Qalb Care ke Supabase.
 
 ---
 
@@ -9,7 +9,7 @@ Panduan langkah demi langkah untuk menyambungkan ZikirCare ke Supabase.
 1. Buka https://supabase.com dan log masuk.
 2. Klik **New Project**.
 3. Masukkan:
-   - **Name**: `zikircare` (atau nama pilihan)
+   - **Name**: `i-qalb-care` (atau nama pilihan)
    - **Database Password**: simpan kata laluan ini.
    - **Region**: Pilih yang terdekat (cth. `Southeast Asia`).
 4. Klik **Create new project**.
@@ -27,7 +27,7 @@ Panduan langkah demi langkah untuk menyambungkan ZikirCare ke Supabase.
 
 ## 3. Jalankan Schema SQL
 
-1. Buka fail `supabase/schema.sql` dalam projek ZikirCare anda.
+1. Buka fail `supabase/schema.sql` dalam projek i-Qalb Care anda.
 2. Salin keseluruhan kandungan.
 3. Tampal di SQL Editor.
 4. Klik **Run**.
@@ -78,7 +78,7 @@ Panduan langkah demi langkah untuk menyambungkan ZikirCare ke Supabase.
 ## 8. Letakkan Environment Variables di Northflank
 
 1. Log masuk ke https://app.northflank.com.
-2. Buka projek dan service ZikirCare anda.
+2. Buka projek dan service i-Qalb Care anda.
 3. Pergi ke **Environment** tab.
 4. Tambah tiga variables:
    - `VITE_SUPABASE_URL` = URL dari Langkah 6

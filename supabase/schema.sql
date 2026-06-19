@@ -1,4 +1,4 @@
--- ZikirCare Supabase Schema
+-- i-Qalb Care Supabase Schema
 -- Phase 3A: Complete schema with all columns used by services, indexes, and comments
 -- Safe to run multiple times (uses CREATE TABLE IF NOT EXISTS and CREATE INDEX IF NOT EXISTS)
 
@@ -9,7 +9,7 @@
 CREATE TABLE IF NOT EXISTS school_settings (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   school_name text,
-  app_name text DEFAULT 'ZikirCare',
+  app_name text DEFAULT 'i-Qalb Care',
   logo_url text,
   tagline text,
   theme_color text DEFAULT '#8B5CF6',

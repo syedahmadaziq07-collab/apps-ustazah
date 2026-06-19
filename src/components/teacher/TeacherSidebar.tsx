@@ -41,7 +41,7 @@ export const TeacherSidebar: React.FC<TeacherSidebarProps> = ({ onLogout }) => {
             <School className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <p className="text-sm font-black text-purple-900 leading-tight">ZikirCare</p>
+            <p className="text-sm font-black text-purple-900 leading-tight">i-Qalb Care</p>
             <p className="text-[9px] font-bold text-purple-500">Dashboard Guru</p>
           </div>
         </div>

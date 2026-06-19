@@ -123,7 +123,7 @@ export const TeacherBrandingEditor: React.FC = () => {
                 )}
               </div>
               <div>
-                <p className="text-lg font-black" style={{ color: form.theme_color || '#8B5CF6' }}>{form.app_name || 'ZikirCare'}</p>
+                <p className="text-lg font-black" style={{ color: form.theme_color || '#8B5CF6' }}>{form.app_name || 'i-Qalb Care'}</p>
                 <p className="text-[11px] font-bold text-slate-500">{form.school_name || 'SK AL-FALAH'}</p>
               </div>
             </div>

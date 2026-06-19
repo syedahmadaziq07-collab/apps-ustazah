@@ -59,8 +59,8 @@ export default defineConfig(() => {
           clientsClaim: true,
         },
         manifest: {
-          name: 'ZikirCare',
-          short_name: 'ZikirCare',
+          name: 'i-Qalb Care',
+          short_name: 'i-Qalb Care',
           description: 'Wellness Intervensi Emosi Kanak-Kanak & Kaunselor Sekolah',
           theme_color: '#8B5CF6',
           background_color: '#FFF7ED',

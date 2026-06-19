@@ -14,13 +14,13 @@ import { SchoolProfile } from '../types';
 
 export const ProfileScreen: React.FC = () => {
   const [profileTitle, setProfileTitle] = useState('Profil Guru Kaunseling');
-  const [profileSubtitle, setProfileSubtitle] = useState('ZikirCare membantu murid mengenal emosi dan mengamalkan cara bertenang secara Islam.');
+  const [profileSubtitle, setProfileSubtitle] = useState('i-Qalb Care membantu murid mengenal emosi dan mengamalkan cara bertenang secara Islam.');
   const [bodyText, setBodyText] = useState('');
   const [schoolInfo, setSchoolInfo] = useState('SK Seri Idaman, Shah Alam, Selangor');
   const [counsellingNote, setCounsellingNote] = useState('');
   const [privacyNote, setPrivacyNote] = useState('');
   const [schoolProfile, setSchoolProfile] = useState<SchoolProfile | null>(null);
-  const [appName, setAppName] = useState('ZikirCare');
+  const [appName, setAppName] = useState('i-Qalb Care');
   const [tagline, setTagline] = useState('');
   const [themeColor, setThemeColor] = useState('#8B5CF6');
 
@@ -186,7 +186,7 @@ export const ProfileScreen: React.FC = () => {
                 Terapi i-CBT (Cognitive Behavioral Islam)
               </h4>
               <p className="text-[10.5px] font-bold text-slate-600 leading-relaxed mt-1">
-                ZikirCare menyusun peralihan kognitif negatif kepada gema zikrullah untuk menstabilkan kondisi psikologi murid yang mengalami tekanan, kemarahan atau cemas harian.
+                i-Qalb Care menyusun peralihan kognitif negatif kepada gema zikrullah untuk menstabilkan kondisi psikologi murid yang mengalami tekanan, kemarahan atau cemas harian.
               </p>
             </div>
           </div>
@@ -216,7 +216,7 @@ export const ProfileScreen: React.FC = () => {
                 Amalan Berterusan di Rumah
               </h4>
               <p className="text-[10.5px] font-bold text-slate-600 leading-relaxed mt-1">
-                Galakkan murid memasang aplikasi PWA ZikirCare di peranti ibu bapa mereka bagi membolehkan latihan zikir, selawat dhuha dan doa dilatih secara mandiri di kediaman masing-masing.
+                Galakkan murid memasang aplikasi PWA i-Qalb Care di peranti ibu bapa mereka bagi membolehkan latihan zikir, selawat dhuha dan doa dilatih secara mandiri di kediaman masing-masing.
               </p>
             </div>
           </div>

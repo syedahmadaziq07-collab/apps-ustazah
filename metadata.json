@@ -1,5 +1,5 @@
 {
-  "name": "ZikirCare: Tenang Bersama Islam",
+  "name": "i-Qalb Care: Tenang Bersama Islam",
   "description": "A children's emotional wellness and Islamic zikir app for school counselors in Malaysia.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

@@ -1,4 +1,4 @@
-const SESSION_KEY = 'zikircare_teacher_session';
+const SESSION_KEY = 'i-qalb-care_teacher_session';
 
 // Demo PIN only. Replace with Supabase Auth in production.
 // Read from env or fallback to default demo PIN.

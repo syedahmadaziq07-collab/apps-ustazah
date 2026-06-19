@@ -1,4 +1,4 @@
--- ZikirCare Seed Defaults
+-- i-Qalb Care Seed Defaults
 -- Phase 3A: Starter content for a fresh Supabase project.
 --
 -- Safe to run multiple times (uses INSERT ... ON CONFLICT DO UPDATE).
@@ -11,7 +11,7 @@ INSERT INTO school_settings (id, school_name, app_name, logo_url, tagline, theme
 VALUES (
   '00000000-0000-0000-0000-000000000001',
   'SK AL-FALAH',
-  'ZikirCare',
+  'i-Qalb Care',
   '',
   'Aplikasi Kerohanian & Emosi Kanak-Kanak',
   '#8B5CF6'
@@ -33,7 +33,7 @@ VALUES (
   'home',
   'home',
   'Apa perasaan kamu hari ini?',
-  'Pilih emosi yang kamu rasa sekarang untuk bertenang bersama ZikirCare.',
+  'Pilih emosi yang kamu rasa sekarang untuk bertenang bersama i-Qalb Care.',
   '',
   '/assets/illustrations/home-children-hero.png',
   '',
@@ -53,11 +53,11 @@ VALUES (
   'profile',
   'profile',
   'Profil App',
-  'ZikirCare membantu murid mengenal emosi dan mengamalkan cara bertenang secara Islam.',
-  'Aplikasi ZikirCare: Tenang Bersama Islam direka khas sebagai instrumen bantuan digital untuk pengamal kaunseling sekolah dalam mengendalikan terapi intervensi emosi murid.',
+  'i-Qalb Care membantu murid mengenal emosi dan mengamalkan cara bertenang secara Islam.',
+  'Aplikasi i-Qalb Care: Tenang Bersama Islam direka khas sebagai instrumen bantuan digital untuk pengamal kaunseling sekolah dalam mengendalikan terapi intervensi emosi murid.',
   '',
   '',
-  '{"schoolInfo": "SK Seri Idaman, Shah Alam, Selangor", "counsellingNote": "ZikirCare menyusun peralihan kognitif negatif kepada gema zikrullah untuk menstabilkan kondisi psikologi murid.", "privacyNote": "Data murid disimpan secara setempat dan tidak dikongsi dengan pihak ketiga.", "supportText": "Untuk sokongan teknikal, hubungi pihak pentadbir sistem."}'::jsonb,
+  '{"schoolInfo": "SK Seri Idaman, Shah Alam, Selangor", "counsellingNote": "i-Qalb Care menyusun peralihan kognitif negatif kepada gema zikrullah untuk menstabilkan kondisi psikologi murid.", "privacyNote": "Data murid disimpan secara setempat dan tidak dikongsi dengan pihak ketiga.", "supportText": "Untuk sokongan teknikal, hubungi pihak pentadbir sistem."}'::jsonb,
   true
 )
 ON CONFLICT (id) DO UPDATE SET

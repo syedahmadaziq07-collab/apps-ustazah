@@ -15,8 +15,8 @@ export const LoginScreen: React.FC = () => {
   const [students, setStudents] = useState<SelectedStudent[]>([]);
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [studentError, setStudentError] = useState(false);
-  const [schoolName, setSchoolName] = useState('ZikirCare');
-  const [appName, setAppName] = useState('ZikirCare');
+  const [schoolName, setSchoolName] = useState('i-Qalb Care');
+  const [appName, setAppName] = useState('i-Qalb Care');
   const [tagline, setTagline] = useState('Terapi Emosi & Zikir untuk Murid');
   const [logoUrl, setLogoUrl] = useState('');
   const [loginTitle, setLoginTitle] = useState('Siapa yang belajar hari ini?');

@@ -1,4 +1,4 @@
--- ZikirCare Supabase Storage Setup
+-- i-Qalb Care Supabase Storage Setup
 -- Phase 3A: Storage buckets for image and audio uploads
 --
 -- Run these SQL statements in your Supabase SQL Editor.

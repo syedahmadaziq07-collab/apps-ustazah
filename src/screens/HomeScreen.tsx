@@ -23,11 +23,11 @@ export const HomeScreen: React.FC = () => {
   const { selectedStudent, clearStudent } = useStudent();
   const [showCounselorModal, setShowCounselorModal] = useState(false);
   const [homeTitle, setHomeTitle] = useState('Apa perasaan kamu hari ini?');
-  const [homeSubtitle, setHomeSubtitle] = useState('Pilih emosi yang kamu rasa sekarang untuk bertenang bersama ZikirCare.');
+  const [homeSubtitle, setHomeSubtitle] = useState('Pilih emosi yang kamu rasa sekarang untuk bertenang bersama i-Qalb Care.');
   const [homeImage, setHomeImage] = useState('/assets/illustrations/home-children-hero.png');
   const [selectedLabel, setSelectedLabel] = useState('Hari ini:');
   const [changeBtnText, setChangeBtnText] = useState('Tukar');
-  const [appName, setAppName] = useState('ZikirCare');
+  const [appName, setAppName] = useState('i-Qalb Care');
   const [emotionImages, setEmotionImages] = useState<Record<string, string>>({});
   const [emotionAudioUrls, setEmotionAudioUrls] = useState<Record<string, string>>({});
 
@@ -252,7 +252,7 @@ export const HomeScreen: React.FC = () => {
 
             <div className="space-y-4 font-sans text-xs text-slate-600">
               <p className="font-bold leading-relaxed">
-                <span className="font-black text-primary">ZikirCare</span> direka khas sebagai instrumen bantuan digital untuk kegunaan pengamal kaunseling sekolah di Malaysia dalam mengendalikan terapi intervensi emosi murid:
+                <span className="font-black text-primary">i-Qalb Care</span> direka khas sebagai instrumen bantuan digital untuk kegunaan pengamal kaunseling sekolah di Malaysia dalam mengendalikan terapi intervensi emosi murid:
               </p>
 
               <div className="p-3.5 bg-emerald-50 rounded-2xl border-2 border-emerald-100">

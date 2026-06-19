@@ -43,7 +43,7 @@ export const TeacherSejarah: React.FC = () => {
 Tarikh: ${item.completedDate || formatDate(item.completedAt)}, ${item.completedTime || formatTime(item.completedAt)}`;
 
     if (navigator.share) {
-      navigator.share({ title: 'Rekod Emosi ZikirCare', text: shareText }).catch(() => {});
+      navigator.share({ title: 'Rekod Emosi i-Qalb Care', text: shareText }).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText).then(() => {
         alert('Rekod telah disalin. Boleh paste kepada ibu bapa.');

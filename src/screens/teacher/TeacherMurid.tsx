@@ -4,6 +4,7 @@ import { isSupabaseConnected } from '../../lib/supabase';
 import { StudentRecord } from '../../types';
 import { getStudents, createStudent, updateStudent, deactivateStudent } from '../../services/studentService';
 import { FileUploadField } from '../../components/dashboard/FileUploadField';
+import { getParentInfo, saveParentInfo } from '../../services/parentInfoService';
 
 interface FormFields {
   fullName: string;
@@ -15,6 +16,8 @@ interface FormFields {
 
 const emptyForm: FormFields = { fullName: '', className: '', photoUrl: '', isActive: true, sortOrder: 0 };
 
+const RELATIONSHIPS = ['Bapa', 'Ibu', 'Penjaga'];
+
 export const TeacherMurid: React.FC = () => {
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,6 +25,14 @@ export const TeacherMurid: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormFields>(emptyForm);
   const [saving, setSaving] = useState(false);
+
+  // Parent info state
+  const [showParent, setShowParent] = useState(false);
+  const [pName, setPName] = useState('');
+  const [pRelation, setPRelation] = useState('');
+  const [pPhone, setPPhone] = useState('');
+  const [pAddress, setPAddress] = useState('');
+  const [pNotes, setPNotes] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -52,15 +63,39 @@ export const TeacherMurid: React.FC = () => {
     });
     setEditingId(s.id);
     setShowModal(true);
+    setShowParent(false);
+    getParentInfo(s.id).then(info => {
+      if (info) {
+        setPName(info.parent_name || '');
+        setPRelation(info.relationship || '');
+        setPPhone(info.phone_number || '');
+        setPAddress(info.address || '');
+        setPNotes(info.notes || '');
+      } else {
+        setPName(''); setPRelation(''); setPPhone(''); setPAddress(''); setPNotes('');
+      }
+    });
   };
 
   const handleSave = async () => {
     if (!form.fullName.trim()) return;
     setSaving(true);
+    let savedId = editingId;
     if (editingId) {
       await updateStudent(editingId, form);
     } else {
-      await createStudent(form);
+      const created = await createStudent(form);
+      savedId = created.id;
+    }
+    // Save parent info if editing (or if any field filled for new student)
+    if (savedId && (pName.trim() || pPhone.trim())) {
+      await saveParentInfo(savedId, {
+        parent_name: pName.trim(),
+        relationship: pRelation,
+        phone_number: pPhone.trim(),
+        address: pAddress.trim(),
+        notes: pNotes.trim(),
+      });
     }
     setSaving(false);
     setShowModal(false);
@@ -268,8 +303,62 @@ export const TeacherMurid: React.FC = () => {
               </div>
             </div>
 
+            {/* Parent Info (collapsible) */}
+            <div className="border-t border-purple-100 pt-4 mt-2">
+              <button onClick={() => setShowParent(!showParent)}
+                className="flex items-center justify-between w-full text-left cursor-pointer">
+                <span className="text-xs font-black text-slate-700">Maklumat Ibu Bapa / Penjaga</span>
+                {showParent ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              </button>
+              {showParent && (
+                <div className="space-y-3 mt-3">
+                  <div>
+                    <label className="text-xs font-black text-slate-700 block mb-1">Nama *</label>
+                    <input type="text" value={pName} onChange={e => setPName(e.target.value)}
+                      placeholder="Ahmad bin Hassan"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-black text-slate-700 block mb-1">Hubungan *</label>
+                    <div className="flex gap-2">
+                      {RELATIONSHIPS.map(r => (
+                        <button key={r} onClick={() => setPRelation(r)}
+                          className={`flex-1 py-3 rounded-xl text-xs font-black border-2 transition-all cursor-pointer ${
+                            pRelation === r
+                              ? 'bg-purple-600 text-white border-purple-600'
+                              : 'bg-purple-50/50 text-slate-600 border-purple-200 hover:bg-purple-100'
+                          }`}>
+                          {r}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-black text-slate-700 block mb-1">Nombor Telefon *</label>
+                    <input type="tel" value={pPhone} onChange={e => setPPhone(e.target.value)}
+                      placeholder="012-3456789"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-black text-slate-700 block mb-1">Alamat</label>
+                    <textarea value={pAddress} onChange={e => setPAddress(e.target.value)}
+                      placeholder="No. 10, Jalan Meranti, Taman Seri Idaman, 40000 Shah Alam, Selangor"
+                      rows={2}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors resize-none" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-black text-slate-700 block mb-1">Nota Tambahan</label>
+                    <textarea value={pNotes} onChange={e => setPNotes(e.target.value)}
+                      placeholder="Alahan, keperluan khas, dsb."
+                      rows={2}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold text-slate-800 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors resize-none" />
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Actions */}
-            <div className="flex items-center gap-3 mt-6">
+            <div className="flex items-center gap-3 mt-2">
               <button
                 onClick={() => { setShowModal(false); resetForm(); }}
                 className="flex-1 py-3 rounded-2xl border-2 border-slate-200 text-xs font-black text-slate-600 hover:bg-slate-50 active:scale-95 transition-all cursor-pointer"

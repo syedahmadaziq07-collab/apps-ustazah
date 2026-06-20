@@ -174,6 +174,17 @@ export interface AppPage {
   updated_at: string;
 }
 
+export interface ParentInfo {
+  id?: string;
+  student_id: string;
+  parent_name: string;
+  relationship: string;
+  phone_number: string;
+  address: string;
+  notes: string;
+  updated_at?: string;
+}
+
 export interface EmotionLogRecord {
   id: string;
   studentId: string;

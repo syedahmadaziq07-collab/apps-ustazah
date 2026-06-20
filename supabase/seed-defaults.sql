@@ -226,3 +226,16 @@ ON CONFLICT (id) DO UPDATE SET
   sort_order = EXCLUDED.sort_order,
   is_active = EXCLUDED.is_active,
   updated_at = now();
+
+-- ============================================
+-- Parent Info (demo data)
+-- ============================================
+INSERT INTO parent_info (student_id, parent_name, relationship, phone_number, address, notes)
+VALUES
+  ('demo-1', 'Encik Ahmad Bin Hassan', 'Bapa', '012-3456789', 'No. 10, Jalan Meranti, Taman Seri Idaman, 40000 Shah Alam, Selangor', 'Tiada alahan makanan.'),
+  ('demo-2', 'Puan Sarah Binti Abdullah', 'Ibu', '019-8765432', 'No. 22, Jalan Cempaka, Taman Bahagia, 40100 Shah Alam, Selangor', 'Alergi ubat penicillin.'),
+  ('demo-3', 'Encik Mohd Fauzi Bin Ismail', 'Bapa', '013-1122334', 'No. 5, Jalan Mawar, Taman Indah, 40200 Shah Alam, Selangor', ''),
+  ('demo-4', 'Puan Maznah Binti Yusof', 'Ibu', '017-5544332', 'No. 15, Jalan Kenanga, Taman Damai, 40300 Shah Alam, Selangor', 'Perhatian: ADHD ringan.'),
+  ('demo-5', 'Encik Ridzuan Bin Ali', 'Penjaga', '016-9988776', 'No. 8, Jalan Melati, Taman Ria, 40400 Shah Alam, Selangor', 'Waris datuk saudara.'),
+  ('demo-6', 'Puan Aisyah Binti Omar', 'Ibu', '011-2233445', 'No. 3, Jalan Anggerik, Taman Selesa, 40500 Shah Alam, Selangor', '')
+ON CONFLICT DO NOTHING;

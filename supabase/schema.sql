@@ -173,6 +173,23 @@ CREATE INDEX IF NOT EXISTS idx_emotion_logs_created ON emotion_logs (created_at 
 CREATE INDEX IF NOT EXISTS idx_emotion_logs_student ON emotion_logs (student_id);
 
 -- ============================================
+-- Table: parent_info
+-- Parent/guardian contact info linked to a student.
+-- ============================================
+CREATE TABLE IF NOT EXISTS parent_info (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id uuid REFERENCES students(id) ON DELETE CASCADE,
+  parent_name text,
+  relationship text,
+  phone_number text,
+  address text,
+  notes text,
+  updated_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_parent_info_student ON parent_info (student_id);
+
+-- ============================================
 -- Table: school_profile
 -- Editable school counsellor profile for the student Profil page.
 -- Singleton row: teacher_name, lembaga_number, school_name, teacher_photo_url.

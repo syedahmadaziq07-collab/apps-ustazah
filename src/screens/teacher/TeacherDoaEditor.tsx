@@ -35,6 +35,7 @@ export const TeacherDoaEditor: React.FC = () => {
       meaning_text: '',
       image_url: '',
       audio_url: '',
+      kategori: 'zikir',
       sort_order: duas.length,
       is_active: true,
       emoji_decorative: '📖',
@@ -131,6 +132,16 @@ export const TeacherDoaEditor: React.FC = () => {
                 <span className="text-xs font-bold text-slate-600">Aktif</span>
               </label>
             </div>
+            <div>
+              <label className="text-xs font-black text-slate-700 block mb-1">Kategori</label>
+              <select value={editTarget.kategori || 'zikir'} onChange={(e) => setEditTarget({ ...editTarget, kategori: e.target.value })}
+                className="w-full px-3 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/50 text-sm font-bold focus:outline-none focus:border-purple-400">
+                <option value="zikir">Zikir</option>
+                <option value="doa">Doa</option>
+                <option value="terapi">Terapi</option>
+                <option value="bacaan">Bacaan</option>
+              </select>
+            </div>
           </div>
           <div>
             <label className="text-xs font-black text-slate-700 block mb-1">Teks Arab</label>
@@ -182,7 +193,7 @@ export const TeacherDoaEditor: React.FC = () => {
               <span className="text-2xl">{d.emoji_decorative}</span>
               <div>
                 <p className="text-sm font-black text-slate-800">{d.title}</p>
-                <p className="text-[10px] font-bold text-slate-400">Susunan: {d.sort_order} | {d.is_active ? 'Aktif' : 'Tidak Aktif'}</p>
+                <p className="text-[10px] font-bold text-slate-400">Susunan: {d.sort_order} | Kategori: {d.kategori || 'zikir'} | {d.is_active ? 'Aktif' : 'Tidak Aktif'}</p>
               </div>
             </div>
             <button onClick={() => openEdit(d)}

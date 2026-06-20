@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Share2, Calendar, Clock, Heart } from 'lucide-react';
 import { EmotionHistoryItem } from '../../types';
 import { isSupabaseConnected } from '../../lib/supabase';
+import { getEmotionLogs } from '../../services/emotionLogService';
 
 function formatDate(isoString: string): string {
   try {
@@ -30,12 +31,7 @@ export const TeacherSejarah: React.FC = () => {
   const [logs, setLogs] = useState<(EmotionHistoryItem & { studentFullName?: string })[]>([]);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('emosiHistory');
-      if (raw) {
-        setLogs(JSON.parse(raw));
-      }
-    } catch {}
+    getEmotionLogs().then(setLogs).catch(() => setLogs([]));
   }, []);
 
   const handleShare = (item: EmotionHistoryItem) => {
@@ -116,11 +112,7 @@ Tarikh: ${item.completedDate || formatDate(item.completedAt)}, ${item.completedT
         </div>
       )}
 
-      <div className="mt-6 bg-purple-50 border-2 border-purple-200 rounded-2xl p-4">
-        <p className="text-[10px] font-bold text-purple-700">
-          TODO: Integrasi Supabase emotion_logs untuk rekod masa sebenar dan muat turun data.
-        </p>
-      </div>
+
     </div>
   );
 };

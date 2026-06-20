@@ -6,6 +6,7 @@ import { StudentLayout } from '../components/StudentLayout';
 import { useStudent } from '../components/StudentProvider';
 import { EmotionKey, EmotionHistoryItem } from '../types';
 import { emotionData } from '../data/emotions';
+import { getEmotionLogs } from '../services/emotionLogService';
 
 type Tab = 'week' | 'month' | 'year';
 
@@ -66,11 +67,8 @@ export const HistoryScreen: React.FC = () => {
   const [history, setHistory] = useState<EmotionHistoryItem[]>([]);
 
   useEffect(() => {
-    const raw = localStorage.getItem('emosiHistory');
-    if (raw) {
-      try { setHistory(JSON.parse(raw)); } catch { setHistory([]); }
-    }
-  }, []);
+    getEmotionLogs(selectedStudent?.id).then(setHistory).catch(() => setHistory([]));
+  }, [selectedStudent?.id]);
 
   const filtered = history.filter(item => {
     if (selectedStudent?.id && item.studentId && item.studentId !== selectedStudent.id) return false;

@@ -57,10 +57,10 @@ export const EmotionDetailScreen: React.FC = () => {
 
   // Audio already playing from home page tap — don't create a new instance
   useEffect(() => {
-    if (emotionDataFull?.audio_malay_url && getCurrentAudioUrl() === emotionDataFull.audio_malay_url) {
+    if (emotionDataFull?.malay_audio_url && getCurrentAudioUrl() === emotionDataFull.malay_audio_url) {
       return;
     }
-  }, [emotionDataFull?.audio_malay_url]);
+  }, [emotionDataFull?.malay_audio_url]);
 
   // Stop audio when navigating away
   useEffect(() => {
@@ -151,7 +151,7 @@ export const EmotionDetailScreen: React.FC = () => {
           </h3>
           <div className="bg-[#FFFDF4]/95 p-3.5 rounded-2xl border-2 border-amber-200 shadow-inner mb-4.5">
             <p className="text-[11.5px] font-black text-[#78350F] leading-relaxed">
-              &quot;{currentEmotion.nasihat}&quot;
+              &quot;{emotionDataFull?.advice_text || currentEmotion.nasihat}&quot;
             </p>
           </div>
 

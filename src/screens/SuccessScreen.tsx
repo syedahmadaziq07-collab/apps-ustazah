@@ -63,10 +63,10 @@ export const SuccessScreen: React.FC = () => {
 
   const handlePlayTahniah = useCallback(() => {
     setAudioFallback('');
-    playStaticAudio('/audio/malay/tahniah.mp3', () => {
+    playStaticAudio(tahniahAudioUrl || '/audio/malay/tahniah.mp3', () => {
       setAudioFallback('Audio belum ditambah lagi.');
     });
-  }, []);
+  }, [tahniahAudioUrl]);
 
   return (
     <StudentLayout activeNav={null}>

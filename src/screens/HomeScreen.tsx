@@ -8,11 +8,11 @@ import {
   CloudDecoration, 
   IslamicMoonStarDecoration
 } from '../components/Decorations';
-import { EmotionButton } from '../components/EmotionButton';
+import { EmotionButton, EmotionButtonProps } from '../components/EmotionButton';
 import { BottomNav } from '../components/BottomNav';
 import { StudentLayout } from '../components/StudentLayout';
 import { emotionData } from '../data/emotions';
-import { EmotionKey } from '../types';
+import { EmotionKey, EmotionContent } from '../types';
 import { useStudent } from '../components/StudentProvider';
 import { getAppPage, getSchoolSettings } from '../services/appContentService';
 import { getEmotions } from '../services/emotionContentService';
@@ -30,6 +30,7 @@ export const HomeScreen: React.FC = () => {
   const [appName, setAppName] = useState('i-Qalb Care');
   const [emotionImages, setEmotionImages] = useState<Record<string, string>>({});
   const [emotionAudioUrls, setEmotionAudioUrls] = useState<Record<string, string>>({});
+  const [emotionMeta, setEmotionMeta] = useState<Record<string, EmotionContent>>({});
 
   useEffect(() => {
     getAppPage('home').then((page) => {
@@ -47,10 +48,13 @@ export const HomeScreen: React.FC = () => {
     getEmotions().then(list => {
       const imgMap: Record<string, string> = {};
       const audioMap: Record<string, string> = {};
+      const metaMap: Record<string, EmotionContent> = {};
       list.forEach(e => {
+        metaMap[e.id] = e;
         if (e.image_url) imgMap[e.id] = e.image_url;
         if (e.malay_audio_url) audioMap[e.id] = e.malay_audio_url;
       });
+      setEmotionMeta(metaMap);
       setEmotionImages(imgMap);
       setEmotionAudioUrls(audioMap);
     }).catch(() => {});
@@ -191,25 +195,25 @@ export const HomeScreen: React.FC = () => {
               {/* Row 1 */}
               <EmotionButton
                 id="gembira"
-                emoji={emotionData.gembira.emoji}
-                label={emotionData.gembira.label}
-                colorType={emotionData.gembira.color}
+                emoji={emotionMeta['gembira']?.emoji || emotionData.gembira.emoji}
+                label={emotionMeta['gembira']?.label || emotionData.gembira.label}
+                colorType={(emotionMeta['gembira']?.color as EmotionButtonProps['colorType']) || emotionData.gembira.color}
                 onClick={() => handleEmotionSelect('gembira')}
                 imageUrl={emotionImages['gembira']}
               />
               <EmotionButton
                 id="marah"
-                emoji={emotionData.marah.emoji}
-                label={emotionData.marah.label}
-                colorType={emotionData.marah.color}
+                emoji={emotionMeta['marah']?.emoji || emotionData.marah.emoji}
+                label={emotionMeta['marah']?.label || emotionData.marah.label}
+                colorType={(emotionMeta['marah']?.color as EmotionButtonProps['colorType']) || emotionData.marah.color}
                 onClick={() => handleEmotionSelect('marah')}
                 imageUrl={emotionImages['marah']}
               />
               <EmotionButton
                 id="sedih"
-                emoji={emotionData.sedih.emoji}
-                label={emotionData.sedih.label}
-                colorType={emotionData.sedih.color}
+                emoji={emotionMeta['sedih']?.emoji || emotionData.sedih.emoji}
+                label={emotionMeta['sedih']?.label || emotionData.sedih.label}
+                colorType={(emotionMeta['sedih']?.color as EmotionButtonProps['colorType']) || emotionData.sedih.color}
                 onClick={() => handleEmotionSelect('sedih')}
                 imageUrl={emotionImages['sedih']}
               />
@@ -217,25 +221,25 @@ export const HomeScreen: React.FC = () => {
               {/* Row 2 */}
               <EmotionButton
                 id="takut"
-                emoji={emotionData.takut.emoji}
-                label={emotionData.takut.label}
-                colorType={emotionData.takut.color}
+                emoji={emotionMeta['takut']?.emoji || emotionData.takut.emoji}
+                label={emotionMeta['takut']?.label || emotionData.takut.label}
+                colorType={(emotionMeta['takut']?.color as EmotionButtonProps['colorType']) || emotionData.takut.color}
                 onClick={() => handleEmotionSelect('takut')}
                 imageUrl={emotionImages['takut']}
               />
               <EmotionButton
                 id="risau"
-                emoji={emotionData.risau.emoji}
-                label={emotionData.risau.label}
-                colorType={emotionData.risau.color}
+                emoji={emotionMeta['risau']?.emoji || emotionData.risau.emoji}
+                label={emotionMeta['risau']?.label || emotionData.risau.label}
+                colorType={(emotionMeta['risau']?.color as EmotionButtonProps['colorType']) || emotionData.risau.color}
                 onClick={() => handleEmotionSelect('risau')}
                 imageUrl={emotionImages['risau']}
               />
               <EmotionButton
                 id="penat"
-                emoji={emotionData.penat.emoji}
-                label={emotionData.penat.label}
-                colorType={emotionData.penat.color}
+                emoji={emotionMeta['penat']?.emoji || emotionData.penat.emoji}
+                label={emotionMeta['penat']?.label || emotionData.penat.label}
+                colorType={(emotionMeta['penat']?.color as EmotionButtonProps['colorType']) || emotionData.penat.color}
                 onClick={() => handleEmotionSelect('penat')}
                 imageUrl={emotionImages['penat']}
               />
@@ -246,9 +250,9 @@ export const HomeScreen: React.FC = () => {
               <div className="w-1/3 min-w-[90px]">
                 <EmotionButton
                   id="tenang"
-                  emoji={emotionData.tenang.emoji}
-                  label={emotionData.tenang.label}
-                  colorType={emotionData.tenang.color}
+                  emoji={emotionMeta['tenang']?.emoji || emotionData.tenang.emoji}
+                  label={emotionMeta['tenang']?.label || emotionData.tenang.label}
+                  colorType={(emotionMeta['tenang']?.color as EmotionButtonProps['colorType']) || emotionData.tenang.color}
                   onClick={() => handleEmotionSelect('tenang')}
                   imageUrl={emotionImages['tenang']}
                 />

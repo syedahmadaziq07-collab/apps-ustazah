@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface EmotionButtonProps {
+export interface EmotionButtonProps {
   id: string;
   emoji: string;
   label: string;

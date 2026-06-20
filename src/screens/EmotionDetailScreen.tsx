@@ -99,8 +99,11 @@ export const EmotionDetailScreen: React.FC = () => {
     green: 'bg-emerald-100 text-[#064E3B] border-emerald-250',
   };
 
-  const themeBorder = colorMap[currentEmotion.color] || colorMap.purple;
-  const badgeStyle = badgeMap[currentEmotion.color] || badgeMap.purple;
+  const liveLabel = emotionDataFull?.label || currentEmotion.label;
+  const liveEmoji = emotionDataFull?.emoji || currentEmotion.emoji;
+  const liveColor = emotionDataFull?.color || currentEmotion.color;
+  const themeBorder = colorMap[liveColor] || colorMap.purple;
+  const badgeStyle = badgeMap[liveColor] || badgeMap.purple;
 
   return (
     <StudentLayout activeNav={null}>
@@ -125,20 +128,20 @@ export const EmotionDetailScreen: React.FC = () => {
         <div className="my-1 text-center bg-white/60 backdrop-blur-xs p-3 rounded-3xl border border-purple-100/50">
           <div className="text-6xl animate-pulse-soft filter drop-shadow-sm select-none my-1 flex items-center justify-center">
             {emotionImageUrl ? (
-              <img src={emotionImageUrl} alt={currentEmotion.label} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md" />
+              <img src={emotionImageUrl} alt={liveLabel} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md" />
             ) : (
-              currentEmotion.emoji
+              liveEmoji
             )}
           </div>
           <span className={`text-[10px] font-black tracking-widest uppercase border px-3.5 py-1 rounded-full ${badgeStyle}`}>
-            Kamu Sedang Rasa {currentEmotion.label}
+            Kamu Sedang Rasa {liveLabel}
           </span>
-          <h1 className="text-2xl font-black text-slate-800 tracking-tight mt-1 leading-none uppercase select-none">{currentEmotion.label}</h1>
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight mt-1 leading-none uppercase select-none">{liveLabel}</h1>
         </div>
 
         <div className="w-full my-3 flex items-center justify-center">
           {emotionImageUrl ? (
-            <img src={emotionImageUrl} alt={currentEmotion.label} className="h-44 w-auto object-contain rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            <img src={emotionImageUrl} alt={liveLabel} className="h-44 w-auto object-contain rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
           ) : (
             <EmotionChildIllustration emotion={evVal} className="h-44" />
           )}

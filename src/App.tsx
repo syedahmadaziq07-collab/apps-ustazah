@@ -9,7 +9,7 @@ import { ReadingScreen } from './screens/ReadingScreen';
 import { CounterScreen } from './screens/CounterScreen';
 import { SuccessScreen } from './screens/SuccessScreen';
 import { HistoryScreen } from './screens/HistoryScreen';
-import { DuaScreen } from './screens/DuaScreen';
+import { AktivitiHubScreen } from './screens/AktivitiHubScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { ProfilMaklumatScreen } from './screens/ProfilMaklumatScreen';
 import { ProfilIbuBapaScreen } from './screens/ProfilIbuBapaScreen';
@@ -58,7 +58,7 @@ function AppRoutes() {
       <Route path="/kira/:emotionId" element={<CounterScreen />} />
       <Route path="/tahniah/:emotionId" element={<SuccessScreen />} />
       <Route path="/sejarah" element={<HistoryScreen />} />
-      <Route path="/doa" element={<DuaScreen />} />
+      <Route path="/doa" element={<AktivitiHubScreen />} />
       <Route path="/profil" element={<ProfileScreen />} />
       <Route path="/profil/maklumat" element={<ProfilMaklumatScreen />} />
       <Route path="/profil/ibu-bapa" element={<ProfilIbuBapaScreen />} />

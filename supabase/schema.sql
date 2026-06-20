@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS duas (
   audio_url text,
   emoji_decorative text DEFAULT '📖',
   explanation text,
+  kategori text DEFAULT 'doa',
   sort_order int DEFAULT 0,
   is_active boolean DEFAULT true,
   created_at timestamptz DEFAULT now(),

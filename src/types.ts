@@ -63,6 +63,7 @@ export interface DuaContent {
   meaning_text: string;
   image_url: string;
   audio_url: string;
+  kategori?: string;
   sort_order: number;
   is_active: boolean;
   emoji_decorative: string;

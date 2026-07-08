@@ -29,13 +29,29 @@ function saveLocalRecords(records: StudentRecord[]) {
 
 export async function getStudents(): Promise<StudentRecord[]> {
   if (isSupabaseConnected && supabase) {
-    const { data, error } = await supabase
-      .from('students')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .order('full_name', { ascending: true });
-    if (!error && data) {
-      return data as StudentRecord[];
+    try {
+      const result = await Promise.race([
+        supabase
+          .from('students')
+          .select('*')
+          .order('sort_order', { ascending: true })
+          .order('full_name', { ascending: true }),
+        new Promise<{ data: null; error: { message: string } }>((resolve) =>
+          setTimeout(() => {
+            console.warn('[StudentService] Supabase query timed out, using localStorage fallback');
+            resolve({ data: null, error: { message: 'timeout' } });
+          }, 8000)
+        ),
+      ]);
+      const { data, error } = result as any;
+      if (!error && data) {
+        return data as StudentRecord[];
+      }
+      if (error) {
+        console.warn('[StudentService] Supabase query error:', error?.message);
+      }
+    } catch (e) {
+      console.warn('[StudentService] Supabase query threw:', e);
     }
     return getLocalRecords();
   }
@@ -43,14 +59,18 @@ export async function getStudents(): Promise<StudentRecord[]> {
 }
 
 export async function getActiveStudents(): Promise<SelectedStudent[]> {
+  console.log('[StudentService] isSupabaseConnected:', isSupabaseConnected, '| supabase:', !!supabase);
   const records = await getStudents();
-  return records
+  console.log('[StudentService] getStudents returned', records.length, 'records');
+  const active = records
     .filter((r) => r.is_active)
     .sort((a, b) => {
       if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
       return a.full_name.localeCompare(b.full_name);
     })
     .map(toSelectedStudent);
+  console.log('[StudentService] returning', active.length, 'active students');
+  return active;
 }
 
 export async function createStudent(fields: { fullName: string; className: string; photoUrl: string; isActive: boolean; sortOrder: number }): Promise<StudentRecord> {

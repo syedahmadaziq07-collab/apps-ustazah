@@ -34,9 +34,9 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({ activeNav }) => 
       {/* Logo & App Name */}
       <div className="px-5 pt-7 pb-5 border-b border-purple-600/30">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-200/20 flex items-center justify-center border border-amber-300/30 overflow-hidden">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-white border-2 border-purple-300/50 flex items-center justify-center">
             {logoUrl && !logoError ? (
-              <img src={logoUrl} alt="I-Qalb Care Logo" className="w-full h-full object-contain p-1" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
+              <img src={logoUrl} alt="I-Qalb Care" className="w-full h-full object-cover rounded-full" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
             ) : (
               <School className="w-5 h-5 text-amber-200" />
             )}

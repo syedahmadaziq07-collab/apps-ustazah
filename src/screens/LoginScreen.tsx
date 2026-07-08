@@ -73,9 +73,9 @@ export const LoginScreen: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 via-amber-50 to-purple-50 flex flex-col">
       {/* School Header */}
       <header className="px-6 pt-6 pb-4 text-center">
-        <div className="w-16 h-16 rounded-full bg-white shadow-md border-2 border-purple-200 flex items-center justify-center mx-auto mb-3 overflow-hidden">
+        <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-purple-200 flex items-center justify-center mx-auto mb-3">
           {logoUrl && !logoError ? (
-            <img src={logoUrl} alt="I-Qalb Care Logo" className="w-full h-full object-contain p-1" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
+            <img src={logoUrl} alt="I-Qalb Care" className="w-full h-full object-cover rounded-full" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
           ) : (
             <School className="w-8 h-8 text-purple-600" />
           )}

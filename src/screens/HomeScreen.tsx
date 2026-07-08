@@ -95,9 +95,9 @@ export const HomeScreen: React.FC = () => {
       <header className="flex items-center justify-between px-6 pt-5 pb-3 bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-purple-100/70 shadow-xs">
         <div className="flex items-center gap-2">
           {/* Logo */}
-          <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center border border-amber-300 shadow-inner overflow-hidden">
+          <div className="w-9 h-9 rounded-full overflow-hidden bg-white border-2 border-amber-300 flex items-center justify-center">
             {logoUrl && !logoError ? (
-              <img src={logoUrl} alt="I-Qalb Care Logo" className="w-full h-full object-contain p-0.5" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
+              <img src={logoUrl} alt="I-Qalb Care" className="w-full h-full object-cover rounded-full" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
             ) : (
               <span className="text-xl">⭐</span>
             )}

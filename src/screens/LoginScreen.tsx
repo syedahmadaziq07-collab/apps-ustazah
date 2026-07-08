@@ -19,6 +19,7 @@ export const LoginScreen: React.FC = () => {
   const [appName, setAppName] = useState('i-Qalb Care');
   const [tagline, setTagline] = useState('Terapi Emosi & Zikir untuk Murid');
   const [logoUrl, setLogoUrl] = useState('');
+  const [logoError, setLogoError] = useState(false);
   const [loginTitle, setLoginTitle] = useState('Siapa yang belajar hari ini?');
   const [loginSubtitle, setLoginSubtitle] = useState('Pilih gambar dan nama kamu untuk mula.');
   const [teacherAlreadyIn] = useState(isTeacherLoggedIn());
@@ -37,7 +38,7 @@ export const LoginScreen: React.FC = () => {
       if (s.school_name) setSchoolName(s.school_name);
       if (s.app_name) setAppName(s.app_name);
       if (s.tagline) setTagline(s.tagline);
-      if (s.logo_url) setLogoUrl(s.logo_url);
+      if (s.logo_url) { setLogoUrl(s.logo_url); setLogoError(false); console.log('[branding] logo_url:', s.logo_url); }
     }).catch(() => {});
     getAppPage('login').then((page) => {
       if (page) {
@@ -73,8 +74,8 @@ export const LoginScreen: React.FC = () => {
       {/* School Header */}
       <header className="px-6 pt-6 pb-4 text-center">
         <div className="w-16 h-16 rounded-full bg-white shadow-md border-2 border-purple-200 flex items-center justify-center mx-auto mb-3 overflow-hidden">
-          {logoUrl ? (
-            <img src={logoUrl} alt={schoolName} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          {logoUrl && !logoError ? (
+            <img src={logoUrl} alt="I-Qalb Care Logo" className="w-full h-full object-contain p-1" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
           ) : (
             <School className="w-8 h-8 text-purple-600" />
           )}

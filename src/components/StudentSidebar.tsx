@@ -19,11 +19,12 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({ activeNav }) => 
   const navigate = useNavigate();
   const { selectedStudent, clearStudent } = useStudent();
   const [logoUrl, setLogoUrl] = useState('');
+  const [logoError, setLogoError] = useState(false);
   const [appName, setAppName] = useState('i-Qalb Care');
 
   useEffect(() => {
     getSchoolSettings().then((s) => {
-      if (s.logo_url) setLogoUrl(s.logo_url);
+      if (s.logo_url) { setLogoUrl(s.logo_url); setLogoError(false); console.log('[branding] logo_url:', s.logo_url); }
       if (s.app_name) setAppName(s.app_name);
     }).catch(() => {});
   }, []);
@@ -34,8 +35,8 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({ activeNav }) => 
       <div className="px-5 pt-7 pb-5 border-b border-purple-600/30">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-200/20 flex items-center justify-center border border-amber-300/30 overflow-hidden">
-            {logoUrl ? (
-              <img src={logoUrl} alt={appName} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            {logoUrl && !logoError ? (
+              <img src={logoUrl} alt="I-Qalb Care Logo" className="w-full h-full object-contain p-1" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
             ) : (
               <School className="w-5 h-5 text-amber-200" />
             )}

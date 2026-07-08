@@ -29,6 +29,7 @@ export const HomeScreen: React.FC = () => {
   const [changeBtnText, setChangeBtnText] = useState('Tukar');
   const [appName, setAppName] = useState('i-Qalb Care');
   const [logoUrl, setLogoUrl] = useState('');
+  const [logoError, setLogoError] = useState(false);
   const [emotionImages, setEmotionImages] = useState<Record<string, string>>({});
   const [emotionAudioUrls, setEmotionAudioUrls] = useState<Record<string, string>>({});
   const [emotionMeta, setEmotionMeta] = useState<Record<string, EmotionContent>>({});
@@ -45,7 +46,7 @@ export const HomeScreen: React.FC = () => {
     }).catch(() => {});
     getSchoolSettings().then((s) => {
       if (s.app_name) setAppName(s.app_name);
-      if (s.logo_url) setLogoUrl(s.logo_url);
+      if (s.logo_url) { setLogoUrl(s.logo_url); setLogoError(false); console.log('[branding] logo_url:', s.logo_url); }
     }).catch(() => {});
     getEmotions().then(list => {
       const imgMap: Record<string, string> = {};
@@ -95,8 +96,8 @@ export const HomeScreen: React.FC = () => {
         <div className="flex items-center gap-2">
           {/* Logo */}
           <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center border border-amber-300 shadow-inner overflow-hidden">
-            {logoUrl ? (
-              <img src={logoUrl} alt={appName} className="w-full h-full object-cover" />
+            {logoUrl && !logoError ? (
+              <img src={logoUrl} alt="I-Qalb Care Logo" className="w-full h-full object-contain p-0.5" onError={() => { console.error('[branding] Logo failed to load:', logoUrl); setLogoError(true); }} />
             ) : (
               <span className="text-xl">⭐</span>
             )}

@@ -192,9 +192,8 @@ export const HomeScreen: React.FC = () => {
             {/* Decorative Sparkle inside card */}
             <span className="absolute -top-3 -right-2 text-2xl animate-star-twinkle">✨</span>
 
-            {/* Grid Layout of 7 EmotionButtons as described */}
-            <div className="grid grid-cols-3 gap-4 lg:gap-5">
-              {/* Row 1 */}
+            {/* Grid Layout of 7 EmotionButtons — all same size */}
+            <div className="grid grid-cols-3 gap-4 lg:gap-5 justify-items-center">
               <EmotionButton
                 id="gembira"
                 emoji={emotionMeta['gembira']?.emoji || emotionData.gembira.emoji}
@@ -219,8 +218,6 @@ export const HomeScreen: React.FC = () => {
                 onClick={() => handleEmotionSelect('sedih')}
                 imageUrl={emotionImages['sedih']}
               />
-
-              {/* Row 2 */}
               <EmotionButton
                 id="takut"
                 emoji={emotionMeta['takut']?.emoji || emotionData.takut.emoji}
@@ -245,20 +242,15 @@ export const HomeScreen: React.FC = () => {
                 onClick={() => handleEmotionSelect('penat')}
                 imageUrl={emotionImages['penat']}
               />
-            </div>
-
-            {/* Centered Row 3 (Tenang option) */}
-            <div className="flex justify-center mt-4 lg:mt-5">
-              <div className="w-1/2 max-w-[200px]">
-                <EmotionButton
-                  id="tenang"
-                  emoji={emotionMeta['tenang']?.emoji || emotionData.tenang.emoji}
-                  label={emotionMeta['tenang']?.label || emotionData.tenang.label}
-                  colorType={(emotionMeta['tenang']?.color as EmotionButtonProps['colorType']) || emotionData.tenang.color}
-                  onClick={() => handleEmotionSelect('tenang')}
-                  imageUrl={emotionImages['tenang']}
-                />
-              </div>
+              <EmotionButton
+                id="tenang"
+                emoji={emotionMeta['tenang']?.emoji || emotionData.tenang.emoji}
+                label={emotionMeta['tenang']?.label || emotionData.tenang.label}
+                colorType={(emotionMeta['tenang']?.color as EmotionButtonProps['colorType']) || emotionData.tenang.color}
+                onClick={() => handleEmotionSelect('tenang')}
+                imageUrl={emotionImages['tenang']}
+                className="col-start-2"
+              />
             </div>
           </div>
 

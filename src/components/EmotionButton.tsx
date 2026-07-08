@@ -7,9 +7,10 @@ export interface EmotionButtonProps {
   colorType: 'yellow' | 'red' | 'blue' | 'purple' | 'orange' | 'teal' | 'green';
   onClick: () => void;
   imageUrl?: string;
+  className?: string;
 }
 
-export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, colorType, onClick, imageUrl }) => {
+export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, colorType, onClick, imageUrl, className = '' }) => {
   const [shaking, setShaking] = useState(false);
 
   const handleClick = () => {
@@ -30,16 +31,16 @@ export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, 
     green: 'bg-green-pastel text-emerald-800 border-emerald-200 hover:bg-emerald-100',
   };
 
+  const circleClass = `w-28 h-28 lg:w-32 lg:h-32 rounded-full border-3 shadow-md shrink-0 ${colorMap[colorType]}`;
+
+  const wrapperClass = `relative w-full flex flex-col items-center gap-1.5 font-sans transition-all duration-200 cursor-pointer ${className} ${
+    shaking ? 'animate-shake' : 'hover:scale-[1.08] active:scale-95'
+  }`;
+
   if (imageUrl) {
     return (
-      <button
-        id={`emotion-btn-${id}`}
-        onClick={handleClick}
-        className={`relative w-full flex flex-col items-center gap-1 font-sans transition-all duration-200 cursor-pointer ${
-          shaking ? 'animate-shake' : 'hover:scale-[1.08] active:scale-95'
-        }`}
-      >
-        <div className={`w-full aspect-square rounded-full border-3 shadow-md overflow-hidden ${colorMap[colorType]}`}>
+      <button id={`emotion-btn-${id}`} onClick={handleClick} className={wrapperClass}>
+        <div className={`${circleClass} overflow-hidden`}>
           <img src={imageUrl} alt={label} className="w-full h-full object-cover" />
         </div>
         <span className="text-[11px] font-black leading-none">{label}</span>
@@ -48,16 +49,11 @@ export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, 
   }
 
   return (
-    <button
-      id={`emotion-btn-${id}`}
-      onClick={handleClick}
-      className={`relative w-full aspect-square flex flex-col items-center justify-center rounded-full border-3 shadow-md font-sans transition-all duration-200 cursor-pointer ${
-        colorMap[colorType]
-      } ${shaking ? 'animate-shake' : 'hover:scale-[1.08] active:scale-95'}`}
-    >
-      <span className="text-4xl filter drop-shadow-sm mb-1 animate-pulse-soft">{emoji}</span>
+    <button id={`emotion-btn-${id}`} onClick={handleClick} className={wrapperClass}>
+      <div className={`${circleClass} flex items-center justify-center`}>
+        <span className="text-4xl filter drop-shadow-sm animate-pulse-soft">{emoji}</span>
+      </div>
       <span className="text-[11px] font-black leading-none">{label}</span>
-      <div className="absolute bottom-1.5 w-1.5 h-1.5 rounded-full bg-current opacity-40" />
     </button>
   );
 };

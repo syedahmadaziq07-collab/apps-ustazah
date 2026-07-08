@@ -109,7 +109,7 @@ export const HomeScreen: React.FC = () => {
           {/* Selected Student Badge */}
           {selectedStudent && (
             <div className="hidden sm:flex items-center gap-1.5 bg-purple-50 border border-purple-200 rounded-full px-3 py-1">
-              <span className="text-[10px] font-black text-purple-700 truncate max-w-[120px]">
+              <span className="text-[11px] font-black text-purple-700 truncate max-w-[220px]">
                 {selectedLabel} {selectedStudent.fullName}
               </span>
             </div>
@@ -139,36 +139,38 @@ export const HomeScreen: React.FC = () => {
       </header>
 
       {/* Greeting Header */}
-      <div className="relative z-10 px-5 md:px-6 pt-3 pb-1">
+      <div className="relative z-10 px-6 md:px-8 pt-4 pb-2">
         <div className="flex items-center justify-between">
           <button className="lg:hidden w-9 h-9 rounded-full bg-white/80 flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 cursor-pointer active:scale-95 transition-all">
             <Menu className="w-5 h-5" />
           </button>
-          <button className="w-9 h-9 rounded-full bg-white/80 flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 cursor-pointer active:scale-95 transition-all">
-            <Bell className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <button className="w-9 h-9 rounded-full bg-white/80 flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 cursor-pointer active:scale-95 transition-all">
+              <Bell className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-        <div className="mt-2">
-          <p className="text-sm font-medium text-purple-600/80">Assalamualaikum,</p>
-          <h1 className="text-2xl font-black text-slate-800 leading-tight">
-            {selectedStudent?.fullName?.split(' ')[0] || 'Murid'}
+        <div className="mt-3">
+          <p className="text-base font-semibold text-purple-600/80">Assalamualaikum,</p>
+          <h1 className="text-3xl font-black text-slate-800 leading-tight">
+            {selectedStudent?.fullName?.split(' ')?.slice(0, 2)?.join(' ')?.toUpperCase() || 'MURID'}
           </h1>
-          <p className="text-xs font-bold text-slate-500 mt-0.5">Bagaimana perasaan kamu hari ini?</p>
+          <p className="text-sm font-bold text-slate-500 mt-1">Bagaimana perasaan kamu hari ini?</p>
         </div>
       </div>
 
       {/* Main Content scroll area */}
-      <main className="flex-grow px-5 md:px-6 pt-1 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center my-4 lg:my-8">
+      <main className="flex-grow px-6 md:px-8 lg:px-10 pt-2 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-16 items-center my-6 lg:my-10">
           
           {/* Left Column: Title + Hero Image */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             {/* Polished Kid App Header Title */}
             <div className="text-center sm:text-left">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-800 tracking-tight leading-tight">
                 {homeTitle}
               </h2>
-              <p className="text-xs sm:text-sm font-bold text-slate-500 mt-1 font-sans">
+              <p className="text-sm sm:text-base font-bold text-slate-500 mt-2 font-sans">
                 {homeSubtitle}
               </p>
             </div>
@@ -178,20 +180,20 @@ export const HomeScreen: React.FC = () => {
               <img
                 src={homeImage}
                 alt="Kanak-kanak Muslim ceria"
-                className="w-full h-[220px] sm:h-[280px] md:h-64 lg:h-[400px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
+                className="w-full h-[260px] sm:h-[320px] md:h-72 lg:h-[440px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
                 referrerPolicy="no-referrer"
               />
             </div>
           </div>
 
           {/* Right Column: Emotion Buttons Selection Card */}
-          <div className="bg-[#FFFDF4]/95 rounded-[32px] p-6 lg:p-8 shadow-[0_12px_28px_-8px_rgba(124,58,237,0.18)] border-2 border-purple-100/50 relative">
+          <div className="bg-[#FFFDF4]/95 rounded-[32px] p-8 lg:p-10 shadow-[0_16px_36px_-10px_rgba(124,58,237,0.2)] border-2 border-purple-100/50 relative">
             
             {/* Decorative Sparkle inside card */}
             <span className="absolute -top-3 -right-2 text-2xl animate-star-twinkle">✨</span>
 
             {/* Grid Layout of 7 EmotionButtons as described */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-4 lg:gap-5">
               {/* Row 1 */}
               <EmotionButton
                 id="gembira"
@@ -246,8 +248,8 @@ export const HomeScreen: React.FC = () => {
             </div>
 
             {/* Centered Row 3 (Tenang option) */}
-            <div className="flex justify-center mt-3">
-              <div className="w-1/3 min-w-[90px]">
+            <div className="flex justify-center mt-4 lg:mt-5">
+              <div className="w-1/2 max-w-[200px]">
                 <EmotionButton
                   id="tenang"
                   emoji={emotionMeta['tenang']?.emoji || emotionData.tenang.emoji}

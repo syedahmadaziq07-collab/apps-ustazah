@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConnected } from '../lib/supabase';
 import { SchoolSettings, AppPage, SchoolProfile } from '../types';
+import { listFiles } from './storageService';
 
 const SETTINGS_KEY = 'zikirCareSchoolSettings';
 const PAGES_KEY = 'zikirCareAppPages';
@@ -102,6 +103,24 @@ function saveLocalPages(pages: Record<string, AppPage>) {
 const CORRECT_APP_NAME = 'I-Qalb Care';
 const CORRECT_TAGLINE = 'Aplikasi Kerohanian & Emosi Kanak-Kanak';
 
+async function migrateLogoFromStorage(): Promise<string | null> {
+  if (!isSupabaseConnected || !supabase) return null;
+  try {
+    // Check branding folder, then profile folder for existing logo files
+    for (const folder of ['branding', 'profile']) {
+      const { data, error } = await listFiles('app-images', folder);
+      if (!error && data && data.length > 0) {
+        const latest = data[0]; // sorted desc by created_at
+        const { data: publicData } = supabase.storage
+          .from('app-images')
+          .getPublicUrl(`${folder}/${latest.name}`);
+        if (publicData?.publicUrl) return publicData.publicUrl;
+      }
+    }
+  } catch {}
+  return null;
+}
+
 export async function getSchoolSettings(): Promise<SchoolSettings> {
   let settings: SchoolSettings;
   if (isSupabaseConnected && supabase) {
@@ -120,6 +139,15 @@ export async function getSchoolSettings(): Promise<SchoolSettings> {
   // Force correct branding regardless of stale DB values
   settings.app_name = CORRECT_APP_NAME;
   settings.tagline = CORRECT_TAGLINE;
+  // Auto-migrate: if no logo_url, try to find one from previous storage uploads
+  if (!settings.logo_url) {
+    const migrated = await migrateLogoFromStorage();
+    if (migrated) {
+      settings.logo_url = migrated;
+      console.log('[branding] migrated logo_url from storage:', migrated);
+    }
+  }
+  console.log('[branding] loaded logo_url:', settings.logo_url);
   console.log('[branding] Loaded school settings:', settings);
   return settings;
 }

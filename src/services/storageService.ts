@@ -90,6 +90,17 @@ export async function uploadFile(
   return { publicUrl, error: null };
 }
 
+export async function listFiles(bucket: BucketName, folder: string): Promise<{ data: { name: string }[] | null; error: string | null }> {
+  if (!isStorageAvailable()) {
+    return { data: null, error: 'Supabase Storage belum disambungkan.' };
+  }
+  const { data, error } = await supabase!.storage
+    .from(bucket)
+    .list(folder, { sortBy: { column: 'created_at', order: 'desc' } });
+  if (error) return { data: null, error: error.message };
+  return { data: data as { name: string }[], error: null };
+}
+
 export async function deleteFile(bucket: BucketName, path: string): Promise<{ error: string | null }> {
   if (!isStorageAvailable()) {
     return { error: 'Supabase Storage belum disambungkan.' };

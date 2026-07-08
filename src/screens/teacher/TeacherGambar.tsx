@@ -49,6 +49,7 @@ export const TeacherGambar: React.FC = () => {
         const settings = await getSchoolSettings();
         settings.logo_url = publicUrl;
         await saveSchoolSettings(settings);
+        console.log('[branding] saved logo_url:', publicUrl);
       }
       setTimeout(() => setMessages(prev => ({ ...prev, [section.id]: '' })), 3000);
     }

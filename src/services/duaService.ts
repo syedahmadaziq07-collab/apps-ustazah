@@ -35,8 +35,16 @@ function saveLocal(d: DuaContent[]) { try { localStorage.setItem(DUAS_KEY, JSON.
 
 export async function getDuas(): Promise<DuaContent[]> {
   if (isSupabaseConnected && supabase) {
-    const { data, error } = await supabase.from('duas').select('*').order('sort_order');
-    if (!error && data) return data as DuaContent[];
+    try {
+      const result = await Promise.race([
+        supabase.from('duas').select('*').order('sort_order'),
+        new Promise<{ data: null; error: { message: string } }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'timeout' } }), 8000)
+        ),
+      ]);
+      const { data, error } = result as any;
+      if (!error && data) return data as DuaContent[];
+    } catch {}
   }
   return getLocal();
 }

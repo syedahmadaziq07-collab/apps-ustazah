@@ -9,8 +9,9 @@ import {
 } from '../components/Decorations';
 import { BottomNav } from '../components/BottomNav';
 import { StudentLayout } from '../components/StudentLayout';
-import { DuaContent } from '../types';
+import { DuaContent, TherapyContent } from '../types';
 import { getDuas } from '../services/duaService';
+import { getAllTherapies } from '../services/emotionContentService';
 
 type FilterKey = 'semua' | 'zikir' | 'terapi' | 'doa' | 'bacaan';
 
@@ -46,15 +47,36 @@ function getDuration(item: DuaContent): string {
   return '5 minit';
 }
 
+const therapyEmojiMap: Record<string, string> = {
+  zikir: '📿',
+  doa: '🤲',
+  breathing: '🌬️',
+  kata_semangat: '💪',
+  rehat: '😌',
+};
+
+const therapyTypeLabel: Record<string, string> = {
+  zikir: 'Zikir',
+  doa: 'Doa',
+  breathing: 'Pernafasan',
+  kata_semangat: 'Kata Semangat',
+  rehat: 'Rehat',
+};
+
 export const AktivitiHubScreen: React.FC = () => {
   const navigate = useNavigate();
   const [duas, setDuas] = useState<DuaContent[]>([]);
+  const [therapies, setTherapies] = useState<TherapyContent[]>([]);
   const [activeFilter, setActiveFilter] = useState<FilterKey>('semua');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getDuas().then(list => {
-      setDuas(list.filter(d => d.is_active));
+    Promise.all([
+      getDuas().then(list => list.filter(d => d.is_active)),
+      getAllTherapies().then(list => list.filter(t => t.is_active)),
+    ]).then(([duaList, therapyList]) => {
+      setDuas(duaList);
+      setTherapies(therapyList);
       setLoading(false);
     });
   }, []);
@@ -64,13 +86,15 @@ export const AktivitiHubScreen: React.FC = () => {
     const doaItems = duas.filter(d => d.kategori === 'doa');
     const bacaanItems = duas.filter(d => d.kategori === 'bacaan');
 
-    const terapiItems: { id: string; title: string; desc: string; emoji: string; duration: string; navigateTo: string }[] = [
-      { id: 'th-marah-2', title: 'Tarik Nafas Dalam', desc: 'Ambil nafas perlahan, tahan, hembus', emoji: '🌬️', duration: '3 minit', navigateTo: '/emosi/marah' },
-      { id: 'th-risau-2', title: 'Latihan Pernafasan', desc: 'Teknik pernafasan untuk bertenang', emoji: '🫁', duration: '3 minit', navigateTo: '/emosi/risau' },
-      { id: 'th-penat-1', title: 'Rehatkan Badan', desc: 'Duduk selesa dan rehatkan badan', emoji: '😌', duration: '5 minit', navigateTo: '/emosi/penat' },
-      { id: 'th-gembira-2', title: 'Senyum & Ucap Syukur', desc: 'Senaman ringkas untuk rasa positif', emoji: '😊', duration: '2 minit', navigateTo: '/emosi/gembira' },
-      { id: 'th-takut-3', title: 'Ucap Kata Semangat', desc: 'Ingatkan diri Allah sentiasa bersama', emoji: '💪', duration: '2 minit', navigateTo: '/emosi/takut' },
-    ];
+    const terapiItems = therapies.map(t => ({
+      id: t.id,
+      title: t.title,
+      desc: t.instruction,
+      emoji: therapyEmojiMap[t.therapy_type] || '🧘',
+      duration: t.count_target + ' kali',
+      emotionId: t.emotion_id,
+      therapyType: therapyTypeLabel[t.therapy_type] || t.therapy_type,
+    }));
 
     const allSections = [
       { ...SECTION_CONFIG[0], items: zikirItems },
@@ -133,16 +157,21 @@ export const AktivitiHubScreen: React.FC = () => {
                 <div key={section.key} className="mb-6">
                   <SectionHeader icon={section.icon} label={section.label} desc={section.desc} />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {(sectionItems as typeof sectionItems & { navigateTo: string }[]).map((item, i) => (
-                      <button key={item.id} onClick={() => navigate(item.navigateTo)}
+                    {(sectionItems as { id: string; title: string; desc: string; emoji: string; duration: string; emotionId: string; therapyType: string }[]).map((item, i) => (
+                      <button key={item.id} onClick={() => navigate(`/kira/${item.emotionId}?therapy=${item.id}`)}
                         className={`w-full bg-gradient-to-r ${cardGradients[i % cardGradients.length]} rounded-2xl p-4 border-2 shadow-sm flex items-center gap-4 text-left hover:scale-[1.02] active:scale-98 transition-all cursor-pointer`}>
                         <span className="text-3xl shrink-0">{item.emoji}</span>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-xs font-black text-slate-800">{item.title}</h4>
                           <p className="text-[10px] font-bold text-slate-500 mt-0.5">{item.desc}</p>
-                          <span className="inline-flex items-center gap-1 text-[10px] font-black text-slate-400 mt-1">
-                            <Clock className="w-3 h-3" /> {item.duration}
-                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-black text-slate-400">
+                              <Clock className="w-3 h-3" /> {item.duration}
+                            </span>
+                            <span className="text-[9px] font-bold text-purple-500 bg-purple-50 px-1.5 py-0.5 rounded-full border border-purple-200">
+                              {item.therapyType}
+                            </span>
+                          </div>
                         </div>
                       </button>
                     ))}

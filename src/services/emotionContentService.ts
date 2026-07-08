@@ -52,8 +52,16 @@ function saveLocalTherapies(d: TherapyContent[]) { try { localStorage.setItem(TH
 
 export async function getEmotions(): Promise<EmotionContent[]> {
   if (isSupabaseConnected && supabase) {
-    const { data, error } = await supabase.from('emotions').select('*').order('sort_order');
-    if (!error && data) return data as EmotionContent[];
+    try {
+      const result = await Promise.race([
+        supabase.from('emotions').select('*').order('sort_order'),
+        new Promise<{ data: null; error: { message: string } }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'timeout' } }), 8000)
+        ),
+      ]);
+      const { data, error } = result as any;
+      if (!error && data) return data as EmotionContent[];
+    } catch {}
   }
   return getLocalEmotions();
 }
@@ -92,10 +100,33 @@ export async function resetEmotionsToDefault(): Promise<boolean> {
 
 export async function getTherapiesByEmotion(emotionId: string): Promise<TherapyContent[]> {
   if (isSupabaseConnected && supabase) {
-    const { data, error } = await supabase.from('therapies').select('*').eq('emotion_id', emotionId).order('sort_order');
-    if (!error && data) return data as TherapyContent[];
+    try {
+      const result = await Promise.race([
+        supabase.from('therapies').select('*').eq('emotion_id', emotionId).order('sort_order'),
+        new Promise<{ data: null; error: { message: string } }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'timeout' } }), 8000)
+        ),
+      ]);
+      const { data, error } = result as any;
+      if (!error && data) return data as TherapyContent[];
+    } catch {}
   }
   return getLocalTherapies().filter(t => t.emotion_id === emotionId);
+}
+export async function getAllTherapies(): Promise<TherapyContent[]> {
+  if (isSupabaseConnected && supabase) {
+    try {
+      const result = await Promise.race([
+        supabase.from('therapies').select('*').order('sort_order'),
+        new Promise<{ data: null; error: { message: string } }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: { message: 'timeout' } }), 8000)
+        ),
+      ]);
+      const { data, error } = result as any;
+      if (!error && data) return data as TherapyContent[];
+    } catch {}
+  }
+  return getLocalTherapies();
 }
 export async function getTherapyById(id: string): Promise<TherapyContent | null> {
   if (isSupabaseConnected && supabase) {

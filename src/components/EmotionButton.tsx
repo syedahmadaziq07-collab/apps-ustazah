@@ -31,7 +31,7 @@ export const EmotionButton: React.FC<EmotionButtonProps> = ({ id, emoji, label, 
     green: 'bg-green-pastel text-emerald-800 border-emerald-200 hover:bg-emerald-100',
   };
 
-  const circleClass = `w-28 h-28 lg:w-32 lg:h-32 rounded-full border-3 shadow-md shrink-0 ${colorMap[colorType]}`;
+  const circleClass = `w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full border-3 shadow-md shrink-0 ${colorMap[colorType]}`;
 
   const wrapperClass = `relative w-full flex flex-col items-center gap-1.5 font-sans transition-all duration-200 cursor-pointer ${className} ${
     shaking ? 'animate-shake' : 'hover:scale-[1.08] active:scale-95'

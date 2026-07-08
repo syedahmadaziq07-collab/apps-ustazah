@@ -165,7 +165,7 @@ export const HomeScreen: React.FC = () => {
 
       {/* Main Content scroll area */}
       <main className="flex-grow px-6 md:px-8 lg:px-10 pt-2 pb-6 select-none relative z-10 overflow-y-auto w-full max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-16 items-center my-6 lg:my-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 lg:gap-16 items-center my-6 lg:my-10">
           
           {/* Left Column: Title + Hero Image */}
           <div className="flex flex-col gap-6">
@@ -184,20 +184,20 @@ export const HomeScreen: React.FC = () => {
               <img
                 src={homeImage}
                 alt="Kanak-kanak Muslim ceria"
-                className="w-full h-[260px] sm:h-[320px] md:h-72 lg:h-[440px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
+                className="w-full max-h-[220px] sm:max-h-[280px] md:max-h-none md:h-72 lg:h-[440px] rounded-[32px] object-cover shadow-xl border-4 border-white animate-bounce-in"
                 referrerPolicy="no-referrer"
               />
             </div>
           </div>
 
           {/* Right Column: Emotion Buttons Selection Card */}
-          <div className="bg-[#FFFDF4]/95 rounded-[32px] p-8 lg:p-10 shadow-[0_16px_36px_-10px_rgba(124,58,237,0.2)] border-2 border-purple-100/50 relative">
+          <div className="bg-[#FFFDF4]/95 rounded-[32px] p-4 sm:p-6 lg:p-8 shadow-[0_16px_36px_-10px_rgba(124,58,237,0.2)] border-2 border-purple-100/50 relative">
             
             {/* Decorative Sparkle inside card */}
             <span className="absolute -top-3 -right-2 text-2xl animate-star-twinkle">✨</span>
 
             {/* Grid Layout of 7 EmotionButtons — all same size */}
-            <div className="grid grid-cols-3 gap-4 lg:gap-5 justify-items-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 justify-items-center">
               <EmotionButton
                 id="gembira"
                 emoji={emotionMeta['gembira']?.emoji || emotionData.gembira.emoji}
@@ -253,7 +253,7 @@ export const HomeScreen: React.FC = () => {
                 colorType={(emotionMeta['tenang']?.color as EmotionButtonProps['colorType']) || emotionData.tenang.color}
                 onClick={() => handleEmotionSelect('tenang')}
                 imageUrl={emotionImages['tenang']}
-                className="col-start-2"
+                className="sm:col-start-2"
               />
             </div>
           </div>

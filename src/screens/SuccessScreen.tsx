@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Sparkles, Home, Star, Volume2, History } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
 import { StudentLayout } from '../components/StudentLayout';
@@ -17,6 +17,7 @@ import { getTherapyById, getEmotionById } from '../services/emotionContentServic
 export const SuccessScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const [audioFallback, setAudioFallback] = useState('');
 
@@ -25,16 +26,20 @@ export const SuccessScreen: React.FC = () => {
   const [therapyData, setTherapyData] = useState<TherapyContent | null>(null);
   const [tahniahAudioUrl, setTahniahAudioUrl] = useState('');
 
+  // Read audio_tahniah_url from navigation state first, fall back to DB fetch
   useEffect(() => {
-    if (therapyId) {
-      getTherapyById(therapyId).then(t => setTherapyData(t));
-    }
-    if (idVal in emotionData) {
+    const stateAudio = (location.state as { audioTahniah?: string } | null)?.audioTahniah;
+    if (stateAudio) {
+      setTahniahAudioUrl(stateAudio);
+    } else if (idVal in emotionData) {
       getEmotionById(idVal).then(e => {
         if (e?.audio_tahniah_url) setTahniahAudioUrl(e.audio_tahniah_url);
       });
     }
-  }, [therapyId, idVal]);
+    if (therapyId) {
+      getTherapyById(therapyId).then(t => setTherapyData(t));
+    }
+  }, [therapyId, idVal, location.state]);
 
   // Auto-play audio_tahniah_url on mount
   useEffect(() => {

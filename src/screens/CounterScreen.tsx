@@ -27,10 +27,12 @@ export const CounterScreen: React.FC = () => {
   const [count, setCount] = useState(0);
   const [therapyData, setTherapyData] = useState<TherapyContent | null>(null);
   const [emotionArabicAudioUrl, setEmotionArabicAudioUrl] = useState('');
+  const [tahniahAudioUrl, setTahniahAudioUrl] = useState('');
 
   useEffect(() => {
     getEmotionById(idVal).then(e => {
       if (e?.arabic_audio_url) setEmotionArabicAudioUrl(e.arabic_audio_url);
+      if (e?.audio_tahniah_url) setTahniahAudioUrl(e.audio_tahniah_url);
     });
     if (therapyId) {
       getTherapyById(therapyId).then(t => setTherapyData(t));
@@ -115,13 +117,16 @@ export const CounterScreen: React.FC = () => {
     } catch (e) { /* ignore */ }
 
     if (nextCount === maxCount) {
+      if (tahniahAudioUrl) {
+        new Audio(tahniahAudioUrl).play().catch(() => {});
+      }
       setTimeout(() => {
         saveCompletionData();
         const params = therapyId ? `?therapy=${therapyId}` : '';
-        navigate(`/tahniah/${idVal}${params}`);
+        navigate(`/tahniah/${idVal}${params}`, { state: { audioTahniah: tahniahAudioUrl } });
       }, 500);
     }
-  }, [count, emotionArabicAudioUrl, arabicAudioPath, idVal, navigate, maxCount, therapyId]);
+  }, [count, emotionArabicAudioUrl, arabicAudioPath, tahniahAudioUrl, idVal, navigate, maxCount, therapyId]);
 
   const saveCompletionData = () => {
     try {

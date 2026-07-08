@@ -42,8 +42,9 @@ const cardGradients = [
 ];
 
 function getDuration(item: DuaContent): string {
-  if (item.kategori === 'zikir') return '2 minit';
-  if (item.kategori === 'doa') return '3 minit';
+  const kat = item.kategori?.toLowerCase();
+  if (kat === 'zikir') return '2 minit';
+  if (kat === 'doa') return '3 minit';
   return '5 minit';
 }
 
@@ -82,9 +83,9 @@ export const AktivitiHubScreen: React.FC = () => {
   }, []);
 
   const sections = useMemo(() => {
-    const zikirItems = duas.filter(d => d.kategori === 'zikir');
-    const doaItems = duas.filter(d => d.kategori === 'doa');
-    const bacaanItems = duas.filter(d => d.kategori === 'bacaan');
+    const zikirItems = duas.filter(d => d.kategori?.toLowerCase() === 'zikir');
+    const doaItems = duas.filter(d => d.kategori?.toLowerCase() === 'doa');
+    const bacaanItems = duas.filter(d => d.kategori?.toLowerCase() === 'bacaan');
 
     const terapiItems = therapies.map(t => ({
       id: t.id,

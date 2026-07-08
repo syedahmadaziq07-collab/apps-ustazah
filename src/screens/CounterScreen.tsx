@@ -118,13 +118,15 @@ export const CounterScreen: React.FC = () => {
 
     if (nextCount === maxCount) {
       if (tahniahAudioUrl) {
-        new Audio(tahniahAudioUrl).play().catch(() => {});
+        const audio = new Audio(tahniahAudioUrl);
+        audio.play().catch(() => {});
+        (window as any).__tahniahAudio = audio;
       }
       setTimeout(() => {
         saveCompletionData();
         const params = therapyId ? `?therapy=${therapyId}` : '';
-        navigate(`/tahniah/${idVal}${params}`, { state: { audioTahniah: tahniahAudioUrl } });
-      }, 500);
+        navigate(`/tahniah/${idVal}${params}`);
+      }, 300);
     }
   }, [count, emotionArabicAudioUrl, arabicAudioPath, tahniahAudioUrl, idVal, navigate, maxCount, therapyId]);
 

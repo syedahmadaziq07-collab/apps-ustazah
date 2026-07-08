@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { Sparkles, Home, Star, Volume2, History } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Sparkles, Home, Star, History } from 'lucide-react';
 import { emotionData, staticDuas } from '../data/emotions';
 import { StudentLayout } from '../components/StudentLayout';
 import {
@@ -11,45 +11,34 @@ import {
   SuccessStarMosqueIllustration
 } from '../components/Decorations';
 import { EmotionKey, TherapyContent } from '../types';
-import { playStaticAudio, stopCurrentAudio } from '../utils/audio';
-import { getTherapyById, getEmotionById } from '../services/emotionContentService';
+import { getTherapyById } from '../services/emotionContentService';
 
 export const SuccessScreen: React.FC = () => {
   const { emotionId } = useParams<{ emotionId: string }>();
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const navigate = useNavigate();
-  const [audioFallback, setAudioFallback] = useState('');
 
   const idVal = emotionId || 'tenang';
   const therapyId = searchParams.get('therapy');
   const [therapyData, setTherapyData] = useState<TherapyContent | null>(null);
-  const [tahniahAudioUrl, setTahniahAudioUrl] = useState('');
 
-  // Read audio_tahniah_url from navigation state first, fall back to DB fetch
   useEffect(() => {
-    const stateAudio = (location.state as { audioTahniah?: string } | null)?.audioTahniah;
-    if (stateAudio) {
-      setTahniahAudioUrl(stateAudio);
-    } else if (idVal in emotionData) {
-      getEmotionById(idVal).then(e => {
-        if (e?.audio_tahniah_url) setTahniahAudioUrl(e.audio_tahniah_url);
-      });
-    }
     if (therapyId) {
       getTherapyById(therapyId).then(t => setTherapyData(t));
     }
-  }, [therapyId, idVal, location.state]);
+  }, [therapyId]);
 
-  // Auto-play audio_tahniah_url on mount
+  // Cleanup tahniah audio when leaving this page
   useEffect(() => {
-    if (tahniahAudioUrl) {
-      playStaticAudio(tahniahAudioUrl);
-    }
     return () => {
-      stopCurrentAudio();
+      const audio = (window as any).__tahniahAudio;
+      if (audio) {
+        audio.pause();
+        audio.src = '';
+        (window as any).__tahniahAudio = null;
+      }
     };
-  }, [tahniahAudioUrl]);
+  }, []);
 
   let zikirText = "berzikir";
   let maxCount = 10;
@@ -65,13 +54,6 @@ export const SuccessScreen: React.FC = () => {
       zikirText = dataObj.rumi;
     }
   }
-
-  const handlePlayTahniah = useCallback(() => {
-    setAudioFallback('');
-    playStaticAudio(tahniahAudioUrl || '/audio/malay/tahniah.mp3', () => {
-      setAudioFallback('Audio belum ditambah lagi.');
-    });
-  }, [tahniahAudioUrl]);
 
   return (
     <StudentLayout activeNav={null}>
@@ -126,34 +108,19 @@ export const SuccessScreen: React.FC = () => {
           </ul>
         </div>
 
-        <div className="w-full mt-5 select-none flex flex-col gap-3">
-          <button onClick={handlePlayTahniah}
-            className="w-full py-4 border-3 border-amber-400 text-amber-700 hover:bg-amber-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white/90 shadow-sm">
-            <Volume2 className="w-5 h-5" />
-            Dengar Ucapan
+        <div className="w-full mt-5 select-none grid grid-cols-2 gap-3">
+          <button onClick={() => navigate('/sejarah')}
+            className="w-full py-4 border-3 border-purple-300 text-purple-600 hover:bg-purple-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white/90 shadow-sm">
+            <History className="w-5 h-5" />
+            Lihat Sejarah
           </button>
-          <div className="grid grid-cols-2 gap-3">
-            <button onClick={() => navigate('/sejarah')}
-              className="w-full py-4 border-3 border-purple-300 text-purple-600 hover:bg-purple-50 font-black rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm cursor-pointer bg-white/90 shadow-sm">
-              <History className="w-5 h-5" />
-              Lihat Sejarah
-            </button>
-            <button onClick={() => navigate('/')}
-              className="w-full py-4 bg-gradient-to-r from-primary to-purple-600 hover:from-purple-700 hover:to-purple-800 text-white font-black text-base rounded-2xl flex items-center justify-center gap-2 shadow-lg border-b-4 border-purple-800 active:translate-y-[2px] active:border-b-2 transition-all cursor-pointer">
-              <Home className="w-5 h-5" />
-              Kembali ke Utama
-            </button>
-          </div>
+          <button onClick={() => navigate('/')}
+            className="w-full py-4 bg-gradient-to-r from-primary to-purple-600 hover:from-purple-700 hover:to-purple-800 text-white font-black text-base rounded-2xl flex items-center justify-center gap-2 shadow-lg border-b-4 border-purple-800 active:translate-y-[2px] active:border-b-2 transition-all cursor-pointer">
+            <Home className="w-5 h-5" />
+            Kembali ke Utama
+          </button>
         </div>
       </main>
-
-      {audioFallback && (
-        <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
-          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3 shadow-lg text-center">
-            <p className="text-xs font-black text-amber-900">{audioFallback}</p>
-          </div>
-        </div>
-      )}
     </AppPhoneFrame>
     </StudentLayout>
   );

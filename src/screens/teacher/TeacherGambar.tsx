@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Upload, Copy, Check, Image as ImageIcon, School, Home, FileText, Heart, BookOpen, BookHeart, Users } from 'lucide-react';
 import { isStorageAvailable } from '../../services/storageService';
 import { uploadFile, validateImageFile, formatFileSize } from '../../services/storageService';
+import { getSchoolSettings, saveSchoolSettings } from '../../services/appContentService';
 
 interface UploadSection {
   id: string;
@@ -43,6 +44,12 @@ export const TeacherGambar: React.FC = () => {
     } else if (publicUrl) {
       setUrls(prev => ({ ...prev, [section.id]: publicUrl }));
       setMessages(prev => ({ ...prev, [section.id]: 'Muat naik berjaya' }));
+      // Auto-save logo/profile uploads to school_settings.logo_url
+      if (section.id === 'logo' || section.id === 'profile') {
+        const settings = await getSchoolSettings();
+        settings.logo_url = publicUrl;
+        await saveSchoolSettings(settings);
+      }
       setTimeout(() => setMessages(prev => ({ ...prev, [section.id]: '' })), 3000);
     }
     setUploading(prev => ({ ...prev, [section.id]: false }));

@@ -99,7 +99,11 @@ function saveLocalPages(pages: Record<string, AppPage>) {
   try { localStorage.setItem(PAGES_KEY, JSON.stringify(pages)); } catch {}
 }
 
+const CORRECT_APP_NAME = 'I-Qalb Care';
+const CORRECT_TAGLINE = 'Aplikasi Kerohanian & Emosi Kanak-Kanak';
+
 export async function getSchoolSettings(): Promise<SchoolSettings> {
+  let settings: SchoolSettings;
   if (isSupabaseConnected && supabase) {
     const { data, error } = await supabase
       .from('school_settings')
@@ -107,13 +111,23 @@ export async function getSchoolSettings(): Promise<SchoolSettings> {
       .limit(1)
       .maybeSingle();
     if (!error && data) {
-      return data as SchoolSettings;
+      settings = data as SchoolSettings;
     }
   }
-  return getLocalSettings();
+  if (!settings) {
+    settings = getLocalSettings();
+  }
+  // Force correct branding regardless of stale DB values
+  settings.app_name = CORRECT_APP_NAME;
+  settings.tagline = CORRECT_TAGLINE;
+  console.log('[branding] Loaded school settings:', settings);
+  return settings;
 }
 
 export async function saveSchoolSettings(settings: SchoolSettings): Promise<boolean> {
+  // Force correct branding on save
+  settings.app_name = CORRECT_APP_NAME;
+  settings.tagline = CORRECT_TAGLINE;
   if (isSupabaseConnected && supabase) {
     const { id, ...upsertData } = settings;
     const { error } = await supabase

@@ -28,6 +28,7 @@ export const HomeScreen: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState('Hari ini:');
   const [changeBtnText, setChangeBtnText] = useState('Tukar');
   const [appName, setAppName] = useState('i-Qalb Care');
+  const [logoUrl, setLogoUrl] = useState('');
   const [emotionImages, setEmotionImages] = useState<Record<string, string>>({});
   const [emotionAudioUrls, setEmotionAudioUrls] = useState<Record<string, string>>({});
   const [emotionMeta, setEmotionMeta] = useState<Record<string, EmotionContent>>({});
@@ -44,6 +45,7 @@ export const HomeScreen: React.FC = () => {
     }).catch(() => {});
     getSchoolSettings().then((s) => {
       if (s.app_name) setAppName(s.app_name);
+      if (s.logo_url) setLogoUrl(s.logo_url);
     }).catch(() => {});
     getEmotions().then(list => {
       const imgMap: Record<string, string> = {};
@@ -91,14 +93,15 @@ export const HomeScreen: React.FC = () => {
       {/* Top Bar Logo & App title */}
       <header className="flex items-center justify-between px-6 pt-5 pb-3 bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-purple-100/70 shadow-xs">
         <div className="flex items-center gap-2">
-          {/* Logo with star decoration */}
-          <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center border border-amber-300 shadow-inner">
-            <span className="text-xl animate-star-twinkle">⭐</span>
+          {/* Logo */}
+          <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center border border-amber-300 shadow-inner overflow-hidden">
+            {logoUrl ? (
+              <img src={logoUrl} alt={appName} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-xl">⭐</span>
+            )}
           </div>
           <div className="flex flex-col">
-            <span className="bg-[#D1FAE5] text-[#065F46] text-[10px] font-black px-2 py-0.5 rounded-full w-max leading-none mb-0.5 uppercase tracking-wider">
-              EmosiKu
-            </span>
             <span className="text-lg font-black text-primary tracking-tight leading-none flex items-center gap-1">
               {appName}
             </span>

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, BarChart2, BookOpen, User, LogOut } from 'lucide-react';
+import { Home, BarChart2, BookOpen, User, LogOut, School } from 'lucide-react';
 import { useStudent } from './StudentProvider';
+import { getSchoolSettings } from '../services/appContentService';
 
 interface StudentSidebarProps {
   activeNav: 'Utama' | 'Sejarah' | 'Doa' | 'Profil' | null;
@@ -17,18 +18,30 @@ const navItems = [
 export const StudentSidebar: React.FC<StudentSidebarProps> = ({ activeNav }) => {
   const navigate = useNavigate();
   const { selectedStudent, clearStudent } = useStudent();
+  const [logoUrl, setLogoUrl] = useState('');
+  const [appName, setAppName] = useState('i-Qalb Care');
+
+  useEffect(() => {
+    getSchoolSettings().then((s) => {
+      if (s.logo_url) setLogoUrl(s.logo_url);
+      if (s.app_name) setAppName(s.app_name);
+    }).catch(() => {});
+  }, []);
 
   return (
     <aside className="fixed left-0 top-0 w-[260px] h-screen z-50 hidden lg:flex flex-col bg-gradient-to-b from-purple-700 via-purple-800 to-purple-900 text-white shadow-2xl border-r border-purple-600/30">
       {/* Logo & App Name */}
       <div className="px-5 pt-7 pb-5 border-b border-purple-600/30">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-200/20 flex items-center justify-center border border-amber-300/30">
-            <span className="text-xl">⭐</span>
+          <div className="w-10 h-10 rounded-xl bg-amber-200/20 flex items-center justify-center border border-amber-300/30 overflow-hidden">
+            {logoUrl ? (
+              <img src={logoUrl} alt={appName} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            ) : (
+              <School className="w-5 h-5 text-amber-200" />
+            )}
           </div>
           <div>
-            <span className="text-[10px] font-black text-amber-200 uppercase tracking-wider block leading-none mb-0.5">i-Qalb Care</span>
-            <span className="text-base font-black tracking-tight text-white leading-none">EmosiKu</span>
+            <span className="text-base font-black tracking-tight text-white leading-none">{appName}</span>
           </div>
         </div>
       </div>
